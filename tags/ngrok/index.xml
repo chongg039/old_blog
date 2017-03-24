@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ngrok on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/ngrok/index.xml</link>
+    <link>https://chongg039.cn/tags/ngrok/index.xml</link>
     <description>Recent content in Ngrok on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/ngrok/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/ngrok/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>使用ngrok实现内网穿透</title>
-      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
       <pubDate>Sun, 18 Sep 2016 09:37:45 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
       <description>
 
 &lt;p&gt;今天想用nodejs写一个微信公众号服务，很尴尬的发现自己的腾讯云学生服务器已经三个月没续费被收回了。工作室的这台服务器又不是很想动，于是就想到前一段时间看的一个实现内网穿透的工具ngrok，花了一段时间部署在了自己的ubuntu上。又化了两块钱买了个域名，准备以后作为工作室测试来用。&lt;/p&gt;

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Vultr on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/vultr/index.xml</link>
+    <link>https://chongg039.cn/tags/vultr/index.xml</link>
     <description>Recent content in Vultr on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/vultr/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/vultr/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>使用vultr&#43;SS&#43;锐速科学上网</title>
-      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
       <pubDate>Mon, 03 Oct 2016 20:32:20 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
       <description>
 
 &lt;p&gt;接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。&lt;/p&gt;

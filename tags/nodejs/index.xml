@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nodejs on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/nodejs/index.xml</link>
+    <link>https://chongg039.cn/tags/nodejs/index.xml</link>
     <description>Recent content in Nodejs on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>使用 nodejs 模拟登陆电子科大信息门户并抓取信息</title>
-      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</link>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</link>
       <pubDate>Thu, 08 Dec 2016 12:09:31 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</guid>
       <description>
 
 &lt;p&gt;学校高层做了个公众号，把信息门户弄到微信上的浏览器上。本着干掉学校高层的一贯行事风格，觉得是时候搞一个正规的公众号来抢学校生意了。&lt;/p&gt;
@@ -336,10 +336,10 @@ request(loginOption, function (err, res, body) {
     
     <item>
       <title>搭建 Linux 开发环境</title>
-      <link>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <link>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Thu, 12 May 2016 19:29:07 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <guid>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;

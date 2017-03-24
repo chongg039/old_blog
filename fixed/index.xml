@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Fixed on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/fixed/index.xml</link>
+    <link>https://chongg039.cn/fixed/index.xml</link>
     <description>Recent content in Fixed on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 22 Aug 2015 06:42:21 -0700</lastBuildDate>
-    <atom:link href="https://chongg039.github.io/fixed/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/fixed/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>about</title>
-      <link>https://chongg039.github.io/about/</link>
+      <link>https://chongg039.cn/about/</link>
       <pubDate>Sat, 22 Aug 2015 06:42:21 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/about/</guid>
+      <guid>https://chongg039.cn/about/</guid>
       <description>&lt;p&gt;coldriver，nodejs玩家，最近转型Go&lt;/p&gt;
 
 &lt;p&gt;仍就读于蓉城某非著名985院校计算机专业，创萌工作室现任负责人，保研无望又不安于找工作，最近准备搞点事情&lt;/p&gt;
@@ -37,10 +37,10 @@
     
     <item>
       <title>resume</title>
-      <link>https://chongg039.github.io/resume/</link>
+      <link>https://chongg039.cn/resume/</link>
       <pubDate>Sat, 22 Aug 2015 06:28:26 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/resume/</guid>
+      <guid>https://chongg039.cn/resume/</guid>
       <description>
 
 &lt;h2 id=&#34;联系方式&#34;&gt;联系方式&lt;/h2&gt;
@@ -144,10 +144,10 @@
     
     <item>
       <title>life</title>
-      <link>https://chongg039.github.io/life/</link>
+      <link>https://chongg039.cn/life/</link>
       <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/life/</guid>
+      <guid>https://chongg039.cn/life/</guid>
       <description>
 
 &lt;h2 id=&#34;2017-02-27&#34;&gt;2017-02-27&lt;/h2&gt;

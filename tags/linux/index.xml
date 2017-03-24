@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linux on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/linux/index.xml</link>
+    <link>https://chongg039.cn/tags/linux/index.xml</link>
     <description>Recent content in Linux on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Linux 服务器配置静态 IP 并 802.1x 拨号</title>
-      <link>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</link>
+      <link>https://chongg039.cn/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</link>
       <pubDate>Sat, 12 Nov 2016 15:15:27 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</guid>
+      <guid>https://chongg039.cn/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</guid>
       <description>
 
 &lt;p&gt;终于布好工作室的服务器了。&lt;/p&gt;

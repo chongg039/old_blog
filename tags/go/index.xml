@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/go/index.xml</link>
+    <link>https://chongg039.cn/tags/go/index.xml</link>
     <description>Recent content in Go on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>解决 Go 中遍历 map 的随机化问题</title>
-      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</link>
+      <link>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</link>
       <pubDate>Mon, 13 Mar 2017 18:51:20 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</guid>
+      <guid>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</guid>
       <description>&lt;p&gt;在 air-server 中有一个函数，支持解析 URL 的 query 并返回字段中城市的数据，如：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;GET /aqi/cities?1=成都&amp;amp;2=北京&amp;amp;3=杭州&amp;amp;4=西安
@@ -83,10 +83,10 @@
     
     <item>
       <title>Go实现空气质量状况API服务器过程中的思考</title>
-      <link>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <link>https://chongg039.cn/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
       <pubDate>Sat, 04 Mar 2017 16:27:52 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <guid>https://chongg039.cn/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
       <description>&lt;p&gt;学习Go之后第一个项目，是编写一个API服务器，提供城市AQI的JSON数据。&lt;/p&gt;
 
 &lt;p&gt;既然要实现这个功能，要解决的问题一个是数据源，一个是Server。&lt;/p&gt;
@@ -149,10 +149,10 @@ GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回
     
     <item>
       <title>我为什么选择Go</title>
-      <link>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</link>
+      <link>https://chongg039.cn/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</link>
       <pubDate>Mon, 27 Feb 2017 12:50:39 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</guid>
+      <guid>https://chongg039.cn/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</guid>
       <description>
 
 &lt;p&gt;是的，我开始接触go语言了，如去年年底所说的那样。&lt;/p&gt;

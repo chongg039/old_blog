@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/blog/index.xml</link>
+    <link>https://chongg039.cn/blog/index.xml</link>
     <description>Recent content in Blog on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 22 Mar 2017 22:51:09 +0800</lastBuildDate>
-    <atom:link href="https://chongg039.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>[Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化</title>
-      <link>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</link>
+      <link>https://chongg039.cn/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</link>
       <pubDate>Wed, 22 Mar 2017 22:51:09 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</guid>
+      <guid>https://chongg039.cn/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</guid>
       <description>
 
 &lt;p&gt;跟风，响应 Web 世界的号召，决定把博客全站换成 HTTPS 访问，并记录下遇到的一些问题。&lt;/p&gt;
@@ -104,10 +104,10 @@
     
     <item>
       <title>解决 Go 中遍历 map 的随机化问题</title>
-      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</link>
+      <link>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</link>
       <pubDate>Mon, 13 Mar 2017 18:51:20 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</guid>
+      <guid>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</guid>
       <description>&lt;p&gt;在 air-server 中有一个函数，支持解析 URL 的 query 并返回字段中城市的数据，如：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;GET /aqi/cities?1=成都&amp;amp;2=北京&amp;amp;3=杭州&amp;amp;4=西安
@@ -177,10 +177,10 @@
     
     <item>
       <title>Go实现空气质量状况API服务器过程中的思考</title>
-      <link>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <link>https://chongg039.cn/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
       <pubDate>Sat, 04 Mar 2017 16:27:52 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <guid>https://chongg039.cn/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
       <description>&lt;p&gt;学习Go之后第一个项目，是编写一个API服务器，提供城市AQI的JSON数据。&lt;/p&gt;
 
 &lt;p&gt;既然要实现这个功能，要解决的问题一个是数据源，一个是Server。&lt;/p&gt;
@@ -243,10 +243,10 @@ GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回
     
     <item>
       <title>我为什么选择Go</title>
-      <link>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</link>
+      <link>https://chongg039.cn/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</link>
       <pubDate>Mon, 27 Feb 2017 12:50:39 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</guid>
+      <guid>https://chongg039.cn/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</guid>
       <description>
 
 &lt;p&gt;是的，我开始接触go语言了，如去年年底所说的那样。&lt;/p&gt;
@@ -303,10 +303,10 @@ GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回
     
     <item>
       <title>2016年终总结</title>
-      <link>https://chongg039.github.io/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</link>
+      <link>https://chongg039.cn/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</link>
       <pubDate>Sat, 31 Dec 2016 16:59:03 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://chongg039.cn/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</guid>
       <description>
 
 &lt;p&gt;年底了，总结一下这一年。&lt;/p&gt;
@@ -345,10 +345,10 @@ GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回
     
     <item>
       <title>使用 nodejs 模拟登陆电子科大信息门户并抓取信息</title>
-      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</link>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</link>
       <pubDate>Thu, 08 Dec 2016 12:09:31 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</guid>
       <description>
 
 &lt;p&gt;学校高层做了个公众号，把信息门户弄到微信上的浏览器上。本着干掉学校高层的一贯行事风格，觉得是时候搞一个正规的公众号来抢学校生意了。&lt;/p&gt;
@@ -671,10 +671,10 @@ request(loginOption, function (err, res, body) {
     
     <item>
       <title>Linux 服务器配置静态 IP 并 802.1x 拨号</title>
-      <link>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</link>
+      <link>https://chongg039.cn/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</link>
       <pubDate>Sat, 12 Nov 2016 15:15:27 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</guid>
+      <guid>https://chongg039.cn/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</guid>
       <description>
 
 &lt;p&gt;终于布好工作室的服务器了。&lt;/p&gt;
@@ -806,10 +806,10 @@ iface enp7s0f0 inet static
     
     <item>
       <title>使用vultr&#43;SS&#43;锐速科学上网</title>
-      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
       <pubDate>Mon, 03 Oct 2016 20:32:20 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
       <description>
 
 &lt;p&gt;接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。&lt;/p&gt;
@@ -940,10 +940,10 @@ reboot
     
     <item>
       <title>解决 ubuntu 下键盘错位问题</title>
-      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
+      <link>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
       <pubDate>Sun, 02 Oct 2016 15:43:36 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
+      <guid>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
       <description>
 
 &lt;p&gt;很悲催的键盘错位了，就这个系统有问题，以前也没遇到过。简而言之就是@和“互换，#打不出来等。问题不大，但是影响输入体验。
@@ -1011,10 +1011,10 @@ XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
     
     <item>
       <title>使用ngrok实现内网穿透</title>
-      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
       <pubDate>Sun, 18 Sep 2016 09:37:45 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
       <description>
 
 &lt;p&gt;今天想用nodejs写一个微信公众号服务，很尴尬的发现自己的腾讯云学生服务器已经三个月没续费被收回了。工作室的这台服务器又不是很想动，于是就想到前一段时间看的一个实现内网穿透的工具ngrok，花了一段时间部署在了自己的ubuntu上。又化了两块钱买了个域名，准备以后作为工作室测试来用。&lt;/p&gt;
@@ -1111,10 +1111,10 @@ trust_host_root_certs: false
     
     <item>
       <title>分享一些自用chrome插件</title>
-      <link>https://chongg039.github.io/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</link>
+      <link>https://chongg039.cn/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</link>
       <pubDate>Sat, 21 May 2016 15:45:01 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</guid>
+      <guid>https://chongg039.cn/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</guid>
       <description>&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/Chrome1111.jpg&#34; alt=&#34;分享一些自用的chrome插件&#34; title=&#34;chrome&#34; /&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -1140,10 +1140,10 @@ trust_host_root_certs: false
     
     <item>
       <title>搭建 Linux 开发环境</title>
-      <link>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <link>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Thu, 12 May 2016 19:29:07 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <guid>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;
@@ -1247,10 +1247,10 @@ trust_host_root_certs: false
     
     <item>
       <title>说说es5中的闭包</title>
-      <link>https://chongg039.github.io/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</link>
+      <link>https://chongg039.cn/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</link>
       <pubDate>Mon, 18 Apr 2016 19:26:22 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</guid>
+      <guid>https://chongg039.cn/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;匿名函数&lt;/strong&gt;：下面是最常见的一种&lt;strong&gt;函数表达式&lt;/strong&gt;的书写形式
 &lt;code&gt;
@@ -1378,10 +1378,10 @@ var functionName = function(arg0, arg1, arg2){
     
     <item>
       <title>写在前面</title>
-      <link>https://chongg039.github.io/blog/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</link>
+      <link>https://chongg039.cn/blog/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</link>
       <pubDate>Sun, 17 Apr 2016 19:29:07 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</guid>
+      <guid>https://chongg039.cn/blog/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</guid>
       <description>
 
 &lt;h2 id=&#34;我为什么建博客&#34;&gt;我为什么建博客&lt;/h2&gt;

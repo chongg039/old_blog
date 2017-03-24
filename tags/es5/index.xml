@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Es5 on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/es5/index.xml</link>
+    <link>https://chongg039.cn/tags/es5/index.xml</link>
     <description>Recent content in Es5 on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/es5/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/es5/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>说说es5中的闭包</title>
-      <link>https://chongg039.github.io/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</link>
+      <link>https://chongg039.cn/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</link>
       <pubDate>Mon, 18 Apr 2016 19:26:22 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</guid>
+      <guid>https://chongg039.cn/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;匿名函数&lt;/strong&gt;：下面是最常见的一种&lt;strong&gt;函数表达式&lt;/strong&gt;的书写形式
 &lt;code&gt;

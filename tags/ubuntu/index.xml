@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ubuntu on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/ubuntu/index.xml</link>
+    <link>https://chongg039.cn/tags/ubuntu/index.xml</link>
     <description>Recent content in Ubuntu on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>解决 ubuntu 下键盘错位问题</title>
-      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
+      <link>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
       <pubDate>Sun, 02 Oct 2016 15:43:36 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
+      <guid>https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
       <description>
 
 &lt;p&gt;很悲催的键盘错位了，就这个系统有问题，以前也没遇到过。简而言之就是@和“互换，#打不出来等。问题不大，但是影响输入体验。
@@ -81,10 +81,10 @@ XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
     
     <item>
       <title>搭建 Linux 开发环境</title>
-      <link>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <link>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Thu, 12 May 2016 19:29:07 -0700</pubDate>
       
-      <guid>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <guid>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description>
 
 &lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;

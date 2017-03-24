@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Https on coldriver的技术博客</title>
-    <link>https://chongg039.github.io/tags/https/index.xml</link>
+    <link>https://chongg039.cn/tags/https/index.xml</link>
     <description>Recent content in Https on coldriver的技术博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <atom:link href="https://chongg039.github.io/tags/https/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chongg039.cn/tags/https/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>[Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化</title>
-      <link>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</link>
+      <link>https://chongg039.cn/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</link>
       <pubDate>Wed, 22 Mar 2017 22:51:09 +0800</pubDate>
       
-      <guid>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</guid>
+      <guid>https://chongg039.cn/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</guid>
       <description>
 
 &lt;p&gt;跟风，响应 Web 世界的号召，决定把博客全站换成 HTTPS 访问，并记录下遇到的一些问题。&lt;/p&gt;
