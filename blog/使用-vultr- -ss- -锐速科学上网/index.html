@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Don&#39;t panic">
+
+<base href="https://chongg039.cn/">
+<title>
+
+
+     使用 vultr &#43; SS &#43; 锐速科学上网 
+
+</title>
+<link rel="canonical" href="https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-vultr-&#43;-ss-&#43;-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/">
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="https://chongg039.cn/css/reset.css?t=1490332936">
+    <link rel="stylesheet" href="https://chongg039.cn/css/pygments.css?t=1490332936">
+    <link rel="stylesheet" href="https://chongg039.cn/css/main.css?t=1490332936">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://chongg039.cn/img/favicon.ico"
+
+>
+
+
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+            <a href="https://chongg039.cn/"><div class="name">coldriver的技术博客</div></a>
+            
+            <nav>
+                <ul>
+                    <li class="nav-blog"><a href="https://chongg039.cn/blog/">Blog</a></li>
+                    <li class="nav-about"><a href="https://chongg039.cn/about/">About</a></li>
+                    <li class="nav-code"><a href="https://chongg039.cn/life/">Life</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/chongg039" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.cn/img/github.svg" alt="github" /></a>
+        
+
+        
+            <a href="//twitter.com/uestcchongg" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.cn/img/twitter.svg" alt="twitter" /></a>
+        
+
+        
+
+        
+
+        
+
+        
+            <a href="mailto:chongg039@gmail.com"><img class="icon" src="https://chongg039.cn/img/email.svg" alt="email" /></a>
+        
+
+        
+            <a href="https://chongg039.cn/index.xml"><img class="icon" src="https://chongg039.cn/img/rss.svg" alt="rss" /></a>
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    使用 vultr &#43; SS &#43; 锐速科学上网
+
+</div>
+
+                    <div class="initials"><a href="https://chongg039.cn/">ad</a></div>
+                </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Mon Oct 3 2016 20:32:20 -0700'>Oct 3, 2016</div>
+                    
+                    
+                    <div class="reading-time"><div class="middot"></div>1 minute read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<p>接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。</p>
+
+<h3 id="配置vultr主机">配置vultr主机</h3>
+
+<p>V家的主机算得上是性价比较高的一款了，而且有日本和新加坡的线路，相对来说延迟比较稳定。截止我购买的时候是每个新用户有20刀的返利，还是比较划算的。</p>
+
+<h4 id="在-https-www-vultr-com-创建用户">在 <a href="https://www.vultr.com/">https://www.vultr.com/</a> 创建用户</h4>
+
+<p><img src="https://c1.staticflickr.com/1/687/33457501971_fe260f32da_b.jpg" alt="" /></p>
+
+<p>进来后需要绑定账户。如果没有信用卡的话建议使用PayPal，而且PayPal应该是支持国内的储蓄卡绑定的，比较方便。</p>
+
+<p>第一次使用需要先充值5刀，还是比较便宜的，之后会说到vultr主机的扣费机制。</p>
+
+<p>在图的右边，这次我注册了一个新账号，但是很不幸的显示返利变少了。。。好吧你要是能找到优惠码的话也许还会有。。。</p>
+
+<h4 id="配置主机">配置主机</h4>
+
+<p><img src="https://c1.staticflickr.com/4/3883/32743726394_8cb9dbd881_b.jpg" alt="" /></p>
+
+<p>这是我的vultr主界面面板，可以看到已经有了两个在运行的服务器。如果开始要新建一个服务器，点击右上方的+号：</p>
+
+<p><img src="https://c1.staticflickr.com/4/3796/32743725874_59c0cd1116_b.jpg" alt="" />
+&gt;这里选择日本的服务器，经过几天的测试发现日本的要比新加坡的线路快不少
+操作系统选择自己熟悉的就好，我选的ubuntu14.04，不建议windows
+如果只是为了搭建番茄的梯子，配置最低配那个就行，一个月总计才5刀，性能完全满足需求
+有需要的话可以勾选IPV6，我们校区没有就不搞了</p>
+
+<p>配置完后deploy就会生成相应的vultr服务器了主界面像下面这样：</p>
+
+<p><img src="https://c1.staticflickr.com/3/2896/32743725054_71c68e7697_b.jpg" alt="" /></p>
+
+<p>显示了ip地址，初始root密码和流量、费用的使用。</p>
+
+<h4 id="ssh到vultr服务器">ssh到vultr服务器</h4>
+
+<p>打开终端，输入
+&gt;ssh root@你的vultr主机ip</p>
+
+<p>第一次验证选择&rsquo;YES&rsquo;，输入初始密码后便连上了vultr服务器。</p>
+
+<blockquote>
+<p>可以 <code>passwd root</code> 修改初始密码</p>
+</blockquote>
+
+<h3 id="安装shadowsocks-python服务器版">安装shadowsocks-python服务器版</h3>
+
+<p>shadowsocks服务器有很多版本，go、python、libev、R都可以。安装方式可以手动配，我自己的ubuntu电脑就是用这种比较原始的办法配的，需要手动编写 /etc/shadowsocks.json 文件，还得写一个开机启动和后台运行脚本。不过确实比较有成就感，而且一劳永逸。</p>
+
+<p>然而那天我们美工告诉我 <a href="https://teddysun.com/">秋水大大</a> 写了一个自动生成脚本，感觉世界观被颠覆了。不过确实好用，这里用他的 <a href="https://teddysun.com/342.html">Shadowsocks Python版一键安装脚本</a> 来安装到我们的vultr服务器中：</p>
+
+<pre><code>wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
+
+chmod +x shadowsocks.sh
+
+./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log
+</code></pre>
+
+<p>按照脚本提示输入就可以，安装完后提示如下：</p>
+
+<pre><code>Congratulations, shadowsocks install completed!
+Your Server IP:your_server_ip
+Your Server Port:your_server_port
+Your Password:your_password
+Your Local IP:127.0.0.1
+Your Local Port:1080
+Your Encryption Method:aes-256-cfb
+
+Welcome to visit:https://teddysun.com/342.html
+Enjoy it!
+</code></pre>
+
+<blockquote>
+<p>tesths 建议我们用8388端口，说这个经他测试比较稳定。虽然知道他在满嘴跑火车，但是还是忍不住用了。。。</p>
+</blockquote>
+
+<p>可以使用下面的命令操作shadowsocks：</p>
+
+<pre><code>启动：/etc/init.d/shadowsocks start
+停止：/etc/init.d/shadowsocks stop
+重启：/etc/init.d/shadowsocks restart
+状态：/etc/init.d/shadowsocks status
+</code></pre>
+
+<p>现在不论你的电脑是windows、mac还是linux，使用ss客户端（自行查找下载）输入ip、端口和密码应该就可以番茄了。可以打开 <a href="https://fast.com/">https://fast.com/</a> 测一下速。
+&gt;说实话买到的vultr主机的ip，番茄快不快完全看人品，根本不知道这个节点速度怎样。
+所以我建议多买几个主机，多用几个ip试试，因问V家的主机不是一次性收费一个月的5刀，而是按时间计费。加上他给的返利，可以多几个ip试用几天，留下稳定的那个服务器，剩下的再删掉即可。</p>
+
+<h3 id="配置锐速">配置锐速</h3>
+
+<p>有很多的服务器加速工具，<a href="http://www.serverspeeder.com/">锐速</a> 应该是相当不错的一家，又不会无脑占用国际带宽。不过不知道官方怎么了，我们安装破解版就可以。</p>
+
+<p>锐速破解版也有一键安装脚本，我参考的是 <a href="https://www.91yun.org/archives/683">这里</a> 的方法。</p>
+
+<h4 id="安装锐速">安装锐速</h4>
+
+<pre><code>wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;&amp; bash serverspeeder-all.sh
+</code></pre>
+
+<blockquote>
+<p>如果安装失败，一般会提示锐速支持的内核和我们的不匹配，可以 <a href="http://dl.serverspeeder.com/ls.do?m=availables">http://dl.serverspeeder.com/ls.do?m=availables</a> 查看支持的内核</p>
+</blockquote>
+
+<h4 id="更换内核">更换内核</h4>
+
+<pre><code>dpkg -l|grep linux-image
+//查看当前安装的内核
+apt-get install linux-image-3.13.0-96-generic linux-image-extra-3.13.0-96-generic
+//安装锐速支持的内核，如果不支持，可能会选择一个比较近的版本下载
+sudo apt-get purge linux-image-3.13.0-xx-generic linux-image-extra-3.13.0-xx-generic
+//卸载第一步看到的不支持的内核
+update-grub
+//更新系统引导文件
+reboot
+//重启后生效
+</code></pre>
+
+<p>这样再去执行一键安装脚本，锐速就可以顺利安装了。</p>
+
+<p>理论上速度应该会有所提升，而且还比较明显。</p>
+
+<p>最后我只想说，脚本真是个好东西啊。。。
+（默哀一下阿里月饼事件的员工们）</p>
+
+                <br>
+                <p><a href="https://chongg039.cn/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'coldriver';
+    var disqus_identifier = 'https:\/\/chongg039.cn\/blog\/%E4%BD%BF%E7%94%A8-vultr-\x2b-ss-\x2b-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91\/';
+    var disqus_title = '使用 vultr \x2b SS \x2b 锐速科学上网';
+    var disqus_url = 'https:\/\/chongg039.cn\/blog\/%E4%BD%BF%E7%94%A8-vultr-\x2b-ss-\x2b-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+</body>
+</html>
+

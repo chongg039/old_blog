@@ -9,11 +9,11 @@
     <atom:link href="https://chongg039.cn/tags/vultr/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>使用vultr&#43;SS&#43;锐速科学上网</title>
-      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+      <title>使用 vultr &#43; SS &#43; 锐速科学上网</title>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-vultr-&#43;-ss-&#43;-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
       <pubDate>Mon, 03 Oct 2016 20:32:20 -0700</pubDate>
       
-      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-vultr-&#43;-ss-&#43;-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
       <description>
 
 &lt;p&gt;接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。&lt;/p&gt;
@@ -24,7 +24,7 @@
 
 &lt;h4 id=&#34;在-https-www-vultr-com-创建用户&#34;&gt;在 &lt;a href=&#34;https://www.vultr.com/&#34;&gt;https://www.vultr.com/&lt;/a&gt; 创建用户&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-create-account.png&#34; alt=&#34; &#34; title=&#34;vultr-create-account&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/1/687/33457501971_fe260f32da_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;进来后需要绑定账户。如果没有信用卡的话建议使用PayPal，而且PayPal应该是支持国内的储蓄卡绑定的，比较方便。&lt;/p&gt;
 
@@ -34,11 +34,11 @@
 
 &lt;h4 id=&#34;配置主机&#34;&gt;配置主机&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-setting-servers.png&#34; alt=&#34; &#34; title=&#34;vultr-setting-servers&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3883/32743726394_8cb9dbd881_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这是我的vultr主界面面板，可以看到已经有了两个在运行的服务器。如果开始要新建一个服务器，点击右上方的+号：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server.png&#34; alt=&#34; &#34; title=&#34;vultr-server&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3796/32743725874_59c0cd1116_b.jpg&#34; alt=&#34;&#34; /&gt;
 &amp;gt;这里选择日本的服务器，经过几天的测试发现日本的要比新加坡的线路快不少
 操作系统选择自己熟悉的就好，我选的ubuntu14.04，不建议windows
 如果只是为了搭建番茄的梯子，配置最低配那个就行，一个月总计才5刀，性能完全满足需求
@@ -46,7 +46,7 @@
 
 &lt;p&gt;配置完后deploy就会生成相应的vultr服务器了主界面像下面这样：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server-info.png&#34; alt=&#34; &#34; title=&#34;vultr-server-info&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/3/2896/32743725054_71c68e7697_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;显示了ip地址，初始root密码和流量、费用的使用。&lt;/p&gt;
 
@@ -138,7 +138,7 @@ reboot
 &lt;p&gt;理论上速度应该会有所提升，而且还比较明显。&lt;/p&gt;
 
 &lt;p&gt;最后我只想说，脚本真是个好东西啊。。。
-（默哀一下阿里的月饼员工们）&lt;/p&gt;
+（默哀一下阿里月饼事件的员工们）&lt;/p&gt;
 </description>
     </item>
     

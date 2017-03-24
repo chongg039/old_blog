@@ -371,21 +371,21 @@ GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回
 
 &lt;p&gt;为了完成模拟登陆这一目的，先尝试获取登录主界面&lt;code&gt;http://portal.uestc.edu.cn/&lt;/code&gt;的内容。分析一波登陆过程中的 HTTP 行为：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/HTTPAnalysis.png&#34; alt=&#34;HTTPAnalysis&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/1/664/33546049616_08658fcd69_b.jpg&#34; alt=&#34;HTTPAnalysis&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;可以发现在正文&lt;code&gt;portal.uestc.edu.cn/&lt;/code&gt;前有两个页面，分别打开看一看：&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;login?service=http%3A%2F%2Fportal.uestc.edu.cn%2F&lt;/code&gt;页面：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/3021.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3816/32743728994_a16798c664_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;?ticket=ST-199833-BbDvk6q57cmNFtJkBJNL1481032281383-zATy-cas&lt;/code&gt;页面：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/3022.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3671/32743729674_a3846b6f00_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;最终页面：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/200.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3752/32743728154_d255046c53_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;理论上是获取到最终页面的&lt;code&gt;JSESSIONID&lt;/code&gt;，这是服务器用来唯一标识用户信息的&lt;code&gt;session&lt;/code&gt;。带着这个 cookie 去访问其他相关页面，就能获取到对应数据。&lt;/p&gt;
 
@@ -616,7 +616,7 @@ request(loginOption, function (err, res, body) {
 
 &lt;p&gt;凭经验来看&lt;code&gt;ids&lt;/code&gt;肯定是在前文的响应 body 里服务器已经返回的数据。果然，在请求这个地址之前已经请求了一个地址：&lt;code&gt;http://eams.uestc.edu.cn/eams/courseTableForStd.action?_=1481077999393&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/ids.png&#34; alt=&#34;ids&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3907/32772354773_5a8581b019_b.jpg&#34; alt=&#34;ids&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;解析这个 Response，就可以得到对应的ids值。&lt;/p&gt;
 
@@ -630,19 +630,19 @@ request(loginOption, function (err, res, body) {
 
 &lt;p&gt;主界面：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/main.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/1/567/32772355483_07c82b1c94_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;课程表：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/courses.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3844/33546051106_05d777eeac_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;考试安排：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/eams.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3684/33546052326_839c5dfb38_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;成绩垃圾就打上码了：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/gradesAll.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3845/32772353723_7322eb585e_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;虽然效果粗糙了一些，但就结果而言还是好的，达到了目的。&lt;/p&gt;
 
@@ -805,11 +805,11 @@ iface enp7s0f0 inet static
     </item>
     
     <item>
-      <title>使用vultr&#43;SS&#43;锐速科学上网</title>
-      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+      <title>使用 vultr &#43; SS &#43; 锐速科学上网</title>
+      <link>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-vultr-&#43;-ss-&#43;-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
       <pubDate>Mon, 03 Oct 2016 20:32:20 -0700</pubDate>
       
-      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
+      <guid>https://chongg039.cn/blog/%E4%BD%BF%E7%94%A8-vultr-&#43;-ss-&#43;-%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
       <description>
 
 &lt;p&gt;接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。&lt;/p&gt;
@@ -820,7 +820,7 @@ iface enp7s0f0 inet static
 
 &lt;h4 id=&#34;在-https-www-vultr-com-创建用户&#34;&gt;在 &lt;a href=&#34;https://www.vultr.com/&#34;&gt;https://www.vultr.com/&lt;/a&gt; 创建用户&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-create-account.png&#34; alt=&#34; &#34; title=&#34;vultr-create-account&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/1/687/33457501971_fe260f32da_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;进来后需要绑定账户。如果没有信用卡的话建议使用PayPal，而且PayPal应该是支持国内的储蓄卡绑定的，比较方便。&lt;/p&gt;
 
@@ -830,11 +830,11 @@ iface enp7s0f0 inet static
 
 &lt;h4 id=&#34;配置主机&#34;&gt;配置主机&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-setting-servers.png&#34; alt=&#34; &#34; title=&#34;vultr-setting-servers&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3883/32743726394_8cb9dbd881_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;这是我的vultr主界面面板，可以看到已经有了两个在运行的服务器。如果开始要新建一个服务器，点击右上方的+号：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server.png&#34; alt=&#34; &#34; title=&#34;vultr-server&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3796/32743725874_59c0cd1116_b.jpg&#34; alt=&#34;&#34; /&gt;
 &amp;gt;这里选择日本的服务器，经过几天的测试发现日本的要比新加坡的线路快不少
 操作系统选择自己熟悉的就好，我选的ubuntu14.04，不建议windows
 如果只是为了搭建番茄的梯子，配置最低配那个就行，一个月总计才5刀，性能完全满足需求
@@ -842,7 +842,7 @@ iface enp7s0f0 inet static
 
 &lt;p&gt;配置完后deploy就会生成相应的vultr服务器了主界面像下面这样：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server-info.png&#34; alt=&#34; &#34; title=&#34;vultr-server-info&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/3/2896/32743725054_71c68e7697_b.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;显示了ip地址，初始root密码和流量、费用的使用。&lt;/p&gt;
 
@@ -934,7 +934,7 @@ reboot
 &lt;p&gt;理论上速度应该会有所提升，而且还比较明显。&lt;/p&gt;
 
 &lt;p&gt;最后我只想说，脚本真是个好东西啊。。。
-（默哀一下阿里的月饼员工们）&lt;/p&gt;
+（默哀一下阿里月饼事件的员工们）&lt;/p&gt;
 </description>
     </item>
     
@@ -988,7 +988,7 @@ XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;使得保存的配置生效。
 这样一般就成功了，若是还不行，有可能是fcitx输入法的问题。
 打开 Fcitx Configuration，可以在search里找到
-&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/%20FcitxConfiguration.png&#34; alt=&#34; &#34; title=&#34; FcitxConfiguration&#34; /&gt;
+&lt;img src=&#34;https://c1.staticflickr.com/4/3766/33457473611_5ab96b6472_b.jpg&#34; alt=&#34;&#34; /&gt;
 像我上面选择的键盘语言是
 &amp;gt;XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;&lt;/p&gt;
 
@@ -997,7 +997,7 @@ XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;到这里就可以解决大部分问题了，至少我这里键盘输入还没有回弹到那种奇葩的状况。
 那就必须秀一波@@@@@@@########&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;ldquo;啊哈哈！&lt;/p&gt;
 
-&lt;h2 id=&#34;http-7xswbj-com1-z0-glb-clouddn-com-runningchicken-jpg-runingchicken&#34;&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/runningchicken.jpg&#34; alt=&#34; &#34; title=&#34;runingchicken&#34; /&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;https-c1-staticflickr-com-4-3666-33457496511-69a2c3bdae-z-jpg&#34;&gt;&lt;img src=&#34;https://c1.staticflickr.com/4/3666/33457496511_69a2c3bdae_z.jpg&#34; alt=&#34;&#34; /&gt;&lt;/h2&gt;
 
 &lt;h4 id=&#34;参考文档&#34;&gt;参考文档&lt;/h4&gt;
 
@@ -1115,7 +1115,7 @@ trust_host_root_certs: false
       <pubDate>Sat, 21 May 2016 15:45:01 -0700</pubDate>
       
       <guid>https://chongg039.cn/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/Chrome1111.jpg&#34; alt=&#34;分享一些自用的chrome插件&#34; title=&#34;chrome&#34; /&gt;&lt;/p&gt;
+      <description>&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/1/738/33457475271_8f1bb7c525_b.jpg&#34; alt=&#34;分享一些自用的chrome插件&#34; /&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;ul&gt;
@@ -1145,8 +1145,6 @@ trust_host_root_certs: false
       
       <guid>https://chongg039.cn/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description>
-
-&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;先说说我为啥要干这事儿。
@@ -1227,7 +1225,7 @@ trust_host_root_certs: false
 &lt;ul&gt;
 &lt;li&gt;护眼，没有防蓝光眼镜的话（有的话尽量也搞一个）装一个&lt;code&gt;f.lux&lt;/code&gt;，不过这里用的是&lt;code&gt;redshift&lt;/code&gt;，据说这个要好一点。参考&lt;a href=&#34;http://www.ituring.com.cn/article/211486&#34;&gt;图灵社区&lt;/a&gt;的一篇文章进行安装&lt;/li&gt;
 &lt;li&gt;截图，键盘上的Print Screen就很方便，会弹出对话框提醒你保存。放一张网易云音乐的照片
-&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/cloudNet.png&#34; alt=&#34;cloudNet&#34; /&gt;&lt;/li&gt;
+&lt;img src=&#34;https://c1.staticflickr.com/3/2916/33457490061_8ba9ac7803_b.jpg&#34; alt=&#34;cloudNet&#34; /&gt;&lt;/li&gt;
 &lt;li&gt;邮件系统，还是用Thunderbird，好用原生而且方便。系统自带不用安装，配置自己找教程（偷个懒）&lt;/li&gt;
 &lt;li&gt;dropbox，这个没装好，有时间再来更新&lt;/li&gt;
 &lt;/ul&gt;
@@ -1281,7 +1279,7 @@ var functionName = function(arg0, arg1, arg2){
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;在一个函数内部定义一个函数会将包含的函数（即外部函数）的活动对象添加到他的作用域链中。就是说，某一个函数内部定义的匿名函数的作用域链中，实际上会包含外部函数（即定义这个匿名函数的函数）的活动对象&amp;mdash;&amp;ndash;&amp;gt;所以匿名函数从定义它的函数中返回后，匿名函数的作用域链被初始化为包含在定义它的函数的活动对象和全局变量对象&amp;mdash;&amp;mdash;&amp;gt;匿名函数就可以访问在定义它的函数中的所有变量&amp;mdash;&amp;mdash;&amp;ndash;&amp;gt;更重要的是，定义他的函数在执行完毕后其活动对象不会被销毁（&lt;strong&gt;因为匿名函数的作用域链仍在引用这个活动对象&lt;/strong&gt;），即 即使定义它的函数返回后，其执行环境的作用域链被销毁了，但活动对象仍在内存中&amp;mdash;&amp;mdash;&amp;mdash;-&amp;gt;因此，&lt;strong&gt;直到匿名函数被销毁后，定义它的函数的活动对象才会被销毁&lt;/strong&gt;
-&lt;img src=&#34;http://7xswbj.com2.z0.glb.clouddn.com/closure.jpg&#34; alt=&#34;closure&#34; /&gt;
+&lt;img src=&#34;https://c1.staticflickr.com/1/579/33457488141_24d2d58c5e_b.jpg&#34; alt=&#34;closure&#34; /&gt;
 &amp;gt; 解除对匿名函数的引用（来释放内存）
 (定义匿名函数的函数名)&lt;code&gt;functionName = null&lt;/code&gt;;
 解除函数的引用，即通知垃圾回收例程将其清除

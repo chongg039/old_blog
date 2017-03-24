@@ -35,9 +35,9 @@
 
 
     
-    <link rel="stylesheet" href="https://chongg039.cn/css/reset.css?t=1490331471">
-    <link rel="stylesheet" href="https://chongg039.cn/css/pygments.css?t=1490331471">
-    <link rel="stylesheet" href="https://chongg039.cn/css/main.css?t=1490331471">
+    <link rel="stylesheet" href="https://chongg039.cn/css/reset.css?t=1490332936">
+    <link rel="stylesheet" href="https://chongg039.cn/css/pygments.css?t=1490332936">
+    <link rel="stylesheet" href="https://chongg039.cn/css/main.css?t=1490332936">
     
 
 
@@ -151,21 +151,21 @@
 
 <p>为了完成模拟登陆这一目的，先尝试获取登录主界面<code>http://portal.uestc.edu.cn/</code>的内容。分析一波登陆过程中的 HTTP 行为：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/HTTPAnalysis.png" alt="HTTPAnalysis" /></p>
+<p><img src="https://c1.staticflickr.com/1/664/33546049616_08658fcd69_b.jpg" alt="HTTPAnalysis" /></p>
 
 <p>可以发现在正文<code>portal.uestc.edu.cn/</code>前有两个页面，分别打开看一看：</p>
 
 <p><code>login?service=http%3A%2F%2Fportal.uestc.edu.cn%2F</code>页面：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/3021.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/4/3816/32743728994_a16798c664_b.jpg" alt="" /></p>
 
 <p><code>?ticket=ST-199833-BbDvk6q57cmNFtJkBJNL1481032281383-zATy-cas</code>页面：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/3022.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/4/3671/32743729674_a3846b6f00_b.jpg" alt="" /></p>
 
 <p>最终页面：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/200.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/4/3752/32743728154_d255046c53_b.jpg" alt="" /></p>
 
 <p>理论上是获取到最终页面的<code>JSESSIONID</code>，这是服务器用来唯一标识用户信息的<code>session</code>。带着这个 cookie 去访问其他相关页面，就能获取到对应数据。</p>
 
@@ -396,7 +396,7 @@ request(loginOption, function (err, res, body) {
 
 <p>凭经验来看<code>ids</code>肯定是在前文的响应 body 里服务器已经返回的数据。果然，在请求这个地址之前已经请求了一个地址：<code>http://eams.uestc.edu.cn/eams/courseTableForStd.action?_=1481077999393</code></p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/ids.png" alt="ids" /></p>
+<p><img src="https://c1.staticflickr.com/4/3907/32772354773_5a8581b019_b.jpg" alt="ids" /></p>
 
 <p>解析这个 Response，就可以得到对应的ids值。</p>
 
@@ -410,19 +410,19 @@ request(loginOption, function (err, res, body) {
 
 <p>主界面：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/main.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/1/567/32772355483_07c82b1c94_b.jpg" alt="" /></p>
 
 <p>课程表：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/courses.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/4/3844/33546051106_05d777eeac_b.jpg" alt="" /></p>
 
 <p>考试安排：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/eams.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/4/3684/33546052326_839c5dfb38_b.jpg" alt="" /></p>
 
 <p>成绩垃圾就打上码了：</p>
 
-<p><img src="http://ohroncry6.bkt.clouddn.com/gradesAll.png" alt="" /></p>
+<p><img src="https://c1.staticflickr.com/4/3845/32772353723_7322eb585e_b.jpg" alt="" /></p>
 
 <p>虽然效果粗糙了一些，但就结果而言还是好的，达到了目的。</p>
 
