@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Https on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/https/index.xml</link>
+    <description>Recent content in Https on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/https/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>[Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化</title>
+      <link>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</link>
+      <pubDate>Wed, 22 Mar 2017 22:51:09 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</guid>
+      <description>
+
+&lt;p&gt;跟风，响应 Web 世界的号召，决定把博客全站换成 HTTPS 访问，并记录下遇到的一些问题。&lt;/p&gt;
+
+&lt;h3 id=&#34;github-page&#34;&gt;Github Page&lt;/h3&gt;
+
+&lt;p&gt;原来博客是部署在云服务器上，后来觉得没有这个必要，也不想花精力在维护上面，就重新把博客放回了 Github Page 。因此下面的文字并不针对自有服务器的博客用户进行说明。&lt;/p&gt;
+
+&lt;h3 id=&#34;图床&#34;&gt;图床&lt;/h3&gt;
+
+&lt;p&gt;为了加快访问速度，原来图片等一些较大的文件都放在了 七牛云存储 上，但七牛并不提供免费的 HTTPS 流量访问，而这却是全站 HTTPS 化的硬性条件之一。&lt;/p&gt;
+
+&lt;p&gt;我选择了将图床迁移到了 Flickr 上，它提供了免费的 HTTPS 外链和 1T 的存储量，使用起来绰绰有余。&lt;/p&gt;
+
+&lt;p&gt;Mac 端迁移推荐一款应用：iPic，配合插件使用能自动识别 Markdown 文章中的图片并将其上传到新的图床。虽然我使用的时候这个功能好像挂了，但其他功能印象还是很不错。软件一年的使用费用是 38元人民币，你可以在 App Store中下载。&lt;/p&gt;
+
+&lt;h3 id=&#34;ssl服务提供商-cloudflare&#34;&gt;SSL服务提供商：Cloudflare&lt;/h3&gt;
+
+&lt;p&gt;作为私人博客还是希望有一个免费的 SSL 证书，最理想的 Let&amp;rsquo;s Encrypt 却不能为我们的 Github 博客提供帮助。然而作为候选的 Cloudflare 则给了我们这个选择，具体方法不再阐述，你可以参考这篇博文完成配置操作：&lt;a href=&#34;https://yicodes.com/2016/12/04/free-cloudflare-ssl-for-custom-domain/&#34;&gt;为自定义域名的GitHub Pages添加SSL 完整方案 &lt;/a&gt; 。&lt;/p&gt;
+
+&lt;h3 id=&#34;遇到的问题&#34;&gt;遇到的问题&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;全站 HTTPS 化要求所有引用文件的来源，否则会显示网站不安全的信息，这便需要仔细选择图床等第三方文件存储提供商。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;我是用的是 Hugo 的 Go 语言博客框架，如果你使用的是第三方的主题文件，一定要检查其中 JS，CSS文件引入时的路径，如果是 &amp;ldquo;http://&amp;hellip;/main.css&amp;rdquo; 开头的绝对路径是无法被引用使用的。一个可行的方案是修改为 &amp;ldquo;//&amp;hellip;/main.css&amp;rdquo; 的相对文件路径。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果使用自定义域名代替 github.io 的二级域名，注意在 Hugo 的配置文件 config.toml 中的 baseurl 修改，否则有时仍会引用 HTTP 的文件资源。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是我的配置文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;   baseurl             = &amp;quot;https://chongg039.cn/&amp;quot;
+   builddrafts         = false
+   canonifyurls        = true
+   contentdir          = &amp;quot;content&amp;quot;
+   languageCode        = &amp;quot;zh-cn&amp;quot;
+   layoutdir           = &amp;quot;layouts&amp;quot;
+   publishdir          = &amp;quot;public&amp;quot;
+   author              = &amp;quot;coldriver&amp;quot;
+   title               = &amp;quot;coldriver的技术博客&amp;quot;
+   theme				= &amp;quot;cocoa&amp;quot;
+   pygmentsuseclasses  = true
+   disqusshortname     = &amp;quot;coldriver&amp;quot; # Comment out to disable Disqus.
+   pluralizelisttitles = false
+   googleAnalytics     = &amp;quot;UA-123-45&amp;quot;
+
+   [permalinks]
+   fixed = &amp;quot;:title/&amp;quot;
+   blog  = &amp;quot;blog/:slug/&amp;quot;
+
+   [params]
+   author                 = &amp;quot;coldriver的技术博客&amp;quot;
+   cachebuster            = true                          # add the current unix timestamp in query string for cache busting css assets
+   dateform               = &amp;quot;Jan 2, 2006&amp;quot;
+   dateformfull           = &amp;quot;Mon Jan 2 2006 15:04:05 MST&amp;quot;
+   description            = &amp;quot;Don&#39;t panic&amp;quot;
+   email                  = &amp;quot;chongg039@gmail.com&amp;quot;
+   # extracssfiles          = [ &amp;quot;/css/override.css&amp;quot; ]       # In your `static` directory, add/remove files as necessary.
+   # faviconfile            = &amp;quot;img/leaf.ico&amp;quot;
+   github                 = &amp;quot;//github.com/chongg039&amp;quot;
+   highlightjs            = true
+   lang                   = &amp;quot;en&amp;quot;
+   # linkedin               = &amp;quot;//linkedin.com/in/you&amp;quot;
+   noshowreadtime         = false                         # if true, don&#39;t show &amp;quot;&amp;lt;x&amp;gt; minutes read&amp;quot; in posts
+   selfintro              = &amp;quot;&amp;quot;                            # appears in the site header when set to a non-empty string
+   twitter                = &amp;quot;//twitter.com/uestcchongg&amp;quot;
+   # highlightjslanguages = [&amp;quot;go&amp;quot;]                        # additional languages not included in the &amp;quot;common&amp;quot; set
+
+   # avatar                 = &amp;quot;img/profile.png&amp;quot; # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
+   # gravatar             = &amp;quot;&amp;quot;                # do not use in the same time as avatar
+
+   # The following are DEPRECATED.
+   gatracker              = &amp;quot;XYZ&amp;quot; # use googleAnalytics instead
+   initials               = &amp;quot;ad&amp;quot;  # displayed on single post page; deprecated in v0.3.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Cloudflare 生效大概在72小时之内，我这边还是比较快的。如果你的博客显示不安全的信息，或者丢失样式文件，建议打开控制台检查一下，多半是某处文件没有使用 HTTPS 导致的。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;最后建议阅读 Jerry Qu 的&lt;a href=&#34;https://imququ.com/post/sth-about-switch-to-https.html&#34;&gt;关于启用 HTTPS 的一些经验分享&lt;/a&gt;，对理解不同平台以及浏览器的 HTTPS 启用有很大帮助。&lt;/p&gt;
+
+&lt;p&gt;配置的过程很痛苦，但当你的博客上出现一把小绿锁，心里是真的舒服。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

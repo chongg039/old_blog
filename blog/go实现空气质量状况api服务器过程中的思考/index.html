@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Don&#39;t panic">
+
+<base href="https://chongg039.github.io/">
+<title>
+
+
+     Go实现空气质量状况API服务器过程中的思考 
+
+</title>
+<link rel="canonical" href="https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/">
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="https://chongg039.github.io/css/reset.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/pygments.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/main.css?t=1490330580">
+    
+        <link rel="stylesheet" href="https://chongg039.github.io/css/override.css?t=1490330580">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://chongg039.github.io/img/favicon.ico"
+
+>
+
+
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+            <a href="https://chongg039.github.io/"><div class="name">coldriver的技术博客</div></a>
+            
+            <nav>
+                <ul>
+                    <li class="nav-blog"><a href="https://chongg039.github.io/blog/">Blog</a></li>
+                    <li class="nav-about"><a href="https://chongg039.github.io/about/">About</a></li>
+                    <li class="nav-code"><a href="https://chongg039.github.io/life/">Life</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/chongg039" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/github.svg" alt="github" /></a>
+        
+
+        
+            <a href="//twitter.com/uestcchongg" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/twitter.svg" alt="twitter" /></a>
+        
+
+        
+
+        
+
+        
+
+        
+            <a href="mailto:chongg039@gmail.com"><img class="icon" src="https://chongg039.github.io/img/email.svg" alt="email" /></a>
+        
+
+        
+            <a href="https://chongg039.github.io/index.xml"><img class="icon" src="https://chongg039.github.io/img/rss.svg" alt="rss" /></a>
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    Go实现空气质量状况API服务器过程中的思考
+
+</div>
+
+                    <div class="initials"><a href="https://chongg039.github.io/">ad</a></div>
+                </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Sat Mar 4 2017 16:27:52 CST'>Mar 4, 2017</div>
+                    
+                    
+                    <div class="reading-time"><div class="middot"></div>1 minute read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                <p>学习Go之后第一个项目，是编写一个API服务器，提供城市AQI的JSON数据。</p>
+
+<p>既然要实现这个功能，要解决的问题一个是数据源，一个是Server。</p>
+
+<p>先说说数据源，如果仅仅和我们初步设想的一样，仅仅为我们的一款应用提供即时数据，那样只是做一个第三方数据的中转便可。不过为了以后可以针对性的做数据分析，还是需要将数据爬下来存在数据库。</p>
+
+<p>一开始用的是 <a href="http://www.pm25.com/">绿色呼吸</a> 的数据源，因为经过考察后认为这个网站更新较快，每小时的第一分钟基本能完成数据更新。其次我们的应用并不需要提供很详细的数据，AQI和pm2.5即可。于是第一版爬虫和服务器便依托这个数据源建立起来了。</p>
+
+<p>因为每小时要存一次数据，一开始便考虑数据库怎么设计要优雅一些。为了增强可视化，数据库我选择的是mongoDB，以“YYYYMMDDHH”格式作为一个collection，每个collection里存放三百多个城市及其数据。</p>
+
+<p>后来发现随着数据的增多，进行复杂查询会开关很多次不同的collection，占用许多不必要时间。于是将数据库迁移到了mysql，只建立一个空气质量表，用“YYYYMMDDHH”格式的时间和城市名作为复合主键存放数据。这样每次查询只需要打开和关闭一次Table。</p>
+
+<p>在测试爬虫性能的时候，因为一次只获取三百多条数据，犯不着异步。但单条写入数据库却消耗了9.85s左右，而因为数据库设计的问题，同样情况下mongoDB仅耗时200ms，这不是我希望看到的。于是为了节省发送链接和开关数据库的时间开销，采用事务进行插入，优化后插入仅耗时70ms，从打开数据库开始计算不到500ms，在接受范围之内。</p>
+
+<pre><code>但经过一段时间发现这个网站的数据源时不时会挂掉，严重时甚至丢失数据。于是萌生了重新爬环保部官方数据的想法，但需要安装 Silverlight。幸好有人在 GitHub 上开源了一个 pyhton 破解版本的爬虫，改动后可用，感谢🙏
+
+但是官方数据源不知为什么更新很慢，基本是到半点才更新
+</code></pre>
+
+<p>数据存储完，接下来是API服务器的实现。</p>
+
+<p>整个过程我是体会到了Go中struct配合interface强大的灵活性</p>
+
+<p>之前看了<a href="https://thenewstack.io/make-a-restful-json-api-go/">一篇文章</a>深受启发，作者在文中实现的架构也让我眼前一亮。于是在此基础上完成了这个空气质量状况的API服务器。实现的接口主要如下：</p>
+
+<pre><code>GET		/aqi/城市名&amp;today			返回某一城市当天所有时段的数据
+
+GET		/aqi/城市名&amp;now			返回某一城市最新一小时的数据
+
+GET		/aqi/城市名&amp;2017022822		返回某一城市某一时刻(2017-02-28 22:00)的数据
+
+GET		/aqi/城市名&amp;trend			返回某一城市当前与上一小时相比变化的AQI，缺少某一时段数据则为0
+
+GET		/aqi/allcity			  返回城市表，包括城市名和城市编号
+
+GET		/aqi/城市名&amp;station		返回某一城市的监测站，包括编号、名称和经纬度
+
+GET		/aqi/cities?city1=城市名&amp;city2=城市名&amp;city3...	返回任意多城市的当前数据
+
+</code></pre>
+
+<p>基本功能主要是参照<a href="http://www.pm25.in/">PM25.in</a>的接口文档，因为我们的应用要精简功能，第一版也就加了这么多。</p>
+
+<p>过程中发现的问题：</p>
+
+<ol>
+<li>自己的思维还是面向过程，尽管Go提供的面向对象十分友好</li>
+<li>在数据库优化方面能力还是有些不足</li>
+<li>旧版工程用两个第三方包，mux路由包和定时任务包cron，以后争取用原生替换掉</li>
+<li>编译还是喜欢用Makefile</li>
+</ol>
+
+<p>为了实现工程自动化，我使用了supervisor并输出运行日志作为监控，目前运行比较稳定。</p>
+
+<p>我将项目开源，<a href="https://github.com/chongg039/AQIApp">旧版工程</a>包括爬虫和服务器，均使用Go实现，但是数据源不稳定，输出API也不够规范，仅作为参考，不再更新。<a href="https://github.com/CM-Studio/air-server">新版工程</a>只有服务器，数据源也是环保部官方数据源格式。开源的目的是便是希望大家有需要就自己搭一个，不要随便攻击我们这种没有加任何安全措施的服务器&hellip;</p>
+
+<p>再说我也不会把我们的IP告诉你。</p>
+
+                <br>
+                <p><a href="https://chongg039.github.io/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'coldriver';
+    var disqus_identifier = 'https:\/\/chongg039.github.io\/blog\/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83\/';
+    var disqus_title = 'Go实现空气质量状况API服务器过程中的思考';
+    var disqus_url = 'https:\/\/chongg039.github.io\/blog\/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+</body>
+</html>
+

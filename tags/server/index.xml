@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Server on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/server/index.xml</link>
+    <description>Recent content in Server on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/server/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go实现空气质量状况API服务器过程中的思考</title>
+      <link>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <pubDate>Sat, 04 Mar 2017 16:27:52 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <description>&lt;p&gt;学习Go之后第一个项目，是编写一个API服务器，提供城市AQI的JSON数据。&lt;/p&gt;
+
+&lt;p&gt;既然要实现这个功能，要解决的问题一个是数据源，一个是Server。&lt;/p&gt;
+
+&lt;p&gt;先说说数据源，如果仅仅和我们初步设想的一样，仅仅为我们的一款应用提供即时数据，那样只是做一个第三方数据的中转便可。不过为了以后可以针对性的做数据分析，还是需要将数据爬下来存在数据库。&lt;/p&gt;
+
+&lt;p&gt;一开始用的是 &lt;a href=&#34;http://www.pm25.com/&#34;&gt;绿色呼吸&lt;/a&gt; 的数据源，因为经过考察后认为这个网站更新较快，每小时的第一分钟基本能完成数据更新。其次我们的应用并不需要提供很详细的数据，AQI和pm2.5即可。于是第一版爬虫和服务器便依托这个数据源建立起来了。&lt;/p&gt;
+
+&lt;p&gt;因为每小时要存一次数据，一开始便考虑数据库怎么设计要优雅一些。为了增强可视化，数据库我选择的是mongoDB，以“YYYYMMDDHH”格式作为一个collection，每个collection里存放三百多个城市及其数据。&lt;/p&gt;
+
+&lt;p&gt;后来发现随着数据的增多，进行复杂查询会开关很多次不同的collection，占用许多不必要时间。于是将数据库迁移到了mysql，只建立一个空气质量表，用“YYYYMMDDHH”格式的时间和城市名作为复合主键存放数据。这样每次查询只需要打开和关闭一次Table。&lt;/p&gt;
+
+&lt;p&gt;在测试爬虫性能的时候，因为一次只获取三百多条数据，犯不着异步。但单条写入数据库却消耗了9.85s左右，而因为数据库设计的问题，同样情况下mongoDB仅耗时200ms，这不是我希望看到的。于是为了节省发送链接和开关数据库的时间开销，采用事务进行插入，优化后插入仅耗时70ms，从打开数据库开始计算不到500ms，在接受范围之内。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;但经过一段时间发现这个网站的数据源时不时会挂掉，严重时甚至丢失数据。于是萌生了重新爬环保部官方数据的想法，但需要安装 Silverlight。幸好有人在 GitHub 上开源了一个 pyhton 破解版本的爬虫，改动后可用，感谢🙏
+
+但是官方数据源不知为什么更新很慢，基本是到半点才更新
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;数据存储完，接下来是API服务器的实现。&lt;/p&gt;
+
+&lt;p&gt;整个过程我是体会到了Go中struct配合interface强大的灵活性&lt;/p&gt;
+
+&lt;p&gt;之前看了&lt;a href=&#34;https://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;一篇文章&lt;/a&gt;深受启发，作者在文中实现的架构也让我眼前一亮。于是在此基础上完成了这个空气质量状况的API服务器。实现的接口主要如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET		/aqi/城市名&amp;amp;today			返回某一城市当天所有时段的数据
+
+GET		/aqi/城市名&amp;amp;now			返回某一城市最新一小时的数据
+
+GET		/aqi/城市名&amp;amp;2017022822		返回某一城市某一时刻(2017-02-28 22:00)的数据
+
+GET		/aqi/城市名&amp;amp;trend			返回某一城市当前与上一小时相比变化的AQI，缺少某一时段数据则为0
+
+GET		/aqi/allcity			  返回城市表，包括城市名和城市编号
+
+GET		/aqi/城市名&amp;amp;station		返回某一城市的监测站，包括编号、名称和经纬度
+
+GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回任意多城市的当前数据
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;基本功能主要是参照&lt;a href=&#34;http://www.pm25.in/&#34;&gt;PM25.in&lt;/a&gt;的接口文档，因为我们的应用要精简功能，第一版也就加了这么多。&lt;/p&gt;
+
+&lt;p&gt;过程中发现的问题：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;自己的思维还是面向过程，尽管Go提供的面向对象十分友好&lt;/li&gt;
+&lt;li&gt;在数据库优化方面能力还是有些不足&lt;/li&gt;
+&lt;li&gt;旧版工程用两个第三方包，mux路由包和定时任务包cron，以后争取用原生替换掉&lt;/li&gt;
+&lt;li&gt;编译还是喜欢用Makefile&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;为了实现工程自动化，我使用了supervisor并输出运行日志作为监控，目前运行比较稳定。&lt;/p&gt;
+
+&lt;p&gt;我将项目开源，&lt;a href=&#34;https://github.com/chongg039/AQIApp&#34;&gt;旧版工程&lt;/a&gt;包括爬虫和服务器，均使用Go实现，但是数据源不稳定，输出API也不够规范，仅作为参考，不再更新。&lt;a href=&#34;https://github.com/CM-Studio/air-server&#34;&gt;新版工程&lt;/a&gt;只有服务器，数据源也是环保部官方数据源格式。开源的目的是便是希望大家有需要就自己搭一个，不要随便攻击我们这种没有加任何安全措施的服务器&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;再说我也不会把我们的IP告诉你。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux 服务器配置静态 IP 并 802.1x 拨号</title>
+      <link>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</link>
+      <pubDate>Sat, 12 Nov 2016 15:15:27 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</guid>
+      <description>
+
+&lt;p&gt;终于布好工作室的服务器了。&lt;/p&gt;
+
+&lt;p&gt;我写了个脚本一键部署静态ip和802.1x拨号：&lt;a href=&#34;https://gist.github.com/chongg039/3310467e329e00de3b6b04aaae646f3c&#34;&gt;ubuntu-server.sh&lt;/a&gt;，不想看我啰嗦的可以直接拿过来改改就能用。&lt;/p&gt;
+
+&lt;p&gt;先讲个小故事：&lt;/p&gt;
+
+&lt;p&gt;工作室项目配了HTTPS，必须要域名访问，可是又没钱，买不起性能好的云服务器怎么办？&lt;/p&gt;
+
+&lt;p&gt;看了看角落里有一台遗留下来的服务器，至强12核 + 32G内存 + 120G SSD，性能不错，就是它了。跑到网络中心问了问，以前这台的MAC地址学校就给分配了一个静态IP，而且现在还能用。很好呀，交了证明材料，拿回了一些信息就准备开工。&lt;/p&gt;
+
+&lt;p&gt;下面就是正题了，针对ubuntu server版进行说明：&lt;/p&gt;
+
+&lt;p&gt;在配置之前，首先得确定几件事情：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;确保你有一个分配到的公网ip，查清楚它的网关和子网掩码，还有本地dns&lt;/li&gt;
+&lt;li&gt;检查服务器有几个网卡，到底是哪个网卡的MAC地址绑定了分配给你的公网ip（我们服务器是双网卡，绑定的是&lt;code&gt;enp7s0f0&lt;/code&gt;，注意下文换成自己的）&lt;/li&gt;
+&lt;li&gt;确保网线插到了对应的网卡接口上&lt;/li&gt;
+&lt;li&gt;有一个可以802.1x拨号的上网账号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;首先尝试一下用dhcp拨号上网&#34;&gt;首先尝试一下用dhcp拨号上网：&lt;/h4&gt;
+
+&lt;p&gt;服务器版使用了&lt;code&gt;wpasupplicant&lt;/code&gt;拨号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install wpasupplicant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编辑&lt;code&gt;/etc/wpa_supplicant.conf&lt;/code&gt;文件:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Where is the control interface located? This is the default path:
+ctrl_interface=/var/run/wpa_supplicant
+
+# Who can use the WPA frontend? Replace &amp;quot;0&amp;quot; with a group name if you
+# want other users besides root to control it.
+# There should be no need to chance this value for a basic configuration:
+ctrl_interface_group=0
+
+# IEEE 802.1X works with EAPOL version 2, but the version is defaults
+# to 1 because of compatibility problems with a number of wireless
+# access points. So we explicitly set it to version 2:
+eapol_version=2
+
+# When configuring WPA-Supplicant for use on a wired network, we don’t need to
+# scan for wireless access points. See the wpa-supplicant documentation if
+# you are authenticating through 802.1x on a wireless network:
+ap_scan=0
+
+network={
+ ​        key_mgmt=IEEE8021X
+         eap=TTLS MD5
+ ​        identity=&amp;quot;yourUsername&amp;quot;
+         anonymous_identity=&amp;quot;yourUsername&amp;quot;
+ ​        password=&amp;quot;yourPassword&amp;quot;
+ ​        phase1=&amp;quot;auth=MD5&amp;quot;
+ ​        phase2=&amp;quot;auth=PAP password=yourPassword&amp;quot;
+ ​        eapol_flags=0
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;替换成你自己的账号和密码&lt;/p&gt;
+
+&lt;p&gt;然后修改&lt;code&gt;/etc/network/interfaces&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp7s0f0
+iface enp7s0f0 inet dhcp
+
+wpa-driver wired
+
+wpa-conf /etc/wpa_supplicant.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;保存，重启下网卡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo /etc/init.d/networking restart
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果不能重启，提示进程占用的话就先kill wpa进程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo killall -q wpa_supplicant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再重启，成功后拨号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo wpa_supplicant -c /etc/wpa_supplicant.conf -B -D wired -i enp7s0f0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用&lt;code&gt;-B&lt;/code&gt;后台运行，成功后可以ping一下地址，ifconfig看看有没有分配到ip，没有的话reboot一下，一般是没问题的。&lt;/p&gt;
+
+&lt;h4 id=&#34;配置静态ip&#34;&gt;配置静态ip&lt;/h4&gt;
+
+&lt;p&gt;这里只需要修改&lt;code&gt;/etc/network/interfaces&lt;/code&gt;中&lt;code&gt;enp7s0f0&lt;/code&gt;部分：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# The primary network interface
+auto enp7s0f0
+iface enp7s0f0 inet static
+         address 222.197.176.***
+         netmask 255.255.255.***
+​         network 222.197.176.128
+ ​        broadcast 222.197.176.255
+ 		 gateway 222.197.176.***
+​		 # dns-* options are implemented by the resolvconf package, if installed
+		 dns-nameservers 202.112.14.***
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;理论上只需要填写&lt;code&gt;address、netmask、gateway、dns&lt;/code&gt;即可，我在安装ubuntu server时联网填入了这些，自动计算出了&lt;code&gt;network&lt;/code&gt;和&lt;code&gt;broadcast&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;重启网卡后再拨号一下，应该就绑定好静态ip并且能上网了，不过建议还是reboot一下。&lt;/p&gt;
+
+&lt;p&gt;可以装个&lt;code&gt;openssh-server&lt;/code&gt;，用别的机子ssh一下这个ip试试。&lt;/p&gt;
+
+&lt;h4 id=&#34;后记&#34;&gt;后记：&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一定要确认给你的静态ip到底绑定的是哪个网卡的MAC地址，并插好了网线，否则就像我们一样绑定好了ip也上不了公网&lt;/li&gt;
+&lt;li&gt;我们学校要求活动中心这边的服务器使用的静态ip，必须用电信给的办公区的上网账号才能拨号，学生宿舍的账号是不行的，给的波段不一样。在配置前一定要去网络中心和电信营业厅问清楚&lt;/li&gt;
+&lt;li&gt;后来装回了ubuntu desktop版，发现直接在network设置里的图形化界面配置就行了，哪这么多破事。。。这充分说明了一开始我们搞不定就是用错了网卡&lt;/li&gt;
+&lt;li&gt;这篇文章主要为了留给工作室以后的学弟学妹们，以及像我们学校一样，仍在使用802.1x拨号的苦逼创业团队用，随意转载&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>使用vultr&#43;SS&#43;锐速科学上网</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+      <pubDate>Mon, 03 Oct 2016 20:32:20 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
+      <description>
+
+&lt;p&gt;接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。&lt;/p&gt;
+
+&lt;h3 id=&#34;配置vultr主机&#34;&gt;配置vultr主机&lt;/h3&gt;
+
+&lt;p&gt;V家的主机算得上是性价比较高的一款了，而且有日本和新加坡的线路，相对来说延迟比较稳定。截止我购买的时候是每个新用户有20刀的返利，还是比较划算的。&lt;/p&gt;
+
+&lt;h4 id=&#34;在-https-www-vultr-com-创建用户&#34;&gt;在 &lt;a href=&#34;https://www.vultr.com/&#34;&gt;https://www.vultr.com/&lt;/a&gt; 创建用户&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-create-account.png&#34; alt=&#34; &#34; title=&#34;vultr-create-account&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;进来后需要绑定账户。如果没有信用卡的话建议使用PayPal，而且PayPal应该是支持国内的储蓄卡绑定的，比较方便。&lt;/p&gt;
+
+&lt;p&gt;第一次使用需要先充值5刀，还是比较便宜的，之后会说到vultr主机的扣费机制。&lt;/p&gt;
+
+&lt;p&gt;在图的右边，这次我注册了一个新账号，但是很不幸的显示返利变少了。。。好吧你要是能找到优惠码的话也许还会有。。。&lt;/p&gt;
+
+&lt;h4 id=&#34;配置主机&#34;&gt;配置主机&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-setting-servers.png&#34; alt=&#34; &#34; title=&#34;vultr-setting-servers&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这是我的vultr主界面面板，可以看到已经有了两个在运行的服务器。如果开始要新建一个服务器，点击右上方的+号：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server.png&#34; alt=&#34; &#34; title=&#34;vultr-server&#34; /&gt;
+&amp;gt;这里选择日本的服务器，经过几天的测试发现日本的要比新加坡的线路快不少
+操作系统选择自己熟悉的就好，我选的ubuntu14.04，不建议windows
+如果只是为了搭建番茄的梯子，配置最低配那个就行，一个月总计才5刀，性能完全满足需求
+有需要的话可以勾选IPV6，我们校区没有就不搞了&lt;/p&gt;
+
+&lt;p&gt;配置完后deploy就会生成相应的vultr服务器了主界面像下面这样：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server-info.png&#34; alt=&#34; &#34; title=&#34;vultr-server-info&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;显示了ip地址，初始root密码和流量、费用的使用。&lt;/p&gt;
+
+&lt;h4 id=&#34;ssh到vultr服务器&#34;&gt;ssh到vultr服务器&lt;/h4&gt;
+
+&lt;p&gt;打开终端，输入
+&amp;gt;ssh root@你的vultr主机ip&lt;/p&gt;
+
+&lt;p&gt;第一次验证选择&amp;rsquo;YES&amp;rsquo;，输入初始密码后便连上了vultr服务器。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;可以 &lt;code&gt;passwd root&lt;/code&gt; 修改初始密码&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;安装shadowsocks-python服务器版&#34;&gt;安装shadowsocks-python服务器版&lt;/h3&gt;
+
+&lt;p&gt;shadowsocks服务器有很多版本，go、python、libev、R都可以。安装方式可以手动配，我自己的ubuntu电脑就是用这种比较原始的办法配的，需要手动编写 /etc/shadowsocks.json 文件，还得写一个开机启动和后台运行脚本。不过确实比较有成就感，而且一劳永逸。&lt;/p&gt;
+
+&lt;p&gt;然而那天我们美工告诉我 &lt;a href=&#34;https://teddysun.com/&#34;&gt;秋水大大&lt;/a&gt; 写了一个自动生成脚本，感觉世界观被颠覆了。不过确实好用，这里用他的 &lt;a href=&#34;https://teddysun.com/342.html&#34;&gt;Shadowsocks Python版一键安装脚本&lt;/a&gt; 来安装到我们的vultr服务器中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
+
+chmod +x shadowsocks.sh
+
+./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;按照脚本提示输入就可以，安装完后提示如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Congratulations, shadowsocks install completed!
+Your Server IP:your_server_ip
+Your Server Port:your_server_port
+Your Password:your_password
+Your Local IP:127.0.0.1
+Your Local Port:1080
+Your Encryption Method:aes-256-cfb
+
+Welcome to visit:https://teddysun.com/342.html
+Enjoy it!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;tesths 建议我们用8388端口，说这个经他测试比较稳定。虽然知道他在满嘴跑火车，但是还是忍不住用了。。。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;可以使用下面的命令操作shadowsocks：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;启动：/etc/init.d/shadowsocks start
+停止：/etc/init.d/shadowsocks stop
+重启：/etc/init.d/shadowsocks restart
+状态：/etc/init.d/shadowsocks status
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在不论你的电脑是windows、mac还是linux，使用ss客户端（自行查找下载）输入ip、端口和密码应该就可以番茄了。可以打开 &lt;a href=&#34;https://fast.com/&#34;&gt;https://fast.com/&lt;/a&gt; 测一下速。
+&amp;gt;说实话买到的vultr主机的ip，番茄快不快完全看人品，根本不知道这个节点速度怎样。
+所以我建议多买几个主机，多用几个ip试试，因问V家的主机不是一次性收费一个月的5刀，而是按时间计费。加上他给的返利，可以多几个ip试用几天，留下稳定的那个服务器，剩下的再删掉即可。&lt;/p&gt;
+
+&lt;h3 id=&#34;配置锐速&#34;&gt;配置锐速&lt;/h3&gt;
+
+&lt;p&gt;有很多的服务器加速工具，&lt;a href=&#34;http://www.serverspeeder.com/&#34;&gt;锐速&lt;/a&gt; 应该是相当不错的一家，又不会无脑占用国际带宽。不过不知道官方怎么了，我们安装破解版就可以。&lt;/p&gt;
+
+&lt;p&gt;锐速破解版也有一键安装脚本，我参考的是 &lt;a href=&#34;https://www.91yun.org/archives/683&#34;&gt;这里&lt;/a&gt; 的方法。&lt;/p&gt;
+
+&lt;h4 id=&#34;安装锐速&#34;&gt;安装锐速&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;amp;&amp;amp; bash serverspeeder-all.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;如果安装失败，一般会提示锐速支持的内核和我们的不匹配，可以 &lt;a href=&#34;http://dl.serverspeeder.com/ls.do?m=availables&#34;&gt;http://dl.serverspeeder.com/ls.do?m=availables&lt;/a&gt; 查看支持的内核&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;更换内核&#34;&gt;更换内核&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;dpkg -l|grep linux-image
+//查看当前安装的内核
+apt-get install linux-image-3.13.0-96-generic linux-image-extra-3.13.0-96-generic
+//安装锐速支持的内核，如果不支持，可能会选择一个比较近的版本下载
+sudo apt-get purge linux-image-3.13.0-xx-generic linux-image-extra-3.13.0-xx-generic
+//卸载第一步看到的不支持的内核
+update-grub
+//更新系统引导文件
+reboot
+//重启后生效
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样再去执行一键安装脚本，锐速就可以顺利安装了。&lt;/p&gt;
+
+&lt;p&gt;理论上速度应该会有所提升，而且还比较明显。&lt;/p&gt;
+
+&lt;p&gt;最后我只想说，脚本真是个好东西啊。。。
+（默哀一下阿里的月饼员工们）&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>使用ngrok实现内网穿透</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <pubDate>Sun, 18 Sep 2016 09:37:45 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <description>
+
+&lt;p&gt;今天想用nodejs写一个微信公众号服务，很尴尬的发现自己的腾讯云学生服务器已经三个月没续费被收回了。工作室的这台服务器又不是很想动，于是就想到前一段时间看的一个实现内网穿透的工具ngrok，花了一段时间部署在了自己的ubuntu上。又化了两块钱买了个域名，准备以后作为工作室测试来用。&lt;/p&gt;
+
+&lt;p&gt;这里感谢下&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt; 提供的文章，方法很不错，省去了自己爬坑的麻烦。&lt;/p&gt;
+
+&lt;h2 id=&#34;准备阶段&#34;&gt;准备阶段&lt;/h2&gt;
+
+&lt;h4 id=&#34;下载ngrok&#34;&gt;下载ngrok&lt;/h4&gt;
+
+&lt;p&gt;由于ngrok是用Go语言开发的，先得安装好必要的环境：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install build-essential golang mercurial git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来从源码安装，原来的官网好像早就挂了，不过开发者们已经把ngrok开源了，可以从github上获得：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/tutumcloud/ngrok.git ngrok
+cd ngrok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;替换证书&#34;&gt;替换证书&lt;/h4&gt;
+
+&lt;p&gt;源码中有证书，但需要自己生成一个，并把原来那个替换掉：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NGROK_DOMAIN=&amp;quot;cmweb.top&amp;quot;
+//注意上面的域名地址替换成你自己的
+//下面依次运行
+openssl genrsa -out base.key 2048
+openssl req -new -x509 -nodes -key base.key -days 10000 -subj &amp;quot;/CN=&amp;gt;$NGROK_DOMAIN&amp;quot; -out base.pem
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -subj &amp;quot;/CN=$NGROK_DOMAIN&amp;quot; -out server.csr
+openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt
+
+cp base.pem assets/client/tls/ngrokroot.crt
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;编译ngrok&#34;&gt;编译ngrok&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo make release-server release-client
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;成功的标志是ngrok/bin目录下应有ngrok、ngrokd两个文件。&lt;/p&gt;
+
+&lt;h3 id=&#34;开始部署&#34;&gt;开始部署&lt;/h3&gt;
+
+&lt;h4 id=&#34;服务器端&#34;&gt;服务器端&lt;/h4&gt;
+
+&lt;p&gt;就是前面生成的ngrokd程序，指定证书、域名和端口启动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo ./bin/ngrokd -tlsKey=server.key -tlsCrt=server.crt -domain=&amp;quot;cmweb.top&amp;quot; -httpAddr=&amp;quot;:8081&amp;quot; -httpsAddr=&amp;quot;:8082&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意修改为自己的域名，httpAddr、httpsAddr 分别是 ngrok 用来转发 http、https 服务的端口，可以随意指定(但要注意这个域名一定是公网可访问到的)。&lt;/p&gt;
+
+&lt;p&gt;这里将我的&lt;code&gt;cmweb.top&lt;/code&gt;域名做了泛解析，我指定了一个子域 &lt;a href=&#34;http://pub.cmweb.top:8081&#34;&gt;http://pub.cmweb.top:8081&lt;/a&gt; 并访问它，发现页面显示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Tunnel pub.cmweb.top:8081 not found
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明服务器端已经好了，剩下的就是部署客户端了。&lt;/p&gt;
+
+&lt;h4 id=&#34;客户端&#34;&gt;客户端&lt;/h4&gt;
+
+&lt;p&gt;客户端就是生成的ngrok，这里参考了&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt;的方法，在ngrok/bin下写了一个启动配置文件 ngrok.cfg：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server_addr: cmweb.top:4443
+trust_host_root_certs: false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4443 端口是服务端ngrokd 开的用来跟客户端通讯的端口，并可通过 -tunnelAddr=&amp;rdquo;:xxx&amp;rdquo; 指定。&lt;/p&gt;
+
+&lt;h3 id=&#34;运行&#34;&gt;运行&lt;/h3&gt;
+
+&lt;p&gt;指定子域、要转发的协议和端口、配置文件，在服务器端运行后，运行客户端：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;./ngrok -subdomain pub -proto=http -config=ngrok.cfg 80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里貌似只支持本机的80端口进行映射，试了其他的端口会报错，而且nodejs的微信API也只支持80端口，毕竟我们的主要目的不是为了研究这个，具体原因也就没有深究。&lt;/p&gt;
+
+&lt;p&gt;现在就大功告成了我把一个测试用例&lt;code&gt;app.listen(80)&lt;/code&gt;上，发现公网可以通过 &lt;a href=&#34;http://pub.cmweb.top:8081&#34;&gt;http://pub.cmweb.top:8081&lt;/a&gt; 进行访问了，也就是说实现了内网到公网的一个映射。&lt;/p&gt;
+
+&lt;h3 id=&#34;结语&#34;&gt;结语&lt;/h3&gt;
+
+&lt;p&gt;文章基本是对&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt;方法的一次操作纪录，没什么原创性，但是可以学到很多知识（也省去了私人开发项目购买服务器的钱&amp;hellip;）。总之以后本机开发的项目就不用劳心费神的再放到服务器上辛辛苦苦的去调试了。&lt;/p&gt;
+
+&lt;p&gt;这也算是一次成功的实践，也不用麻烦的去捣鼓路由器。&lt;/p&gt;
+
+&lt;p&gt;补充：发现了一个集成好了的东西：&lt;a href=&#34;www.ngrok.cc&#34;&gt;sunny-ngrok&lt;/a&gt; ，有时间大家可以研究一下。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

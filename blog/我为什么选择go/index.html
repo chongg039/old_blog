@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Don&#39;t panic">
+
+<base href="https://chongg039.github.io/">
+<title>
+
+
+     我为什么选择Go 
+
+</title>
+<link rel="canonical" href="https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/">
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="https://chongg039.github.io/css/reset.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/pygments.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/main.css?t=1490330580">
+    
+        <link rel="stylesheet" href="https://chongg039.github.io/css/override.css?t=1490330580">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://chongg039.github.io/img/favicon.ico"
+
+>
+
+
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+            <a href="https://chongg039.github.io/"><div class="name">coldriver的技术博客</div></a>
+            
+            <nav>
+                <ul>
+                    <li class="nav-blog"><a href="https://chongg039.github.io/blog/">Blog</a></li>
+                    <li class="nav-about"><a href="https://chongg039.github.io/about/">About</a></li>
+                    <li class="nav-code"><a href="https://chongg039.github.io/life/">Life</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/chongg039" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/github.svg" alt="github" /></a>
+        
+
+        
+            <a href="//twitter.com/uestcchongg" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/twitter.svg" alt="twitter" /></a>
+        
+
+        
+
+        
+
+        
+
+        
+            <a href="mailto:chongg039@gmail.com"><img class="icon" src="https://chongg039.github.io/img/email.svg" alt="email" /></a>
+        
+
+        
+            <a href="https://chongg039.github.io/index.xml"><img class="icon" src="https://chongg039.github.io/img/rss.svg" alt="rss" /></a>
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    我为什么选择Go
+
+</div>
+
+                    <div class="initials"><a href="https://chongg039.github.io/">ad</a></div>
+                </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Mon Feb 27 2017 12:50:39 CST'>Feb 27, 2017</div>
+                    
+                    
+                    <div class="reading-time"><div class="middot"></div>1 minute read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<p>是的，我开始接触go语言了，如去年年底所说的那样。</p>
+
+<p>先说说我为什么不继续用Node，并不是因为这门语言不好。事实上，NodeJS作为一个争议颇多的“全栈”语言，才带我真正走进了编程世界。它的异步，并发，非阻塞，以及丰富的npm库，无一不证明了它在解决传统服务器端编程的很多非常棒的思想。</p>
+
+<p>我可以毫不违心的说，使用node开发web服务器是一件非常畅快的事情（尤其是对一名新手而言），而且使用JS前后端通吃的感觉可以满足我很大的虚荣心。同时丰富的npm包以及良好的版本管理也给人留下了很好的印象。</p>
+
+<p>以下都是我的一面之词，看看便罢。</p>
+
+<h2 id="node存在争议的地方">Node存在争议的地方</h2>
+
+<h3 id="乱七八糟的回调">乱七八糟的回调</h3>
+
+<p>虽然不论是官方还是民间都提出了很多解决异步回调的办法，但只能说是打的补丁而已，始终会让人是认为是早期语言的设计问题（这里可能说的比较片面）。</p>
+
+<h3 id="动态数据类型">动态数据类型</h3>
+
+<p>这类动态语言虽然免去了编译的麻烦，但在构建大型项目时利用编译器可以更早发现问题。从另一个方面来讲也增加了对环境的依赖，毕竟JS本来就是依赖于浏览器而生，Node也是运行在V8引擎之上。</p>
+
+<p>这里只是个人的感受，毕竟接触的语言也不多。</p>
+
+<h3 id="大量引入三方npm包">大量引入三方npm包</h3>
+
+<p>海量的npm包的确极大缩短了开发时间，但是也造成了滥用的问题。如果一个项目中引用的三方npm包过多，先不说耦合大不大，最起码系统的安全和稳定已经很难保证。而且如果是因为非常重大的问题导致的单个包的不得不更新，内部结构也要做出必要的升级，而这将给后期维护带来更多的困扰。</p>
+
+<p>所以说虽然用三方包用的很爽，但心里还是抵制这种滥用的模式的。</p>
+
+<h3 id="设计模式">设计模式</h3>
+
+<p>RESTful不用说了，这种理念无懈可击，最起码现在看起来是这样。主要还是想说一下MVC。</p>
+
+<p>最初开始使用mongodb + express + angularjs + nodejs做应用开发时，接触的便是MVC的文件组织目录，那时看来确实是结构清晰的一种组织方式。但现在看来，这种多文件夹以及相对不友好的require反而成了一种负担。</p>
+
+<p>有人会说MVC不是一种文件分散结构，而是客观存在的。这样说当然这对，可是又有多少人在使用MVC的过程中不会建立那几个文件夹呢？在我看来通过文件名已经足够清晰了，Node始终缺乏一个让我觉得满意的解决方法。</p>
+
+<h2 id="我用go的理由">我用Go的理由</h2>
+
+<ol>
+<li>首先Go很好的诠释了什么叫21世纪的C语言：设计优美良好、编译快、天生支持并发、部署方便，并且较新的版本完成了自举，第一印象非常好；</li>
+<li>有很多第三方package，方便引入，但许多三方package均仅使用原生package完成，依赖关系较弱；</li>
+<li>package包的组织方式使我们完全不需要显式组织MVC，减轻了组织结构的负担；</li>
+<li>不仅编译非常快，而且支持<code>go run</code>动态运行。编译快也是我将博客从Hexo迁移到Hugo的原因之一；</li>
+<li>支持多环境交叉编译，部署完全不需要考虑运行环境的依赖问题；</li>
+</ol>
+
+<p>还有很多理由就不一一说了，毕竟才接触Go两个多月。</p>
+
+<p>在用Go写了一个API服务器之后，我找到了当初刚学Node的那种畅快感。也许我接触的才是冰山一角，也许Go自身也有很多我没有发现的问题，也许我是学一门语言爱一门语言&hellip;&hellip;</p>
+
+<p>但学习总能带给我惊喜，你也可以试试。</p>
+
+                <br>
+                <p><a href="https://chongg039.github.io/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'coldriver';
+    var disqus_identifier = 'https:\/\/chongg039.github.io\/blog\/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go\/';
+    var disqus_title = '我为什么选择Go';
+    var disqus_url = 'https:\/\/chongg039.github.io\/blog\/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+</body>
+</html>
+

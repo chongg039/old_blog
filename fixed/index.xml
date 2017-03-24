@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fixed on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/fixed/index.xml</link>
+    <description>Recent content in Fixed on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 22 Aug 2015 06:42:21 -0700</lastBuildDate>
+    <atom:link href="https://chongg039.github.io/fixed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>about</title>
+      <link>https://chongg039.github.io/about/</link>
+      <pubDate>Sat, 22 Aug 2015 06:42:21 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/about/</guid>
+      <description>&lt;p&gt;coldriver，nodejs玩家，最近转型Go&lt;/p&gt;
+
+&lt;p&gt;仍就读于蓉城某非著名985院校计算机专业，创萌工作室现任负责人，保研无望又不安于找工作，最近准备搞点事情&lt;/p&gt;
+
+&lt;p&gt;师从isomker， tesths两位不大不小的牛人，工作室有一帮同甘共苦的小伙伴，时间紧凑，不过生活也算是滋润&lt;/p&gt;
+
+&lt;p&gt;有强烈的技术情结，重度开源患者，还未成型的全栈攻城尸。喜欢运动爱冒险，愿意探索新奇的语言和事物&lt;/p&gt;
+
+&lt;p&gt;如果你喜欢这里，可以订阅一下就是不知道下一篇什么时候更新。如果有兴趣也可以通过微信，Twitter 和我交流，共同学习进步&lt;/p&gt;
+
+&lt;p&gt;对我或者本站有意见和建议也可以通过下方的邮箱和我联系 ，希望你生活愉快！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/weixin.png?imageView2/2/w/200&#34; alt=&#34;微信&#34; /&gt;
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/twitter.jpg?imageView2/2/w/200&#34; alt=&#34;Twitter&#34; /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;resume/&#34;&gt;这里是我的简历&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>resume</title>
+      <link>https://chongg039.github.io/resume/</link>
+      <pubDate>Sat, 22 Aug 2015 06:28:26 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/resume/</guid>
+      <description>
+
+&lt;h2 id=&#34;联系方式&#34;&gt;联系方式&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;手机：请私信我的微信&lt;/li&gt;
+&lt;li&gt;Email：chongg039@gmail.com&lt;/li&gt;
+&lt;li&gt;微信号：uestc_gch&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;个人信息&#34;&gt;个人信息&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;高崇/男/1996&lt;/li&gt;
+&lt;li&gt;本科/电子科技大学计算机科学与技术学院&lt;/li&gt;
+&lt;li&gt;工作年限：2年&lt;/li&gt;
+&lt;li&gt;技术博客：&lt;a href=&#34;https://chongg039.cn&#34;&gt;https://chongg039.cn&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Github: &lt;a href=&#34;https://github.com/chongg039&#34;&gt;https://github.com/chongg039&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;期望职位：NodeJS/Golang，架构师实习生&lt;/li&gt;
+&lt;li&gt;期望城市：杭州，成都&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;工作经历&#34;&gt;工作经历&lt;/h2&gt;
+
+&lt;h3 id=&#34;cm-studio-2015年9月-今&#34;&gt;CM-Studio （ 2015年9月 ~ 今 ）&lt;/h3&gt;
+
+&lt;h4 id=&#34;wemeet&#34;&gt;WeMeet&lt;/h4&gt;
+
+&lt;p&gt;基于LBS的社交提供类服务，类似支付宝的“实景红包”的社交应用（但概念提出要比其出现更早），客户端主要为iOS和android，目前均已开发完毕。
+&lt;/br&gt;
+&lt;/br&gt;
+此项目的创意来源为2016年度游戏“Pokémon Go”，将社交与“AR”（增强现实）理念相融合。项目中解决了比较大的两个问题，一是即时通信协议的选取和基于区域的消息队列，二是全站HTTPS加密传输。
+&lt;/br&gt;
+&lt;/br&gt;
+本人在项目中担任负责人，主要负责技术和架构选型。不过感觉很多地方的思想并不是很成熟。&lt;/p&gt;
+
+&lt;h4 id=&#34;notlonely&#34;&gt;NotLonely&lt;/h4&gt;
+
+&lt;p&gt;同样是基于LBS的社交提供服务，受众范围为高校校园，主要理念是线上服务带动线下活动。
+&lt;/br&gt;
+&lt;/br&gt;
+此项目隶属工作室，但WeMeet很多灵感均来源于此。跟随NotLonely项目组成员也获得了很多产品方面的启发。&lt;/p&gt;
+
+&lt;h4 id=&#34;空气质量状况提供服务&#34;&gt;空气质量状况提供服务&lt;/h4&gt;
+
+&lt;p&gt;为用户提供全国各地的实时AQI统计情况，目前客户端有mac端，服务端基本开发完毕。
+&lt;/br&gt;
+&lt;/br&gt;
+本人因为此项目转型到了Go语言，体会到了Go在服务端的强大之处。本人在项目中收获最大的，一是学习了数据库选型和海量数据入库的优化方法，二是对并发和定时任务的深入了解。
+&lt;/br&gt;
+&lt;/br&gt;
+本人在项目中负责服务端的开发。&lt;/p&gt;
+
+&lt;h3 id=&#34;四川华迪信息技术有限公司-2016年7月-2016年8月&#34;&gt;四川华迪信息技术有限公司 （ 2016年7月 ~ 2016年8月 ）&lt;/h3&gt;
+
+&lt;h4 id=&#34;精准扶贫系统&#34;&gt;精准扶贫系统&lt;/h4&gt;
+
+&lt;p&gt;为贫困人口提供政府的扶贫信息和在线的贫困申请，以及为政府工作人员提供线上审批的处理方式。目前android已开发完毕。
+&lt;/br&gt;
+&lt;/br&gt;
+此次项目为学校的暑期实习项目，为期十五天的封闭式培训，让整个项目组有了快速开发并上线一个完整应用的能力。这也算是第一次完整的项目经历。
+&lt;/br&gt;
+&lt;/br&gt;
+本人在其中担任项目负责人，并负责整个android端的开发工作。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;开源项目&#34;&gt;开源项目&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/chongg039/AQIApp&#34;&gt;AQIAPP&lt;/a&gt; : 空气质量状况的爬虫以及API服务器&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/chongg039/expressBlog&#34;&gt;BlogEngine&lt;/a&gt; : 使用nodejs + express + mongodb + Angularjs1.x开发的博客引擎和Socket在线聊天室&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/chongg039/uestcLogin&#34;&gt;uestcLogin&lt;/a&gt; : 使用nodejs开发的模拟登陆电子科技大学教务处网站，并抓取学生成绩，考试以及课表的命令行工具&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/chongg039/chongg039.github.io&#34;&gt;Myblog&lt;/a&gt; : &lt;del&gt;使用nodejs + Hexo搭建的技术博客，不定期更新文章&lt;/del&gt;  目前已经迁移到Hugo&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;技能清单&#34;&gt;技能清单&lt;/h2&gt;
+
+&lt;p&gt;以下均为我熟练使用的技能&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;开发语言：Node/JavaScript/Go&lt;/li&gt;
+&lt;li&gt;Web框架：Express/Meteor&lt;/li&gt;
+&lt;li&gt;前端框架：Bootstrap/AngularJS1.x/Vue（这些是首选，其他的大部分都接触过）&lt;/li&gt;
+&lt;li&gt;前端工具：Bower/Yeoman&lt;/li&gt;
+&lt;li&gt;数据库相关：MySQL/MongoDB&lt;/li&gt;
+&lt;li&gt;操作系统和服务器：OS X／Linux／Nginx&lt;/li&gt;
+&lt;li&gt;版本管理、文档和自动化部署工具：Git/Markdown/Makefile/Supervisor&lt;/li&gt;
+&lt;li&gt;其他：RESTful/websocket/stackoverflow/全英文Google&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;致谢&#34;&gt;致谢&lt;/h2&gt;
+
+&lt;p&gt;感谢您花时间阅读我的简历，期待能有机会和您共事。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>life</title>
+      <link>https://chongg039.github.io/life/</link>
+      <pubDate>Wed, 19 Aug 2015 20:29:37 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/life/</guid>
+      <description>
+
+&lt;h2 id=&#34;2017-02-27&#34;&gt;2017-02-27&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/amazon-go.jpg&#34; alt=&#34;Amazon Go&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今天迪哥回来了，和我们聊了很长时间。&lt;/p&gt;
+
+&lt;p&gt;迪哥说他要去北京，和一帮老战友创业，想结合小程序把 Amazon Go 的模式在中国推广。听他胡扯半天，我都觉得自己被感染了。&lt;/p&gt;
+
+&lt;p&gt;迪哥今年二十六七，不小了，为了这次创业他又拒了阿里的 offer。我问他为什么，他也没有明确表态。我觉得工作室出去的人，可能多多少少都有这种不愿给人打工的心理吧。&lt;/p&gt;
+
+&lt;p&gt;迪哥最近在做小程序，小程序论坛就是他建的。我老对他说小程序对创业者不友好，既不能圈住流量，也不能得到实际利润，他也只是笑笑。不过对于他的这次创业，我觉得我之前的看法确实可能目光短浅了一些。&lt;/p&gt;
+
+&lt;p&gt;迪哥之前的创业经历寿命都很短暂，于我而言，我也希望我这位不仅是老乡，更是技术上的领路人的北京之行一路顺利。&lt;/p&gt;
+
+&lt;h2 id=&#34;2017-03-10&#34;&gt;2017-03-10&lt;/h2&gt;
+
+&lt;p&gt;我准备考研了，也许是因为焦虑。&lt;/p&gt;
+
+&lt;p&gt;之前我决定要工作的时候，好多人都在劝我。我想的是，哎呀我在工作室学了两年左右，不管是技术还是人脉都积累了不少，不好好利用不可惜了吗。而且大部分研究生的技术实力可能还没有我强，我为什么不去一些有实力的大厂，去更专业的团队磨练自己呢。&lt;/p&gt;
+
+&lt;p&gt;实话说我一开始贪心了，我希望的是早早的去实习两三个月，暑假回来的时候跟着大部队复习考研。这种心理，有一半是我曾经说过的要去大厂看看人家的技术栈和未来的方向，另一半则是鱼与熊掌要见的的盲目自信。&lt;/p&gt;
+
+&lt;p&gt;现在再看，这种自信与自大无异。可以说我去实习就是想见见世面，但我并不能保证自己找到一个有实力的团队。而且回来之后我的复习时间要比别人短，我也不能保证自己能顺利考上研，毕竟学习水平摆在那。&lt;/p&gt;
+
+&lt;p&gt;贪心不足，确实是一大祸根。而且我也并没有充足的准备离开学校走向社会。&lt;/p&gt;
+
+&lt;p&gt;回过身来，如果全身心投入考研，也许我就有更大的几率多了三年时间。这三年的缓冲要比我仓促走向社会强得多。而且面临毕业，我越真切地感受到了时间的宝贵和不够用。有了更多的三年，我的技术实力也许会达到一个非常高的层次，这都是我希望看到的结果。&lt;/p&gt;
+
+&lt;p&gt;想通了，一切也都水到渠成。还在徘徊的同学可以参考一下。&lt;/p&gt;
+
+&lt;p&gt;另外我决定去参加四月的 Gopher China 大会，这也是一次非常好的机会，有想同行的同学可以联系我。&lt;/p&gt;
+
+&lt;h2 id=&#34;2017-3-17&#34;&gt;2017-3-17&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/daji.jpg&#34; alt=&#34;作曲家 --李荣浩&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;美女来成都旅游邀我作陪，我肯定是欣然赴约的。&lt;/p&gt;
+
+&lt;p&gt;因为是周四，一片老厂房区改造的 U37 创意园并没有多少人流，酒吧驻唱的美国老爷爷也没有来。老板告诉我们，平时来的人也并没有多少，这些酒馆、咖啡厅也就这么开下去了。&lt;/p&gt;
+
+&lt;p&gt;最后还是去了九眼桥的妲己酒馆，并且很幸运遇到了乐队驻唱。他们说第一次上这么大的台子，现场的气氛也被炒的很热。一帮年青人在上面尽情宣泄，这大概就是音乐的魅力吧。&lt;/p&gt;
+
+&lt;p&gt;回家路上碰到了一位流浪歌手，在天桥上唱追梦赤子心。很好听，也很孤独。&lt;/p&gt;
+
+&lt;p&gt;如果十年二十年之后我不再从事互联网行业，也许会去学学音乐什么的。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

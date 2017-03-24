@@ -1,0 +1,1437 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>coldriver的技术博客</title>
+    <link>https://chongg039.github.io/index.xml</link>
+    <description>Recent content on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 22 Mar 2017 22:51:09 +0800</lastBuildDate>
+    <atom:link href="https://chongg039.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>[Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化</title>
+      <link>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</link>
+      <pubDate>Wed, 22 Mar 2017 22:51:09 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/</guid>
+      <description>
+
+&lt;p&gt;跟风，响应 Web 世界的号召，决定把博客全站换成 HTTPS 访问，并记录下遇到的一些问题。&lt;/p&gt;
+
+&lt;h3 id=&#34;github-page&#34;&gt;Github Page&lt;/h3&gt;
+
+&lt;p&gt;原来博客是部署在云服务器上，后来觉得没有这个必要，也不想花精力在维护上面，就重新把博客放回了 Github Page 。因此下面的文字并不针对自有服务器的博客用户进行说明。&lt;/p&gt;
+
+&lt;h3 id=&#34;图床&#34;&gt;图床&lt;/h3&gt;
+
+&lt;p&gt;为了加快访问速度，原来图片等一些较大的文件都放在了 七牛云存储 上，但七牛并不提供免费的 HTTPS 流量访问，而这却是全站 HTTPS 化的硬性条件之一。&lt;/p&gt;
+
+&lt;p&gt;我选择了将图床迁移到了 Flickr 上，它提供了免费的 HTTPS 外链和 1T 的存储量，使用起来绰绰有余。&lt;/p&gt;
+
+&lt;p&gt;Mac 端迁移推荐一款应用：iPic，配合插件使用能自动识别 Markdown 文章中的图片并将其上传到新的图床。虽然我使用的时候这个功能好像挂了，但其他功能印象还是很不错。软件一年的使用费用是 38元人民币，你可以在 App Store中下载。&lt;/p&gt;
+
+&lt;h3 id=&#34;ssl服务提供商-cloudflare&#34;&gt;SSL服务提供商：Cloudflare&lt;/h3&gt;
+
+&lt;p&gt;作为私人博客还是希望有一个免费的 SSL 证书，最理想的 Let&amp;rsquo;s Encrypt 却不能为我们的 Github 博客提供帮助。然而作为候选的 Cloudflare 则给了我们这个选择，具体方法不再阐述，你可以参考这篇博文完成配置操作：&lt;a href=&#34;https://yicodes.com/2016/12/04/free-cloudflare-ssl-for-custom-domain/&#34;&gt;为自定义域名的GitHub Pages添加SSL 完整方案 &lt;/a&gt; 。&lt;/p&gt;
+
+&lt;h3 id=&#34;遇到的问题&#34;&gt;遇到的问题&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;全站 HTTPS 化要求所有引用文件的来源，否则会显示网站不安全的信息，这便需要仔细选择图床等第三方文件存储提供商。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;我是用的是 Hugo 的 Go 语言博客框架，如果你使用的是第三方的主题文件，一定要检查其中 JS，CSS文件引入时的路径，如果是 &amp;ldquo;http://&amp;hellip;/main.css&amp;rdquo; 开头的绝对路径是无法被引用使用的。一个可行的方案是修改为 &amp;ldquo;//&amp;hellip;/main.css&amp;rdquo; 的相对文件路径。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果使用自定义域名代替 github.io 的二级域名，注意在 Hugo 的配置文件 config.toml 中的 baseurl 修改，否则有时仍会引用 HTTP 的文件资源。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是我的配置文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-toml&#34;&gt;   baseurl             = &amp;quot;https://chongg039.cn/&amp;quot;
+   builddrafts         = false
+   canonifyurls        = true
+   contentdir          = &amp;quot;content&amp;quot;
+   languageCode        = &amp;quot;zh-cn&amp;quot;
+   layoutdir           = &amp;quot;layouts&amp;quot;
+   publishdir          = &amp;quot;public&amp;quot;
+   author              = &amp;quot;coldriver&amp;quot;
+   title               = &amp;quot;coldriver的技术博客&amp;quot;
+   theme				= &amp;quot;cocoa&amp;quot;
+   pygmentsuseclasses  = true
+   disqusshortname     = &amp;quot;coldriver&amp;quot; # Comment out to disable Disqus.
+   pluralizelisttitles = false
+   googleAnalytics     = &amp;quot;UA-123-45&amp;quot;
+
+   [permalinks]
+   fixed = &amp;quot;:title/&amp;quot;
+   blog  = &amp;quot;blog/:slug/&amp;quot;
+
+   [params]
+   author                 = &amp;quot;coldriver的技术博客&amp;quot;
+   cachebuster            = true                          # add the current unix timestamp in query string for cache busting css assets
+   dateform               = &amp;quot;Jan 2, 2006&amp;quot;
+   dateformfull           = &amp;quot;Mon Jan 2 2006 15:04:05 MST&amp;quot;
+   description            = &amp;quot;Don&#39;t panic&amp;quot;
+   email                  = &amp;quot;chongg039@gmail.com&amp;quot;
+   # extracssfiles          = [ &amp;quot;/css/override.css&amp;quot; ]       # In your `static` directory, add/remove files as necessary.
+   # faviconfile            = &amp;quot;img/leaf.ico&amp;quot;
+   github                 = &amp;quot;//github.com/chongg039&amp;quot;
+   highlightjs            = true
+   lang                   = &amp;quot;en&amp;quot;
+   # linkedin               = &amp;quot;//linkedin.com/in/you&amp;quot;
+   noshowreadtime         = false                         # if true, don&#39;t show &amp;quot;&amp;lt;x&amp;gt; minutes read&amp;quot; in posts
+   selfintro              = &amp;quot;&amp;quot;                            # appears in the site header when set to a non-empty string
+   twitter                = &amp;quot;//twitter.com/uestcchongg&amp;quot;
+   # highlightjslanguages = [&amp;quot;go&amp;quot;]                        # additional languages not included in the &amp;quot;common&amp;quot; set
+
+   # avatar                 = &amp;quot;img/profile.png&amp;quot; # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
+   # gravatar             = &amp;quot;&amp;quot;                # do not use in the same time as avatar
+
+   # The following are DEPRECATED.
+   gatracker              = &amp;quot;XYZ&amp;quot; # use googleAnalytics instead
+   initials               = &amp;quot;ad&amp;quot;  # displayed on single post page; deprecated in v0.3.0.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Cloudflare 生效大概在72小时之内，我这边还是比较快的。如果你的博客显示不安全的信息，或者丢失样式文件，建议打开控制台检查一下，多半是某处文件没有使用 HTTPS 导致的。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;最后建议阅读 Jerry Qu 的&lt;a href=&#34;https://imququ.com/post/sth-about-switch-to-https.html&#34;&gt;关于启用 HTTPS 的一些经验分享&lt;/a&gt;，对理解不同平台以及浏览器的 HTTPS 启用有很大帮助。&lt;/p&gt;
+
+&lt;p&gt;配置的过程很痛苦，但当你的博客上出现一把小绿锁，心里是真的舒服。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>解决 Go 中遍历 map 的随机化问题</title>
+      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 13 Mar 2017 18:51:20 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;p&gt;在 air-server 中有一个函数，支持解析 URL 的 query 并返回字段中城市的数据，如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET /aqi/cities?1=成都&amp;amp;2=北京&amp;amp;3=杭州&amp;amp;4=西安
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;客户端希望的返回值应该是按照输入顺序，即 1，2，3，4 返回的，但实际多次测试后得到的结果总会是不一样的顺序。想了想应该是 query 解析的结果，即&lt;code&gt;r.URL.Query()&lt;/code&gt;为 map 的原因。&lt;/p&gt;
+
+&lt;p&gt;查询后得知，Go 对 map 的实现是在底层的 hashmap，因此对 key-value 的插入和对 map 的遍历而言两者的 key 访问顺序不同。实践后也证明在使用 range 遍历 map 时得到的 key 的顺序被随机化了，Go
+官方也提到过不希望开发者依赖 range 遍历的 key 次序。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;When iterating over a map with a range loop, the iteration order is not specified and is not guaranteed to be the same from one iteration to the next. Since Go 1 the runtime randomizes map iteration order, as programmers relied on the stable iteration order of the previous implementation.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但我们的业务逻辑往往不可避免的使用顺序的 key-value，怎么解决这个问题呢。
+有作者给出了一个方法，即单独维护一个有序的 key 表，根据对应的 key 遍历原始的 map。下面是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func ReturnDataOfCities(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+
+	var locations []string
+
+	// 由于遍历 map 时 key 的随机化问题，维护一个有序的 keys 数组保证
+	// 每次的顺序都是固定的
+	sorted_keys := make([]int, 0)
+	for k, _ := range q {
+	   // 我们希望的 key 为自然数，并按大小排序
+		i, err := strconv.Atoi(k)
+		if err != nil {
+			panic(err)
+		}
+		sorted_keys = append(sorted_keys, i)
+	}
+
+	// Sort &#39;int&#39; key in decreasing order
+	sort.Ints(sorted_keys)
+
+	// If you want key in increasing order
+	// for i, j := 0, len(sorted_keys)-1; i &amp;lt; j; i, j = i+1, j-1 {
+	// 	sorted_keys[i], sorted_keys[j] = sorted_keys[j], sorted_keys[i]
+	// }
+
+	for _, v := range sorted_keys {
+	   // 将 &#39;int&#39; 类型的 key 转换成 &#39;string&#39;
+		s := strconv.Itoa(v)
+		locations = append(locations, q[s][0])
+	}
+	
+	result := CompareDataOfCities(locations)
+
+	w.Header().Set(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json; charset=UTF-8&amp;quot;)
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(result); err != nil {
+		panic(err)
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;至此达到了我们的要求。&lt;/p&gt;
+
+&lt;p&gt;参考文章：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.golang.org/go-maps-in-action&#34;&gt;Go-maps-in-action&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/slvher/article/details/44779081&#34;&gt;遍历map时的key随机化问题及解决方法&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go实现空气质量状况API服务器过程中的思考</title>
+      <link>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <pubDate>Sat, 04 Mar 2017 16:27:52 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <description>&lt;p&gt;学习Go之后第一个项目，是编写一个API服务器，提供城市AQI的JSON数据。&lt;/p&gt;
+
+&lt;p&gt;既然要实现这个功能，要解决的问题一个是数据源，一个是Server。&lt;/p&gt;
+
+&lt;p&gt;先说说数据源，如果仅仅和我们初步设想的一样，仅仅为我们的一款应用提供即时数据，那样只是做一个第三方数据的中转便可。不过为了以后可以针对性的做数据分析，还是需要将数据爬下来存在数据库。&lt;/p&gt;
+
+&lt;p&gt;一开始用的是 &lt;a href=&#34;http://www.pm25.com/&#34;&gt;绿色呼吸&lt;/a&gt; 的数据源，因为经过考察后认为这个网站更新较快，每小时的第一分钟基本能完成数据更新。其次我们的应用并不需要提供很详细的数据，AQI和pm2.5即可。于是第一版爬虫和服务器便依托这个数据源建立起来了。&lt;/p&gt;
+
+&lt;p&gt;因为每小时要存一次数据，一开始便考虑数据库怎么设计要优雅一些。为了增强可视化，数据库我选择的是mongoDB，以“YYYYMMDDHH”格式作为一个collection，每个collection里存放三百多个城市及其数据。&lt;/p&gt;
+
+&lt;p&gt;后来发现随着数据的增多，进行复杂查询会开关很多次不同的collection，占用许多不必要时间。于是将数据库迁移到了mysql，只建立一个空气质量表，用“YYYYMMDDHH”格式的时间和城市名作为复合主键存放数据。这样每次查询只需要打开和关闭一次Table。&lt;/p&gt;
+
+&lt;p&gt;在测试爬虫性能的时候，因为一次只获取三百多条数据，犯不着异步。但单条写入数据库却消耗了9.85s左右，而因为数据库设计的问题，同样情况下mongoDB仅耗时200ms，这不是我希望看到的。于是为了节省发送链接和开关数据库的时间开销，采用事务进行插入，优化后插入仅耗时70ms，从打开数据库开始计算不到500ms，在接受范围之内。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;但经过一段时间发现这个网站的数据源时不时会挂掉，严重时甚至丢失数据。于是萌生了重新爬环保部官方数据的想法，但需要安装 Silverlight。幸好有人在 GitHub 上开源了一个 pyhton 破解版本的爬虫，改动后可用，感谢🙏
+
+但是官方数据源不知为什么更新很慢，基本是到半点才更新
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;数据存储完，接下来是API服务器的实现。&lt;/p&gt;
+
+&lt;p&gt;整个过程我是体会到了Go中struct配合interface强大的灵活性&lt;/p&gt;
+
+&lt;p&gt;之前看了&lt;a href=&#34;https://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;一篇文章&lt;/a&gt;深受启发，作者在文中实现的架构也让我眼前一亮。于是在此基础上完成了这个空气质量状况的API服务器。实现的接口主要如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET		/aqi/城市名&amp;amp;today			返回某一城市当天所有时段的数据
+
+GET		/aqi/城市名&amp;amp;now			返回某一城市最新一小时的数据
+
+GET		/aqi/城市名&amp;amp;2017022822		返回某一城市某一时刻(2017-02-28 22:00)的数据
+
+GET		/aqi/城市名&amp;amp;trend			返回某一城市当前与上一小时相比变化的AQI，缺少某一时段数据则为0
+
+GET		/aqi/allcity			  返回城市表，包括城市名和城市编号
+
+GET		/aqi/城市名&amp;amp;station		返回某一城市的监测站，包括编号、名称和经纬度
+
+GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回任意多城市的当前数据
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;基本功能主要是参照&lt;a href=&#34;http://www.pm25.in/&#34;&gt;PM25.in&lt;/a&gt;的接口文档，因为我们的应用要精简功能，第一版也就加了这么多。&lt;/p&gt;
+
+&lt;p&gt;过程中发现的问题：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;自己的思维还是面向过程，尽管Go提供的面向对象十分友好&lt;/li&gt;
+&lt;li&gt;在数据库优化方面能力还是有些不足&lt;/li&gt;
+&lt;li&gt;旧版工程用两个第三方包，mux路由包和定时任务包cron，以后争取用原生替换掉&lt;/li&gt;
+&lt;li&gt;编译还是喜欢用Makefile&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;为了实现工程自动化，我使用了supervisor并输出运行日志作为监控，目前运行比较稳定。&lt;/p&gt;
+
+&lt;p&gt;我将项目开源，&lt;a href=&#34;https://github.com/chongg039/AQIApp&#34;&gt;旧版工程&lt;/a&gt;包括爬虫和服务器，均使用Go实现，但是数据源不稳定，输出API也不够规范，仅作为参考，不再更新。&lt;a href=&#34;https://github.com/CM-Studio/air-server&#34;&gt;新版工程&lt;/a&gt;只有服务器，数据源也是环保部官方数据源格式。开源的目的是便是希望大家有需要就自己搭一个，不要随便攻击我们这种没有加任何安全措施的服务器&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;再说我也不会把我们的IP告诉你。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>我为什么选择Go</title>
+      <link>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</link>
+      <pubDate>Mon, 27 Feb 2017 12:50:39 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</guid>
+      <description>
+
+&lt;p&gt;是的，我开始接触go语言了，如去年年底所说的那样。&lt;/p&gt;
+
+&lt;p&gt;先说说我为什么不继续用Node，并不是因为这门语言不好。事实上，NodeJS作为一个争议颇多的“全栈”语言，才带我真正走进了编程世界。它的异步，并发，非阻塞，以及丰富的npm库，无一不证明了它在解决传统服务器端编程的很多非常棒的思想。&lt;/p&gt;
+
+&lt;p&gt;我可以毫不违心的说，使用node开发web服务器是一件非常畅快的事情（尤其是对一名新手而言），而且使用JS前后端通吃的感觉可以满足我很大的虚荣心。同时丰富的npm包以及良好的版本管理也给人留下了很好的印象。&lt;/p&gt;
+
+&lt;p&gt;以下都是我的一面之词，看看便罢。&lt;/p&gt;
+
+&lt;h2 id=&#34;node存在争议的地方&#34;&gt;Node存在争议的地方&lt;/h2&gt;
+
+&lt;h3 id=&#34;乱七八糟的回调&#34;&gt;乱七八糟的回调&lt;/h3&gt;
+
+&lt;p&gt;虽然不论是官方还是民间都提出了很多解决异步回调的办法，但只能说是打的补丁而已，始终会让人是认为是早期语言的设计问题（这里可能说的比较片面）。&lt;/p&gt;
+
+&lt;h3 id=&#34;动态数据类型&#34;&gt;动态数据类型&lt;/h3&gt;
+
+&lt;p&gt;这类动态语言虽然免去了编译的麻烦，但在构建大型项目时利用编译器可以更早发现问题。从另一个方面来讲也增加了对环境的依赖，毕竟JS本来就是依赖于浏览器而生，Node也是运行在V8引擎之上。&lt;/p&gt;
+
+&lt;p&gt;这里只是个人的感受，毕竟接触的语言也不多。&lt;/p&gt;
+
+&lt;h3 id=&#34;大量引入三方npm包&#34;&gt;大量引入三方npm包&lt;/h3&gt;
+
+&lt;p&gt;海量的npm包的确极大缩短了开发时间，但是也造成了滥用的问题。如果一个项目中引用的三方npm包过多，先不说耦合大不大，最起码系统的安全和稳定已经很难保证。而且如果是因为非常重大的问题导致的单个包的不得不更新，内部结构也要做出必要的升级，而这将给后期维护带来更多的困扰。&lt;/p&gt;
+
+&lt;p&gt;所以说虽然用三方包用的很爽，但心里还是抵制这种滥用的模式的。&lt;/p&gt;
+
+&lt;h3 id=&#34;设计模式&#34;&gt;设计模式&lt;/h3&gt;
+
+&lt;p&gt;RESTful不用说了，这种理念无懈可击，最起码现在看起来是这样。主要还是想说一下MVC。&lt;/p&gt;
+
+&lt;p&gt;最初开始使用mongodb + express + angularjs + nodejs做应用开发时，接触的便是MVC的文件组织目录，那时看来确实是结构清晰的一种组织方式。但现在看来，这种多文件夹以及相对不友好的require反而成了一种负担。&lt;/p&gt;
+
+&lt;p&gt;有人会说MVC不是一种文件分散结构，而是客观存在的。这样说当然这对，可是又有多少人在使用MVC的过程中不会建立那几个文件夹呢？在我看来通过文件名已经足够清晰了，Node始终缺乏一个让我觉得满意的解决方法。&lt;/p&gt;
+
+&lt;h2 id=&#34;我用go的理由&#34;&gt;我用Go的理由&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先Go很好的诠释了什么叫21世纪的C语言：设计优美良好、编译快、天生支持并发、部署方便，并且较新的版本完成了自举，第一印象非常好；&lt;/li&gt;
+&lt;li&gt;有很多第三方package，方便引入，但许多三方package均仅使用原生package完成，依赖关系较弱；&lt;/li&gt;
+&lt;li&gt;package包的组织方式使我们完全不需要显式组织MVC，减轻了组织结构的负担；&lt;/li&gt;
+&lt;li&gt;不仅编译非常快，而且支持&lt;code&gt;go run&lt;/code&gt;动态运行。编译快也是我将博客从Hexo迁移到Hugo的原因之一；&lt;/li&gt;
+&lt;li&gt;支持多环境交叉编译，部署完全不需要考虑运行环境的依赖问题；&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;还有很多理由就不一一说了，毕竟才接触Go两个多月。&lt;/p&gt;
+
+&lt;p&gt;在用Go写了一个API服务器之后，我找到了当初刚学Node的那种畅快感。也许我接触的才是冰山一角，也许Go自身也有很多我没有发现的问题，也许我是学一门语言爱一门语言&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;但学习总能带给我惊喜，你也可以试试。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>2016年终总结</title>
+      <link>https://chongg039.github.io/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sat, 31 Dec 2016 16:59:03 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</guid>
+      <description>
+
+&lt;p&gt;年底了，总结一下这一年。&lt;/p&gt;
+
+&lt;h4 id=&#34;工作室&#34;&gt;工作室&lt;/h4&gt;
+
+&lt;p&gt;这一年有大半时间都是在创萌工作室度过的，也见证了创萌从当时的三五个人到现在的规模。&lt;/p&gt;
+
+&lt;p&gt;工作室的巨总和迪哥算是我的导师。迪哥带着我从前端转向了nodejs，教会我如何作为一名全栈工程师来思考问题。而巨总眼界比较开阔，给我的更多是学习方法和技术趋势的指导。&lt;/p&gt;
+
+&lt;p&gt;虽然我总是黑巨哥，但那都是玩笑话。巨哥虽然老是在吹牛比，不过他确实给了我很大的影响，这是个我从心底都很尊敬的一个人。&lt;/p&gt;
+
+&lt;p&gt;下半年和军儿接手了工作室，开始了自己的项目。创业艰难，这条路并不像感觉的那样好走，不过总能有所收获。&lt;/p&gt;
+
+&lt;p&gt;一帮同甘共苦的小伙伴，也算是人生一大幸事。&lt;/p&gt;
+
+&lt;h4 id=&#34;技术&#34;&gt;技术&lt;/h4&gt;
+
+&lt;p&gt;对于2016的前端世界，年底各种社交平台上的大手子的撕比也说得差不多了。这里我不发表个人态度。萝卜青菜，自己用着顺手就行。&lt;/p&gt;
+
+&lt;p&gt;我是纯前端入门，学前端框架后转的nodejs。当时还是个大二本科生，node这门“服务器端”语言确实给了我与c和Java相比很多不一样的思考。看着node从当时的v4.4一步一步到v7.0，见证了其“妄图”一统天下的决心，只能感叹前路漫漫。&lt;/p&gt;
+
+&lt;h4 id=&#34;下一步&#34;&gt;下一步&lt;/h4&gt;
+
+&lt;p&gt;现在的感觉就像巨哥说的那样，一门语言学精之后转型是很容易的一件事。我在nodejs踩了大半年的坑，随着ES5到了ES6，不说多么精通，但是感觉确实应该思考下一步要走什么路了。&lt;/p&gt;
+
+&lt;p&gt;我可能会先去看看Go，Ruby的设计思想，重拾Java也说不定，借此机会重新自己去感受下web服务器端语言的发展潮流。&lt;/p&gt;
+
+&lt;p&gt;我还是会去使用各种前端框架，也会去做React Native。尽管我不喜欢TypeScript之类的语法糖，尽管我不喜欢各类层出不穷的轮子，尽管全栈可能是一个美好的设想，但我还是会尽量开阔自己的眼界。&lt;/p&gt;
+
+&lt;p&gt;我会去做机器学习或是其他人工智能的方面，我已经感受到了未来。&lt;/p&gt;
+
+&lt;p&gt;我可能会去考研，但我还是应该会找个公司先实习。不只是为了自己，更是希望能向正规军学习，闭门造车，盲人瞎马带领工作室胡搞一气肯定还是行不通的。还是要看看别人，摸索出自己的一套方法。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>使用 nodejs 模拟登陆电子科大信息门户并抓取信息</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Thu, 08 Dec 2016 12:09:31 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</guid>
+      <description>
+
+&lt;p&gt;学校高层做了个公众号，把信息门户弄到微信上的浏览器上。本着干掉学校高层的一贯行事风格，觉得是时候搞一个正规的公众号来抢学校生意了。&lt;/p&gt;
+
+&lt;p&gt;结果没想到并不是很顺利，信息门户登录有两个重定向页面，自己也对模拟请求服务器不是很熟悉，一步一步好歹是扒到了想要的数据，也浪费了好长时间。先拿出来了个命令行版本，还停留在 es5，准备熬过去考试月后全部重构成 es6，再加上流程控制，放到公众号上造福社会。&lt;/p&gt;
+
+&lt;p&gt;使用到的 npm 库：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;request：模拟 HTTP 请求&lt;/li&gt;
+&lt;li&gt;cheerio：解析页面&lt;/li&gt;
+&lt;li&gt;readline-sync：控制命令行会话&lt;/li&gt;
+&lt;li&gt;chalk：美化输出&lt;/li&gt;
+&lt;li&gt;log4js：管理日志&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;难度主要是模拟登陆到所需页面和解析相关内容上，封装好了接口，以后就方便使用了。&lt;/p&gt;
+
+&lt;h3 id=&#34;分析报文&#34;&gt;分析报文&lt;/h3&gt;
+
+&lt;p&gt;为了完成模拟登陆这一目的，先尝试获取登录主界面&lt;code&gt;http://portal.uestc.edu.cn/&lt;/code&gt;的内容。分析一波登陆过程中的 HTTP 行为：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/HTTPAnalysis.png&#34; alt=&#34;HTTPAnalysis&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以发现在正文&lt;code&gt;portal.uestc.edu.cn/&lt;/code&gt;前有两个页面，分别打开看一看：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;login?service=http%3A%2F%2Fportal.uestc.edu.cn%2F&lt;/code&gt;页面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/3021.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;?ticket=ST-199833-BbDvk6q57cmNFtJkBJNL1481032281383-zATy-cas&lt;/code&gt;页面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/3022.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最终页面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/200.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;理论上是获取到最终页面的&lt;code&gt;JSESSIONID&lt;/code&gt;，这是服务器用来唯一标识用户信息的&lt;code&gt;session&lt;/code&gt;。带着这个 cookie 去访问其他相关页面，就能获取到对应数据。&lt;/p&gt;
+
+&lt;p&gt;那么怎么解决重定向问题呢？&lt;/p&gt;
+
+&lt;p&gt;查到 request 方法自身是支持跟随10次页面重定向的，但是我们现在需要禁止重定向，单独访问并获取每个302界面内 header 中的数据。就可以修改 request 的默认 Redirect 方法，禁止重定向跳转或者设置最大跳转次数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = request.defaults({followRedirect: false});
+//OR ‘maxRedirects = 1’
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有了条件我们就可以来分析怎么一步步获取我们想要的最终数据了（是的我用了分别 request 每个页面这样一个最蠢的办法 &amp;hellip;），以第一个302页面为例详细说明如何操作。&lt;/p&gt;
+
+&lt;h4 id=&#34;第一个302页面&#34;&gt;第一个302页面&lt;/h4&gt;
+
+&lt;p&gt;第一个页面是一个重定向页面，发送 POST 报文获取到了&lt;code&gt;Response-Headers&lt;/code&gt;里的&lt;code&gt;Set-Cookie&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CASPRIVACY&lt;/li&gt;
+&lt;li&gt;iPlanetDirectoryPro&lt;/li&gt;
+&lt;li&gt;CASTGC&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这里面有些是我们需要的，获取他们就要分析&lt;code&gt;Request-Headers&lt;/code&gt;报文。请求头报文里的 Cookie 有两个值：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;route&lt;/li&gt;
+&lt;li&gt;JSESSIONID_ids1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个是怎么生成的？&lt;/p&gt;
+
+&lt;p&gt;分析发现这个&lt;code&gt;JSESSIONID_ids1&lt;/code&gt;是浏览器在访问到 UESTC 信息门户登录界面
+&lt;code&gt;http://idas.uestc.edu.cn/authserver/login?service=http://portal.uestc.edu.cn/index.portal&lt;/code&gt;
+时服务器返回的表示用户信息的一个 Cookie 。那么就很简单了，由于访问登录界面使用的是 GET 方法，使用&lt;code&gt;request&lt;/code&gt;即可获取：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = require(&#39;request&#39;);
+var setCookies， Cookies;
+
+const loginUrl = &#39;http://idas.uestc.edu.cn/authserver/login?service=http://eams.uestc.edu.cn/eams/home.action&#39;;
+
+request(loginUrl, function (err, response, body) {
+	if (!err &amp;amp;&amp;amp; response.statusCode == 200) {
+      	setCookies = response.headers[&#39;set-cookie&#39;];
+		Cookies = setCookies[0] + &amp;quot;; &amp;quot; + setCookies[1];
+      	return Cookies;
+	} else { 
+		console.log(&amp;quot;暂时无法访问信息门户，请稍后重试&amp;quot;);
+		return err;
+	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样便得到了&lt;code&gt;Cookies = route + JSESSIONID_ids1&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;下一步要获取 form 中的内容，最为 POST 的表单随同 cookie 一起发出。表单中有：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;username&lt;/li&gt;
+&lt;li&gt;password&lt;/li&gt;
+&lt;li&gt;lt&lt;/li&gt;
+&lt;li&gt;dllt&lt;/li&gt;
+&lt;li&gt;execution&lt;/li&gt;
+&lt;li&gt;_eventId&lt;/li&gt;
+&lt;li&gt;rmShown&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;前两个是用户名和密码，那后面的又是什么？&lt;/p&gt;
+
+&lt;p&gt;听说15年学校系统进行了一次改版，在学号和密码之外又添加了验证码（如果你多输错几次密码应该就能看到）。网上对这种验证码的处理方式有很多，不过我觉得对学校这种系统还用不上一些图像识别的办法。&lt;/p&gt;
+
+&lt;p&gt;事实上也确实如此，直接用&lt;code&gt;cheerio&lt;/code&gt;解析我们的&lt;code&gt;loginUrl&lt;/code&gt;界面，获取后填入就行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = require(&#39;request&#39;);
+var cheerio = require(&#39;cheerio&#39;);
+var setCookies, Cookies, lt, dllt, execution, _eventId, rmShown;
+
+const loginUrl = &#39;http://idas.uestc.edu.cn/authserver/login?service=http://eams.uestc.edu.cn/eams/home.action&#39;;
+
+request(loginUrl, function (err, response, body) {
+	if (!err &amp;amp;&amp;amp; response.statusCode == 200) {  
+	  	var $ = cheerio.load(body);
+		lt = $(&#39;[name=lt]&#39;).attr(&#39;value&#39;);
+		dllt = $(&#39;[name=dllt]&#39;).attr(&#39;value&#39;);
+		execution = $(&#39;[name=execution]&#39;).attr(&#39;value&#39;);
+		_eventId = $(&#39;[name=_eventId]&#39;).attr(&#39;value&#39;);
+		rmShown = $(&#39;[name=rmShown]&#39;).attr(&#39;value&#39;);
+		// cookies	  
+	  	setCookies = response.headers[&#39;set-cookie&#39;];
+		Cookies = setCookies[0] + &amp;quot;; &amp;quot; + setCookies[1];
+	} else { 
+		console.log(&amp;quot;暂时无法访问信息门户，请稍后重试&amp;quot;);
+		// return err;
+	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在需要的都有了，就可以模拟第一次的 POST 请求了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/* 只写出部分功能 */
+var loginOption = {
+	url: loginUrl,
+	method: &#39;POST&#39;,
+    headers: {	
+        &#39;Accept&#39;:&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#39;,
+        &#39;Accept-Encoding&#39;:&#39;gzip, deflate, sdch&#39;,
+        &#39;Accept-Language&#39;:&#39;zh-CN,zh;q=0.8&#39;,
+        &#39;Cache-Control&#39;:&#39;no-cache&#39;,
+        &#39;Connection&#39;:&#39;keep-alive&#39;,
+        &#39;Cookie&#39;:Cookies,
+        &#39;Host&#39;:&#39;idas.uestc.edu.cn&#39;,
+        &#39;Origin&#39;:&#39;http://idas.uestc.edu.cn&#39;,
+        &#39;Pragma&#39;:&#39;no-cache&#39;,
+        &#39;Referer&#39;:&#39;http://idas.uestc.edu.cn/authserver/login?service=http://eams.uestc.edu.cn/eams/home.action&#39;,
+        &#39;Upgrade-Insecure-Requests&#39;:1,
+        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36&#39;
+    },
+	form: {
+		username: userName,
+		password: password, // 这里可以先替换个人学号密码使用
+		lt: lt,
+		dllt: dllt,
+		execution: execution,
+		_eventId: _eventId,
+		rmShown: rmShown
+	}
+};
+
+request(loginOption, function (err, res, body) {
+    if (!err &amp;amp;&amp;amp; res.statusCode == 302) {
+        // 获取第二个302地址
+        redirectLocation = res.headers[&#39;location&#39;];
+        // 获取所需要的 cookie
+        redirectCookies = res.headers[&#39;set-cookie&#39;][1]; // iPlanetDirectoryPro
+    } else {
+        console.log(&amp;quot;登录失败！请检查学号和密码重试&amp;quot;);
+        //return err;
+  	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;打印结果看看应该就可以得到所需要的 Cookie，第二张图的&lt;code&gt;Reauest-Headers&lt;/code&gt;中需要的是&lt;code&gt;iPlanetDirectoryPro&lt;/code&gt;，我们也只获取这个就可以了。&lt;/p&gt;
+
+&lt;p&gt;通过以上步骤就可以获取到想要的第一个302页面的信息，带着这个信息访问第二个302页面也可以获取到相关信息。最后获取到最终界面的内容。&lt;/p&gt;
+
+&lt;p&gt;下面不贴出具体代码，只是写一写思想。&lt;/p&gt;
+
+&lt;h4 id=&#34;第二个302页面&#34;&gt;第二个302页面&lt;/h4&gt;
+
+&lt;p&gt;获得了第一个302页面的&lt;code&gt;iPlanetDirectoryPro&lt;/code&gt;和重定向地址&lt;code&gt;redirectLocation&lt;/code&gt;，就可以进行 GET 请求，获取所需要的 cookie 了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MOD_AUTH_CAS=MOD_AUTH_ST-150807-EmrjontiArvbt7tLFeDp1481041468406-eVTU-cas
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里有个别的方法，刚才获取的重定向地址&lt;code&gt;redirectLocation&lt;/code&gt;中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http://portal.uestc.edu.cn/index.portal?ticket=ST-150807-EmrjontiArvbt7tLFeDp1481041468406-eVTU-cas
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;观察到存在相同部分，因此第二步重定向页面请求可以省略，直接截取、拼接字符串也是可以获得第二步的 cookie，但这实际上是取巧了 。&lt;/p&gt;
+
+&lt;h4 id=&#34;最终200页面&#34;&gt;最终200页面&lt;/h4&gt;
+
+&lt;p&gt;最终页面的 HTTP 请求是当时困扰我好长时间的，为什么这么说呢？先来看一下它的请求头 cookie 有什么：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;route&lt;/li&gt;
+&lt;li&gt;JSESSIONID&lt;/li&gt;
+&lt;li&gt;iPlanetDirectoryPro&lt;/li&gt;
+&lt;li&gt;MOD_AUTH_CAS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对比一下响应头 cookie：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JSESSIONID&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;很显然两个&lt;code&gt;JSESSIONID&lt;/code&gt;内容不一样的嘛！我要获取响应头的&lt;code&gt;JSESSIONID&lt;/code&gt;，为什么我请求头也要发送一个名称一样的 cookie，而且在前面的请求响应报文中也没有出现好吗！于是我尝试了这些办法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在登录界面的 body 里查找&lt;/li&gt;
+&lt;li&gt;寻找&lt;code&gt;JSESSIONID_ids1&lt;/code&gt;和&lt;code&gt;JSESSIONID&lt;/code&gt;之间的关系&lt;/li&gt;
+&lt;li&gt;模拟服务器端&lt;code&gt;JSESSIONID&lt;/code&gt;的生成算法（感觉真是没救了&amp;hellip;）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;终于在某一天躺在椅子上思考人生的时候回想起了我获取登录页面&lt;code&gt;JSESSIONID_ids1&lt;/code&gt;的过程：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;我为什么不不带 cookie 请求一下第二个302页面呢？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;试试试！果然，在 request 方法禁止重定向的情况下，浏览器虽然打不开这个页面，但是服务器确实返回了&lt;code&gt;route&lt;/code&gt;和&lt;code&gt;JSESSIONID&lt;/code&gt;    。带着这些重新请求，就能得到最后的&lt;code&gt;Response JSESSIONID&lt;/code&gt;和&lt;code&gt;200-body&lt;/code&gt;内容。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;事后仔细回想这个问题，其实是我陷入了两个思维误区：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;一个是我认为只要是名为&lt;code&gt;JSESSIONID&lt;/code&gt;的 cookie，都应该是带有用户 POST 信息的，与用户数据库产生联系的 cookie 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;再一个就是浏览器无法直接打开的302界面，即不能从 chrome 控制台观测到有无 HTTP 报文产生，不代表真的不能单独获取服务器返回的 header 数据。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决了之后真的是心情愉悦～&lt;/p&gt;
+
+&lt;h3 id=&#34;获取相关内容&#34;&gt;获取相关内容&lt;/h3&gt;
+
+&lt;p&gt;进入信息门户的“课程管理”的地址是
+&lt;code&gt;http://eams.uestc.edu.cn/eams/home!childmenus.action?menu.id=844&lt;/code&gt;
+将它的 HTTP 请求替换掉上面的200页面的请求，下一步就可以获取到相应的内容。&lt;/p&gt;
+
+&lt;p&gt;这里就以获取课程表为例详细说明。&lt;/p&gt;
+
+&lt;h4 id=&#34;获取课表&#34;&gt;获取课表&lt;/h4&gt;
+
+&lt;p&gt;地址是
+&lt;code&gt;http://eams.uestc.edu.cn/eams/courseTableForStd!courseTable.action&lt;/code&gt;
+从控制台看出需要一个 POST 请求，发送的表单含有：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ignoreHead&lt;/li&gt;
+&lt;li&gt;setting.kind&lt;/li&gt;
+&lt;li&gt;startWeek&lt;/li&gt;
+&lt;li&gt;semester.id&lt;/li&gt;
+&lt;li&gt;ids&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;cookie 有：&lt;code&gt;JSESSIONID, semester.id, iPlanetDirectoryPro&lt;/code&gt; 。可以看出表单中含有的前面都是常量，处理的粗糙一些的话就可以直接输入。只有一个&lt;code&gt;ids&lt;/code&gt;，应该是学校用来标示学生身份的唯一码（事实上也确实如此），这个怎么需要获取呢？&lt;/p&gt;
+
+&lt;p&gt;凭经验来看&lt;code&gt;ids&lt;/code&gt;肯定是在前文的响应 body 里服务器已经返回的数据。果然，在请求这个地址之前已经请求了一个地址：&lt;code&gt;http://eams.uestc.edu.cn/eams/courseTableForStd.action?_=1481077999393&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/ids.png&#34; alt=&#34;ids&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;解析这个 Response，就可以得到对应的ids值。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这里面的&lt;code&gt;_=1481077999393&lt;/code&gt;可能是个时间戳一类而的东西（猜的），每次访问都是会变的，实际测试的时候应该用什么都可以，都会转到自己所需的内容。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;获取到了对应的 form 内容，POST 之后用正则解析就得到了想要的课程表。但 UESTC 信息门户的课程表是用页面脚本加载到表格里去展示，而我们用模拟请求的方法就比较麻烦了。因此就先统一拿出来所有的课程信息，暂时没有想到很好的解决办法。&lt;/p&gt;
+
+&lt;p&gt;获取成绩和期末考试安排都是类似的方法，难度都不高。&lt;/p&gt;
+
+&lt;h3 id=&#34;放一下效果&#34;&gt;放一下效果：&lt;/h3&gt;
+
+&lt;p&gt;主界面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/main.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;课程表：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/courses.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;考试安排：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/eams.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;成绩垃圾就打上码了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/gradesAll.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;虽然效果粗糙了一些，但就结果而言还是好的，达到了目的。&lt;/p&gt;
+
+&lt;h3 id=&#34;几个注意的问题&#34;&gt;几个注意的问题&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有些地址中的 &amp;lsquo;/&amp;rsquo; 、&amp;rsquo;:&amp;rsquo; 被转义了，使用时注意修改回来&lt;/li&gt;
+&lt;li&gt;有时返回的信息是乱码，开始以为是 Shell 的中文解码问题，最后才发现是请求头里&lt;code&gt;gzip&lt;/code&gt;压缩问题，去掉就可以了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;后面的打算&#34;&gt;后面的打算&lt;/h3&gt;
+
+&lt;p&gt;考试月还是比较仓促的，也没有认真把这个东西做好。准备过年腾出时间来重写一遍：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;全部使用 es6 语法，拿 React 或者 vue 套壳&lt;/li&gt;
+&lt;li&gt;加入 d3 或者 echart 库美化视觉输出&lt;/li&gt;
+&lt;li&gt;再做成公众号，干倒高层&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;整个工程放在了我的  &lt;a href=&#34;https://github.com/chongg039/uestcLogin&#34;&gt;Github&lt;/a&gt; 上，写的烂了点，不过踩坑时的思想还是可以借鉴的 ，觉得有用就给个 Star 吧。&lt;/p&gt;
+
+&lt;p&gt;最后祝大家考试月顺利～&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux 服务器配置静态 IP 并 802.1x 拨号</title>
+      <link>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</link>
+      <pubDate>Sat, 12 Nov 2016 15:15:27 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81-ip-%E5%B9%B6-802.1x-%E6%8B%A8%E5%8F%B7/</guid>
+      <description>
+
+&lt;p&gt;终于布好工作室的服务器了。&lt;/p&gt;
+
+&lt;p&gt;我写了个脚本一键部署静态ip和802.1x拨号：&lt;a href=&#34;https://gist.github.com/chongg039/3310467e329e00de3b6b04aaae646f3c&#34;&gt;ubuntu-server.sh&lt;/a&gt;，不想看我啰嗦的可以直接拿过来改改就能用。&lt;/p&gt;
+
+&lt;p&gt;先讲个小故事：&lt;/p&gt;
+
+&lt;p&gt;工作室项目配了HTTPS，必须要域名访问，可是又没钱，买不起性能好的云服务器怎么办？&lt;/p&gt;
+
+&lt;p&gt;看了看角落里有一台遗留下来的服务器，至强12核 + 32G内存 + 120G SSD，性能不错，就是它了。跑到网络中心问了问，以前这台的MAC地址学校就给分配了一个静态IP，而且现在还能用。很好呀，交了证明材料，拿回了一些信息就准备开工。&lt;/p&gt;
+
+&lt;p&gt;下面就是正题了，针对ubuntu server版进行说明：&lt;/p&gt;
+
+&lt;p&gt;在配置之前，首先得确定几件事情：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;确保你有一个分配到的公网ip，查清楚它的网关和子网掩码，还有本地dns&lt;/li&gt;
+&lt;li&gt;检查服务器有几个网卡，到底是哪个网卡的MAC地址绑定了分配给你的公网ip（我们服务器是双网卡，绑定的是&lt;code&gt;enp7s0f0&lt;/code&gt;，注意下文换成自己的）&lt;/li&gt;
+&lt;li&gt;确保网线插到了对应的网卡接口上&lt;/li&gt;
+&lt;li&gt;有一个可以802.1x拨号的上网账号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;首先尝试一下用dhcp拨号上网&#34;&gt;首先尝试一下用dhcp拨号上网：&lt;/h4&gt;
+
+&lt;p&gt;服务器版使用了&lt;code&gt;wpasupplicant&lt;/code&gt;拨号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install wpasupplicant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;编辑&lt;code&gt;/etc/wpa_supplicant.conf&lt;/code&gt;文件:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Where is the control interface located? This is the default path:
+ctrl_interface=/var/run/wpa_supplicant
+
+# Who can use the WPA frontend? Replace &amp;quot;0&amp;quot; with a group name if you
+# want other users besides root to control it.
+# There should be no need to chance this value for a basic configuration:
+ctrl_interface_group=0
+
+# IEEE 802.1X works with EAPOL version 2, but the version is defaults
+# to 1 because of compatibility problems with a number of wireless
+# access points. So we explicitly set it to version 2:
+eapol_version=2
+
+# When configuring WPA-Supplicant for use on a wired network, we don’t need to
+# scan for wireless access points. See the wpa-supplicant documentation if
+# you are authenticating through 802.1x on a wireless network:
+ap_scan=0
+
+network={
+ ​        key_mgmt=IEEE8021X
+         eap=TTLS MD5
+ ​        identity=&amp;quot;yourUsername&amp;quot;
+         anonymous_identity=&amp;quot;yourUsername&amp;quot;
+ ​        password=&amp;quot;yourPassword&amp;quot;
+ ​        phase1=&amp;quot;auth=MD5&amp;quot;
+ ​        phase2=&amp;quot;auth=PAP password=yourPassword&amp;quot;
+ ​        eapol_flags=0
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;替换成你自己的账号和密码&lt;/p&gt;
+
+&lt;p&gt;然后修改&lt;code&gt;/etc/network/interfaces&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp7s0f0
+iface enp7s0f0 inet dhcp
+
+wpa-driver wired
+
+wpa-conf /etc/wpa_supplicant.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;保存，重启下网卡：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo /etc/init.d/networking restart
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果不能重启，提示进程占用的话就先kill wpa进程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo killall -q wpa_supplicant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再重启，成功后拨号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo wpa_supplicant -c /etc/wpa_supplicant.conf -B -D wired -i enp7s0f0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用&lt;code&gt;-B&lt;/code&gt;后台运行，成功后可以ping一下地址，ifconfig看看有没有分配到ip，没有的话reboot一下，一般是没问题的。&lt;/p&gt;
+
+&lt;h4 id=&#34;配置静态ip&#34;&gt;配置静态ip&lt;/h4&gt;
+
+&lt;p&gt;这里只需要修改&lt;code&gt;/etc/network/interfaces&lt;/code&gt;中&lt;code&gt;enp7s0f0&lt;/code&gt;部分：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# The primary network interface
+auto enp7s0f0
+iface enp7s0f0 inet static
+         address 222.197.176.***
+         netmask 255.255.255.***
+​         network 222.197.176.128
+ ​        broadcast 222.197.176.255
+ 		 gateway 222.197.176.***
+​		 # dns-* options are implemented by the resolvconf package, if installed
+		 dns-nameservers 202.112.14.***
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;理论上只需要填写&lt;code&gt;address、netmask、gateway、dns&lt;/code&gt;即可，我在安装ubuntu server时联网填入了这些，自动计算出了&lt;code&gt;network&lt;/code&gt;和&lt;code&gt;broadcast&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;重启网卡后再拨号一下，应该就绑定好静态ip并且能上网了，不过建议还是reboot一下。&lt;/p&gt;
+
+&lt;p&gt;可以装个&lt;code&gt;openssh-server&lt;/code&gt;，用别的机子ssh一下这个ip试试。&lt;/p&gt;
+
+&lt;h4 id=&#34;后记&#34;&gt;后记：&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一定要确认给你的静态ip到底绑定的是哪个网卡的MAC地址，并插好了网线，否则就像我们一样绑定好了ip也上不了公网&lt;/li&gt;
+&lt;li&gt;我们学校要求活动中心这边的服务器使用的静态ip，必须用电信给的办公区的上网账号才能拨号，学生宿舍的账号是不行的，给的波段不一样。在配置前一定要去网络中心和电信营业厅问清楚&lt;/li&gt;
+&lt;li&gt;后来装回了ubuntu desktop版，发现直接在network设置里的图形化界面配置就行了，哪这么多破事。。。这充分说明了一开始我们搞不定就是用错了网卡&lt;/li&gt;
+&lt;li&gt;这篇文章主要为了留给工作室以后的学弟学妹们，以及像我们学校一样，仍在使用802.1x拨号的苦逼创业团队用，随意转载&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>使用vultr&#43;SS&#43;锐速科学上网</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</link>
+      <pubDate>Mon, 03 Oct 2016 20:32:20 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8vultr&#43;ss&#43;%E9%94%90%E9%80%9F%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</guid>
+      <description>
+
+&lt;p&gt;接手工作室后，tesths 便把原来那个已经配置好的ss账号连同服务器一块给销了。平时ss又十分必要，就向他讨要了具体的方法，自己搭了一个。这里也是把方法贴出来。&lt;/p&gt;
+
+&lt;h3 id=&#34;配置vultr主机&#34;&gt;配置vultr主机&lt;/h3&gt;
+
+&lt;p&gt;V家的主机算得上是性价比较高的一款了，而且有日本和新加坡的线路，相对来说延迟比较稳定。截止我购买的时候是每个新用户有20刀的返利，还是比较划算的。&lt;/p&gt;
+
+&lt;h4 id=&#34;在-https-www-vultr-com-创建用户&#34;&gt;在 &lt;a href=&#34;https://www.vultr.com/&#34;&gt;https://www.vultr.com/&lt;/a&gt; 创建用户&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-create-account.png&#34; alt=&#34; &#34; title=&#34;vultr-create-account&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;进来后需要绑定账户。如果没有信用卡的话建议使用PayPal，而且PayPal应该是支持国内的储蓄卡绑定的，比较方便。&lt;/p&gt;
+
+&lt;p&gt;第一次使用需要先充值5刀，还是比较便宜的，之后会说到vultr主机的扣费机制。&lt;/p&gt;
+
+&lt;p&gt;在图的右边，这次我注册了一个新账号，但是很不幸的显示返利变少了。。。好吧你要是能找到优惠码的话也许还会有。。。&lt;/p&gt;
+
+&lt;h4 id=&#34;配置主机&#34;&gt;配置主机&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-setting-servers.png&#34; alt=&#34; &#34; title=&#34;vultr-setting-servers&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这是我的vultr主界面面板，可以看到已经有了两个在运行的服务器。如果开始要新建一个服务器，点击右上方的+号：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server.png&#34; alt=&#34; &#34; title=&#34;vultr-server&#34; /&gt;
+&amp;gt;这里选择日本的服务器，经过几天的测试发现日本的要比新加坡的线路快不少
+操作系统选择自己熟悉的就好，我选的ubuntu14.04，不建议windows
+如果只是为了搭建番茄的梯子，配置最低配那个就行，一个月总计才5刀，性能完全满足需求
+有需要的话可以勾选IPV6，我们校区没有就不搞了&lt;/p&gt;
+
+&lt;p&gt;配置完后deploy就会生成相应的vultr服务器了主界面像下面这样：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/vultr-server-info.png&#34; alt=&#34; &#34; title=&#34;vultr-server-info&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;显示了ip地址，初始root密码和流量、费用的使用。&lt;/p&gt;
+
+&lt;h4 id=&#34;ssh到vultr服务器&#34;&gt;ssh到vultr服务器&lt;/h4&gt;
+
+&lt;p&gt;打开终端，输入
+&amp;gt;ssh root@你的vultr主机ip&lt;/p&gt;
+
+&lt;p&gt;第一次验证选择&amp;rsquo;YES&amp;rsquo;，输入初始密码后便连上了vultr服务器。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;可以 &lt;code&gt;passwd root&lt;/code&gt; 修改初始密码&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;安装shadowsocks-python服务器版&#34;&gt;安装shadowsocks-python服务器版&lt;/h3&gt;
+
+&lt;p&gt;shadowsocks服务器有很多版本，go、python、libev、R都可以。安装方式可以手动配，我自己的ubuntu电脑就是用这种比较原始的办法配的，需要手动编写 /etc/shadowsocks.json 文件，还得写一个开机启动和后台运行脚本。不过确实比较有成就感，而且一劳永逸。&lt;/p&gt;
+
+&lt;p&gt;然而那天我们美工告诉我 &lt;a href=&#34;https://teddysun.com/&#34;&gt;秋水大大&lt;/a&gt; 写了一个自动生成脚本，感觉世界观被颠覆了。不过确实好用，这里用他的 &lt;a href=&#34;https://teddysun.com/342.html&#34;&gt;Shadowsocks Python版一键安装脚本&lt;/a&gt; 来安装到我们的vultr服务器中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wget --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh
+
+chmod +x shadowsocks.sh
+
+./shadowsocks.sh 2&amp;gt;&amp;amp;1 | tee shadowsocks.log
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;按照脚本提示输入就可以，安装完后提示如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Congratulations, shadowsocks install completed!
+Your Server IP:your_server_ip
+Your Server Port:your_server_port
+Your Password:your_password
+Your Local IP:127.0.0.1
+Your Local Port:1080
+Your Encryption Method:aes-256-cfb
+
+Welcome to visit:https://teddysun.com/342.html
+Enjoy it!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;tesths 建议我们用8388端口，说这个经他测试比较稳定。虽然知道他在满嘴跑火车，但是还是忍不住用了。。。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;可以使用下面的命令操作shadowsocks：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;启动：/etc/init.d/shadowsocks start
+停止：/etc/init.d/shadowsocks stop
+重启：/etc/init.d/shadowsocks restart
+状态：/etc/init.d/shadowsocks status
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在不论你的电脑是windows、mac还是linux，使用ss客户端（自行查找下载）输入ip、端口和密码应该就可以番茄了。可以打开 &lt;a href=&#34;https://fast.com/&#34;&gt;https://fast.com/&lt;/a&gt; 测一下速。
+&amp;gt;说实话买到的vultr主机的ip，番茄快不快完全看人品，根本不知道这个节点速度怎样。
+所以我建议多买几个主机，多用几个ip试试，因问V家的主机不是一次性收费一个月的5刀，而是按时间计费。加上他给的返利，可以多几个ip试用几天，留下稳定的那个服务器，剩下的再删掉即可。&lt;/p&gt;
+
+&lt;h3 id=&#34;配置锐速&#34;&gt;配置锐速&lt;/h3&gt;
+
+&lt;p&gt;有很多的服务器加速工具，&lt;a href=&#34;http://www.serverspeeder.com/&#34;&gt;锐速&lt;/a&gt; 应该是相当不错的一家，又不会无脑占用国际带宽。不过不知道官方怎么了，我们安装破解版就可以。&lt;/p&gt;
+
+&lt;p&gt;锐速破解版也有一键安装脚本，我参考的是 &lt;a href=&#34;https://www.91yun.org/archives/683&#34;&gt;这里&lt;/a&gt; 的方法。&lt;/p&gt;
+
+&lt;h4 id=&#34;安装锐速&#34;&gt;安装锐速&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh &amp;amp;&amp;amp; bash serverspeeder-all.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;如果安装失败，一般会提示锐速支持的内核和我们的不匹配，可以 &lt;a href=&#34;http://dl.serverspeeder.com/ls.do?m=availables&#34;&gt;http://dl.serverspeeder.com/ls.do?m=availables&lt;/a&gt; 查看支持的内核&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;更换内核&#34;&gt;更换内核&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;dpkg -l|grep linux-image
+//查看当前安装的内核
+apt-get install linux-image-3.13.0-96-generic linux-image-extra-3.13.0-96-generic
+//安装锐速支持的内核，如果不支持，可能会选择一个比较近的版本下载
+sudo apt-get purge linux-image-3.13.0-xx-generic linux-image-extra-3.13.0-xx-generic
+//卸载第一步看到的不支持的内核
+update-grub
+//更新系统引导文件
+reboot
+//重启后生效
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样再去执行一键安装脚本，锐速就可以顺利安装了。&lt;/p&gt;
+
+&lt;p&gt;理论上速度应该会有所提升，而且还比较明显。&lt;/p&gt;
+
+&lt;p&gt;最后我只想说，脚本真是个好东西啊。。。
+（默哀一下阿里的月饼员工们）&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>解决 ubuntu 下键盘错位问题</title>
+      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 02 Oct 2016 15:43:36 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
+      <description>
+
+&lt;p&gt;很悲催的键盘错位了，就这个系统有问题，以前也没遇到过。简而言之就是@和“互换，#打不出来等。问题不大，但是影响输入体验。
+工作室的小伙伴都说我这电脑只有我会用。。。&lt;/p&gt;
+
+&lt;p&gt;之前在网上搜到的解决办法是在终端输入：
+&amp;gt;sudo dpkg-reconfigure keyboard-configuration
+//需要安装keyboard-configuration&lt;/p&gt;
+
+&lt;p&gt;然后调整键盘布局，改为English(US)或者English(UK)，这样就相当于把键盘布局重置，然后就好了。&lt;/p&gt;
+
+&lt;p&gt;这种办法也可以通过&lt;code&gt;sudo vim /etc/default/keyboard&lt;/code&gt;手动修改配置：
+&amp;gt; KEYBOARD CONFIGURATION FILE&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Consult the keyboard(5) manual page.&lt;/p&gt;
+
+&lt;p&gt;XKBMODEL=&amp;ldquo;cherrycyboard&amp;rdquo; //修改键盘类型
+XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;
+XKBVARIANT=&amp;ldquo;&amp;rdquo;
+XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;BACKSPACE=&amp;ldquo;guess&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;但是！！！&lt;/strong&gt;这样修改一会键盘就变回去了啊啊！！！一开始是一天，后来越来越快，今天连一分钟也没撑住啊啊！！！
+弄得人心里很是崩溃。。。&lt;/p&gt;
+
+&lt;p&gt;继续看吧，有人说需要在配置完&lt;code&gt;sudo vim /etc/default/keyboard&lt;/code&gt;后，终端中运行一次
+&amp;gt;setupcon&lt;/p&gt;
+
+&lt;p&gt;但是输出了&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;We are not on the console, the console is left unconfigured.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;原来要进入文字终端，虚拟终端还不行。。。
+执行完毕后，重启或者执行一次
+&amp;gt;sudo udevadm trigger &amp;ndash;subsystem-match=input &amp;ndash;action=change&lt;/p&gt;
+
+&lt;p&gt;使得保存的配置生效。
+这样一般就成功了，若是还不行，有可能是fcitx输入法的问题。
+打开 Fcitx Configuration，可以在search里找到
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/%20FcitxConfiguration.png&#34; alt=&#34; &#34; title=&#34; FcitxConfiguration&#34; /&gt;
+像我上面选择的键盘语言是
+&amp;gt;XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;需要把当前语言移动到最上面，没有的话就添加一个。&lt;/p&gt;
+
+&lt;p&gt;到这里就可以解决大部分问题了，至少我这里键盘输入还没有回弹到那种奇葩的状况。
+那就必须秀一波@@@@@@@########&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;ldquo;啊哈哈！&lt;/p&gt;
+
+&lt;h2 id=&#34;http-7xswbj-com1-z0-glb-clouddn-com-runningchicken-jpg-runingchicken&#34;&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/runningchicken.jpg&#34; alt=&#34; &#34; title=&#34;runingchicken&#34; /&gt;&lt;/h2&gt;
+
+&lt;h4 id=&#34;参考文档&#34;&gt;参考文档&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.linuxdiyf.com/linux/16832.html&#34;&gt;ubuntu14.04键盘错位小问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.linuxdiyf.com/linux/17450.html&#34;&gt;ubuntu/mint键盘错乱问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/cc7756789w/article/details/50661992&#34;&gt;Ubuntu下键盘输入错乱问题&lt;/a&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>使用ngrok实现内网穿透</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <pubDate>Sun, 18 Sep 2016 09:37:45 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <description>
+
+&lt;p&gt;今天想用nodejs写一个微信公众号服务，很尴尬的发现自己的腾讯云学生服务器已经三个月没续费被收回了。工作室的这台服务器又不是很想动，于是就想到前一段时间看的一个实现内网穿透的工具ngrok，花了一段时间部署在了自己的ubuntu上。又化了两块钱买了个域名，准备以后作为工作室测试来用。&lt;/p&gt;
+
+&lt;p&gt;这里感谢下&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt; 提供的文章，方法很不错，省去了自己爬坑的麻烦。&lt;/p&gt;
+
+&lt;h2 id=&#34;准备阶段&#34;&gt;准备阶段&lt;/h2&gt;
+
+&lt;h4 id=&#34;下载ngrok&#34;&gt;下载ngrok&lt;/h4&gt;
+
+&lt;p&gt;由于ngrok是用Go语言开发的，先得安装好必要的环境：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install build-essential golang mercurial git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来从源码安装，原来的官网好像早就挂了，不过开发者们已经把ngrok开源了，可以从github上获得：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/tutumcloud/ngrok.git ngrok
+cd ngrok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;替换证书&#34;&gt;替换证书&lt;/h4&gt;
+
+&lt;p&gt;源码中有证书，但需要自己生成一个，并把原来那个替换掉：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NGROK_DOMAIN=&amp;quot;cmweb.top&amp;quot;
+//注意上面的域名地址替换成你自己的
+//下面依次运行
+openssl genrsa -out base.key 2048
+openssl req -new -x509 -nodes -key base.key -days 10000 -subj &amp;quot;/CN=&amp;gt;$NGROK_DOMAIN&amp;quot; -out base.pem
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -subj &amp;quot;/CN=$NGROK_DOMAIN&amp;quot; -out server.csr
+openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt
+
+cp base.pem assets/client/tls/ngrokroot.crt
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;编译ngrok&#34;&gt;编译ngrok&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo make release-server release-client
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;成功的标志是ngrok/bin目录下应有ngrok、ngrokd两个文件。&lt;/p&gt;
+
+&lt;h3 id=&#34;开始部署&#34;&gt;开始部署&lt;/h3&gt;
+
+&lt;h4 id=&#34;服务器端&#34;&gt;服务器端&lt;/h4&gt;
+
+&lt;p&gt;就是前面生成的ngrokd程序，指定证书、域名和端口启动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo ./bin/ngrokd -tlsKey=server.key -tlsCrt=server.crt -domain=&amp;quot;cmweb.top&amp;quot; -httpAddr=&amp;quot;:8081&amp;quot; -httpsAddr=&amp;quot;:8082&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意修改为自己的域名，httpAddr、httpsAddr 分别是 ngrok 用来转发 http、https 服务的端口，可以随意指定(但要注意这个域名一定是公网可访问到的)。&lt;/p&gt;
+
+&lt;p&gt;这里将我的&lt;code&gt;cmweb.top&lt;/code&gt;域名做了泛解析，我指定了一个子域 &lt;a href=&#34;http://pub.cmweb.top:8081&#34;&gt;http://pub.cmweb.top:8081&lt;/a&gt; 并访问它，发现页面显示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Tunnel pub.cmweb.top:8081 not found
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明服务器端已经好了，剩下的就是部署客户端了。&lt;/p&gt;
+
+&lt;h4 id=&#34;客户端&#34;&gt;客户端&lt;/h4&gt;
+
+&lt;p&gt;客户端就是生成的ngrok，这里参考了&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt;的方法，在ngrok/bin下写了一个启动配置文件 ngrok.cfg：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server_addr: cmweb.top:4443
+trust_host_root_certs: false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4443 端口是服务端ngrokd 开的用来跟客户端通讯的端口，并可通过 -tunnelAddr=&amp;rdquo;:xxx&amp;rdquo; 指定。&lt;/p&gt;
+
+&lt;h3 id=&#34;运行&#34;&gt;运行&lt;/h3&gt;
+
+&lt;p&gt;指定子域、要转发的协议和端口、配置文件，在服务器端运行后，运行客户端：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;./ngrok -subdomain pub -proto=http -config=ngrok.cfg 80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里貌似只支持本机的80端口进行映射，试了其他的端口会报错，而且nodejs的微信API也只支持80端口，毕竟我们的主要目的不是为了研究这个，具体原因也就没有深究。&lt;/p&gt;
+
+&lt;p&gt;现在就大功告成了我把一个测试用例&lt;code&gt;app.listen(80)&lt;/code&gt;上，发现公网可以通过 &lt;a href=&#34;http://pub.cmweb.top:8081&#34;&gt;http://pub.cmweb.top:8081&lt;/a&gt; 进行访问了，也就是说实现了内网到公网的一个映射。&lt;/p&gt;
+
+&lt;h3 id=&#34;结语&#34;&gt;结语&lt;/h3&gt;
+
+&lt;p&gt;文章基本是对&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt;方法的一次操作纪录，没什么原创性，但是可以学到很多知识（也省去了私人开发项目购买服务器的钱&amp;hellip;）。总之以后本机开发的项目就不用劳心费神的再放到服务器上辛辛苦苦的去调试了。&lt;/p&gt;
+
+&lt;p&gt;这也算是一次成功的实践，也不用麻烦的去捣鼓路由器。&lt;/p&gt;
+
+&lt;p&gt;补充：发现了一个集成好了的东西：&lt;a href=&#34;www.ngrok.cc&#34;&gt;sunny-ngrok&lt;/a&gt; ，有时间大家可以研究一下。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>分享一些自用chrome插件</title>
+      <link>https://chongg039.github.io/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</link>
+      <pubDate>Sat, 21 May 2016 15:45:01 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/Chrome1111.jpg&#34; alt=&#34;分享一些自用的chrome插件&#34; title=&#34;chrome&#34; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;feedly:关注内容在&lt;a href=&#34;https://github.com/foru17/front-end-collect这里可以找几个&#34;&gt;https://github.com/foru17/front-end-collect这里可以找几个&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;switchyomega：科学上网，配合ss使用&lt;/li&gt;
+&lt;li&gt;onetab：一键收藏网页并保存在本地，方便下次打开&lt;/li&gt;
+&lt;li&gt;postman（扩展）：查看网页发送的数据&lt;/li&gt;
+&lt;li&gt;Responsive Web Design Tester：将网页内容在不同设备呈现&lt;/li&gt;
+&lt;li&gt;cssviewer：实时查看网页某一部分的css&lt;/li&gt;
+&lt;li&gt;Chrome Sniffer Plus：查看网页用了哪些框架（图标会随网页变）&lt;/li&gt;
+&lt;li&gt;page load time：分析网页加载速度&lt;/li&gt;
+&lt;li&gt;save to pocket：右键收藏到pocket，需注册，可在手机上使用&lt;/li&gt;
+&lt;li&gt;Isometric Contributions：可以将github上的访问时间变成盖楼样式，很有意思&lt;/li&gt;
+&lt;li&gt;octotree：这个是神器，具体搜一搜，是关于github实时查看文件的&lt;/li&gt;
+&lt;li&gt;划词翻译&lt;/li&gt;
+&lt;li&gt;Momentum：chrome打开新标签页有背景，这个比较大,建议不使用&lt;/li&gt;
+&lt;li&gt;jsonview：查看网页json&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>搭建 Linux 开发环境</title>
+      <link>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Thu, 12 May 2016 19:29:07 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;先说说我为啥要干这事儿。
+前段时间迪哥要我们用node搞一个最小化 MEAN 产品，没想到只是在搭建开发环境上windows就各种不兼容，出现了许多奇奇怪怪的bug，再加上国内关于node的开发教程确实相对比较少，没有好的学习资源。搞了virtualbox虚拟机，但是内存和性能又开始捉急。干脆换到ubuntu，一步到位，特此记录下过程。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;系统版本：ubuntu14.04LTS&lt;/li&gt;
+&lt;li&gt;开发环境：nodejs4.4.4LTS， Express， Yeoman, chrome&lt;/li&gt;
+&lt;li&gt;写作环境：sublimetext3， haroopad（md）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;在ubuntu上搭建node和前端开发流网上大部分都有教程，我这里就不一一写出来了，只是记下搭建时应该注意的事项和几个比较好的网站供参考&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;开始搭建&#34;&gt;开始搭建&lt;/h3&gt;
+
+&lt;p&gt;####安装ubuntu14.04&lt;/p&gt;
+
+&lt;p&gt;没啥可说的，搞个系统盘装就行了，就是安装的时候注意盘的分区设置（自行google）并且最好选择英文。有几个可能出现的小问题：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果以前安装过ubuntu系统想要删除，不能直接在系统盘下进行格式化，需要先修改win系统下的启动文件，否则就是血的教训（别问我怎么知道的）&lt;/li&gt;
+&lt;li&gt;有时候进入ubuntu系统时会出现配平和一个警告框，大意是警告在低电源出什么问题，这种问题就是你的显卡驱动没有更新，可以先妥协一下点ok重启进入ubuntu，或者进入命令行模式安装即可，办法自己找。当然第一次进入系统时一般不会出现这种问题，所以出于方便考虑&lt;em&gt;建议第一次进系统时就检测一下驱动并且更新&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;还有一个大坑&lt;/strong&gt;，由于经常使用&lt;code&gt;sudo&lt;/code&gt;命令要输入密码，总会有人偷懒想要设置自己的用户直接拥有root权限而省去这一步，网上的教程修改系统配置文件里增加自己的用户为root用户。当然这种办法是可行的。但一旦不小心在写配置文件时写错一个地方就悲剧了，你会发现你连&lt;strong&gt;sudo命令都无法使用！！！&lt;/strong&gt;这就意味着你再也不能在图形界面下将配置文件打开恢复原样了。。。当然也不是没有办法，就是需要进入命令行模式下一顿操作。。。这里我不贴出具体的方法，因为我觉得当时人们设计这种模式是有道理的，限制对sudo命令的使用来保证系统的安全性。我们的目的还是在nodejs开发上，只要不搞linux的话我们还是老老实实&lt;code&gt;sudo&lt;/code&gt;好了，不用输入密码完全可以通过&lt;code&gt;sodo -s -H&lt;/code&gt;等办法解决。。。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;####一些必要的配置&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sudo apt-get update&lt;/code&gt;没事就用一下&lt;/li&gt;
+&lt;li&gt;换源，国内的话换成阿里的源就够用了，在&lt;code&gt;system settings&lt;/code&gt;里的&lt;code&gt;software&amp;amp;update&lt;/code&gt;的&lt;code&gt;download from&lt;/code&gt;目录下修改&lt;/li&gt;
+&lt;li&gt;搜狗输入法，做得还是不错的，需要换&lt;code&gt;fcitx&lt;/code&gt;框架，官网下载deb包。装完后记得重启才能生效
+&amp;gt;注意安装了fcitx后不要删除原有的iBus框架，否则会导致你的图形界面会发生各种异常（比如哪里的图标都可能会消失，图形界面也有可能消失哦，那样又要去命令行系统里重新搞了，iBus留着即可&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;####科学上网
+- 工作室拿shadowsocks爬墙，还是很方便，只是换了岛国的代理后只有后台架梯子chrome还上不了墙，还得搞个switchomega。有篇@&lt;a href=&#34;https://aitanlu.com/ubuntu-shadowsocks-ke-hu-duan-pei-zhi.html&#34;&gt;爱探路&lt;/a&gt;博客介绍的比较详细直接转过来供参考
+- 据说小飞机的账号网上很好找，没有的话用lantern也不错，官网上有linux版本提供deb包下载&lt;/p&gt;
+
+&lt;p&gt;####安装nodejs
+- apt-get 支持安装nodejs命令，不过版本过低，还不能升级，据说是linux官方源不再更新了，然而有的框架和命令还必须要新版本的才能执行。apt-get安装的版本还不支持node命令，只能用nodejs命令替代（这就非常尴尬了）。因此，墙裂推荐去node官网下载最新的nodejs版本自行安装，麻烦一次受益一生。&lt;strong&gt;推荐使用二进制文件进行安装，比较靠谱，安装过程也可以顺便熟悉一下linux命令&lt;/strong&gt;
+- linux中国开源社区有&lt;a href=&#34;https://linux.cn/article-5766-1.html&#34;&gt;一篇文章&lt;/a&gt;做了比较详细的介绍，当然你需要去&lt;a href=&#34;https://nodejs.org/en/&#34;&gt;nodejs官网&lt;/a&gt;看当前最新的稳定版本是哪个然后下载对应的的二进制源码
+- 安装完nodejs后自带了npm包，不过版本比较低，通过&lt;code&gt;sudo npm update npm -g&lt;/code&gt;升级到最新版本。没事可以再&lt;code&gt;update&lt;/code&gt;一下
+- 注意环境配置，如g++和python2.7.x（检查系统内自带的python版本）&lt;/p&gt;
+
+&lt;p&gt;####配置工作流
+- 正常安装Express步骤：注意高版本的要安装&lt;code&gt;express-generator&lt;/code&gt;
+- 正常安装Yeoman步骤：安装条件&lt;code&gt;sudo apt-get install build-essential openssl libssl-dev curl&lt;/code&gt;
+顺手把Ruby装了算了&lt;code&gt;sudo apt-get install ruby&lt;/code&gt;以后需要啥提示的时候在装就行了
+然后&lt;code&gt;sudo npm install -g yo grunt-cli bower&lt;/code&gt;，&lt;code&gt;gulp&lt;/code&gt;有兴趣装了也行
+- 基本配置完了，顺顺当当，总归不会出现windows命令行下各种不能操作的毛病
+（安装时间有点长就顺手装了个命令行版的&lt;a href=&#34;https://github.com/darknessomi/musicbox&#34;&gt;网易云音乐&lt;/a&gt;，说实话比想象中好用多了。就是我这里登陆是GG的，有时间再找找问题||-_-）&lt;/p&gt;
+
+&lt;p&gt;####安装git
+- 推荐@&lt;a href=&#34;http://sjq597.github.io/2015/10/25/Ubuntu-14-04-%E5%AE%89%E8%A3%85git/&#34;&gt;LittleQ&lt;/a&gt;的这篇文章，比较清晰可靠，同时给配置了SSH&lt;/p&gt;
+
+&lt;p&gt;####配置写作环境
+- 去&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;sublimetext官网&lt;/a&gt;下载对应的deb包安装。插件我就不介绍了，一搜一大堆
+- markdown编辑器推荐&lt;a href=&#34;http://pad.haroopress.com/user.html&#34;&gt;haroopad&lt;/a&gt;，这是我目前在使用的编辑器，功能比较齐全，已经基本可以满足需要&lt;/p&gt;
+
+&lt;p&gt;####配置数据库
+- 我目前在学习使用mongodb（然而SQL语言并没有学好||-_-),因为看到大部分MEAN开发都使用noSQL语言
+- 安装比较简单，14.04自带源，&lt;code&gt;sudo apt-get install mongodb&lt;/code&gt;即可，找不到命令的话需要&lt;code&gt;sudo apt-get update&lt;/code&gt;一下
+- 配置启动mongo和指定数据库目录用&lt;code&gt;mongod --dbpath “目录”&lt;/code&gt;
+- &lt;a href=&#34;http://www.bitscn.com/pdb/otherdb/201501/442949.html&#34;&gt;这篇文章&lt;/a&gt;可以稍微参考一下，mongodb安装不会出什么大问题&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;到这里ubuntu下nodejs工作流基本配置完了，只是我在github上的博客还存在windows下，我想把博客的写作环境移植到这里，同时以后换电脑换系统时也需要有个参考。怎么办呢
+- 找到了一个比较靠谱的@&lt;a href=&#34;http://kwangka.github.io/2015/01/17/how-to-synchronize-blog/&#34;&gt;曾梦想仗剑走天涯&lt;/a&gt;写的一篇文章，参考这个基本就能在任意系统上进行博客文章的写作了
+- 图床我扔给七牛了，这个不用考虑
+- 当然方法不唯一，你也可以参考别的方法达成这个目的。有人介绍可以通过dropbox同步更方便，有时间可以尝试一下&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;还有一些乱七八糟的东西&#34;&gt;还有一些乱七八糟的东西&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;护眼，没有防蓝光眼镜的话（有的话尽量也搞一个）装一个&lt;code&gt;f.lux&lt;/code&gt;，不过这里用的是&lt;code&gt;redshift&lt;/code&gt;，据说这个要好一点。参考&lt;a href=&#34;http://www.ituring.com.cn/article/211486&#34;&gt;图灵社区&lt;/a&gt;的一篇文章进行安装&lt;/li&gt;
+&lt;li&gt;截图，键盘上的Print Screen就很方便，会弹出对话框提醒你保存。放一张网易云音乐的照片
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/cloudNet.png&#34; alt=&#34;cloudNet&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;邮件系统，还是用Thunderbird，好用原生而且方便。系统自带不用安装，配置自己找教程（偷个懒）&lt;/li&gt;
+&lt;li&gt;dropbox，这个没装好，有时间再来更新&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;收工-接下来就是愉快的学习和开发过程了&#34;&gt;收工！接下来就是愉快的学习和开发过程了～&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;####更新
+&amp;gt;
+2016.9.4    升级到ubuntu16.04LTS，安装搜狗中文输入可直接使用gdebi安装
+2016.9.10   更换Remarkable作为MD编辑器
+2016.9.26   转移工作流至阿里云服务器
+2016.9.30   配置工作流到docker&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>说说es5中的闭包</title>
+      <link>https://chongg039.github.io/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</link>
+      <pubDate>Mon, 18 Apr 2016 19:26:22 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E8%AF%B4%E8%AF%B4es5%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85/</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;匿名函数&lt;/strong&gt;：下面是最常见的一种&lt;strong&gt;函数表达式&lt;/strong&gt;的书写形式
+&lt;code&gt;
+var functionName = function(arg0, arg1, arg2){
+//函数体
+}
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;即：创建一个函数，并将其复制给变量&lt;code&gt;functionName&lt;/code&gt;，这种情况下创建的函数叫做匿名函数(anonymous function)，&lt;strong&gt;因为&lt;/strong&gt;&lt;code&gt;function&lt;/code&gt;&lt;strong&gt;后面没有标识符&lt;/strong&gt;，其&lt;code&gt;name&lt;/code&gt;属性是空字符串。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;函数表达式使用前必须先赋值，与函数声明的&lt;strong&gt;函数声明提升&lt;/strong&gt;不一致,关键是理解函数声明和函数表达式的区别&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;闭包&lt;/strong&gt;：有权访问另一个函数作用域中的变量的函数。创建闭包常用&lt;strong&gt;在一个函数内部创建另一个函数&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;闭包就是在全局作用域链中，某个位置想要访问函数只能从这一级一层层&lt;strong&gt;向上&lt;/strong&gt;为优先级访问，而&lt;strong&gt;不能访问该位置下创建的函数&lt;/strong&gt;。
+一般来讲函数执行完毕后，局部活动对象就会被销毁，内存中仅仅保留全局作用域。但闭包不同。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;在一个函数内部定义一个函数会将包含的函数（即外部函数）的活动对象添加到他的作用域链中。就是说，某一个函数内部定义的匿名函数的作用域链中，实际上会包含外部函数（即定义这个匿名函数的函数）的活动对象&amp;mdash;&amp;ndash;&amp;gt;所以匿名函数从定义它的函数中返回后，匿名函数的作用域链被初始化为包含在定义它的函数的活动对象和全局变量对象&amp;mdash;&amp;mdash;&amp;gt;匿名函数就可以访问在定义它的函数中的所有变量&amp;mdash;&amp;mdash;&amp;ndash;&amp;gt;更重要的是，定义他的函数在执行完毕后其活动对象不会被销毁（&lt;strong&gt;因为匿名函数的作用域链仍在引用这个活动对象&lt;/strong&gt;），即 即使定义它的函数返回后，其执行环境的作用域链被销毁了，但活动对象仍在内存中&amp;mdash;&amp;mdash;&amp;mdash;-&amp;gt;因此，&lt;strong&gt;直到匿名函数被销毁后，定义它的函数的活动对象才会被销毁&lt;/strong&gt;
+&lt;img src=&#34;http://7xswbj.com2.z0.glb.clouddn.com/closure.jpg&#34; alt=&#34;closure&#34; /&gt;
+&amp;gt; 解除对匿名函数的引用（来释放内存）
+(定义匿名函数的函数名)&lt;code&gt;functionName = null&lt;/code&gt;;
+解除函数的引用，即通知垃圾回收例程将其清除
+随着匿名函数作用域链被销毁，其他作用域（除了全局）也可安全销毁&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;闭包会携带它函数的作用域，因此会比其他函数占用更多内存，&lt;strong&gt;过度使用闭包会导致内存占用过多&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;注意这种作用域链机制带来的一个&lt;strong&gt;副作用：闭包只能取得包含函数中的任何变量的最后一个值。&lt;/strong&gt;
+&amp;gt; （因为   闭包保存的是整个变量对象而不是某个特殊变量）&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;title&amp;gt;Closure Example&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+        &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+
+//下面这个函数
+            function createFunctions(){
+                var result = new Array();
+                
+                
+                for (var i=0; i &amp;lt; 10; i++){
+                    result[i] = function(){
+                        return i;
+                    };
+                }
+                
+                return result;
+            }
+//上面这个函数
+
+            var funcs = createFunctions();
+            
+            //every function outputs 10
+            for (var i=0; i &amp;lt; funcs.length; i++){
+                document.write(funcs[i]() + &amp;quot;&amp;lt;br /&amp;gt;&amp;quot;);
+            }
+
+        &amp;lt;/script&amp;gt;
+     
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面这个函数理应返回一个函数数组，每个函数都返回自己索引值（0~9）。&lt;strong&gt;但是！&lt;/strong&gt;因为每个函数的作用域链都保存着&lt;code&gt;createFunctions()&lt;/code&gt;函数的活动对象，所以&lt;strong&gt;他们引用的是同一个变量&lt;/strong&gt;&lt;code&gt;i&lt;/code&gt;。&lt;strong&gt;当&lt;/strong&gt;&lt;code&gt;createFunctions()&lt;/code&gt;&lt;strong&gt;函数返回后，得到变量&lt;/strong&gt;&lt;code&gt;i&lt;/code&gt;&lt;strong&gt;的值为10。&lt;/strong&gt;此时，&lt;strong&gt;每个函数都引用着保存变量&lt;/strong&gt;&lt;code&gt;i&lt;/code&gt;&lt;strong&gt;的同一个变量对象，所以每个函数内部的&lt;/strong&gt;&lt;code&gt;i&lt;/code&gt;&lt;strong&gt;值都为10。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;下面通过创建另一个匿名函数强制让闭包行为符合预期&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+    &amp;lt;head&amp;gt;
+        &amp;lt;title&amp;gt;Closure Example 2&amp;lt;/title&amp;gt;
+    &amp;lt;/head&amp;gt;
+    &amp;lt;body&amp;gt;
+        &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+
+//下面这个函数        
+            function createFunctions(){
+                var result = new Array();
+                
+                for (var i=0; i &amp;lt; 10; i++){
+                    result[i] = function(num){
+                        return function(){      //这部分
+                            return num;
+                        };
+                    }(i);
+                }
+                
+                return result;
+            }
+//上面这个函数
+            
+            var funcs = createFunctions();
+            
+            //every function outputs 10
+            for (var i=0; i &amp;lt; funcs.length; i++){
+                document.write(funcs[i]() + &amp;quot;&amp;lt;br /&amp;gt;&amp;quot;);
+            }
+
+        &amp;lt;/script&amp;gt;
+     
+    &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里并没有直接把闭包赋值给数组，而是&lt;strong&gt;通过定义一个匿名函数&lt;/strong&gt;，并&lt;strong&gt;将立即执行该匿名函数的结果赋值给数组&lt;/strong&gt;。匿名函数中的参数&lt;code&gt;num&lt;/code&gt;，就是最终函数要返回的值。
+调用每个匿名函数时传入变量&lt;code&gt;i&lt;/code&gt;，因为&lt;strong&gt;参数是按值传递，所以会将变量i的当前值复制给参数&lt;/strong&gt;&lt;code&gt;num&lt;/code&gt;。而在&lt;strong&gt;这个匿名函数内部，又创建了一个访问&lt;/strong&gt;&lt;code&gt;num&lt;/code&gt;&lt;strong&gt;的闭包&lt;/strong&gt;。因此，&lt;code&gt;result&lt;/code&gt;数组中&lt;strong&gt;每个函数都有各自&lt;/strong&gt;&lt;code&gt;num&lt;/code&gt;&lt;strong&gt;的副本&lt;/strong&gt;，便能返回各自不同的数值。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>写在前面</title>
+      <link>https://chongg039.github.io/blog/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</link>
+      <pubDate>Sun, 17 Apr 2016 19:29:07 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2/</guid>
+      <description>
+
+&lt;h2 id=&#34;我为什么建博客&#34;&gt;我为什么建博客&lt;/h2&gt;
+
+&lt;p&gt;大二本科加入创萌工作室学习前端，整个学习阶段对于笔记以及感悟的整理从印象，有道云转移到Quip，感觉最好还是有一个独立博客更为方便。在爬了两个星期的坑后使用Hexo+huno主题以及一些开源插件完成了整个博客的大致创建。
+&lt;/br&gt;
+&lt;/br&gt;
+博客主要用于私人的学习笔记以及感悟随笔，以供各位交流学习，若无特殊说明欢迎转载，但请注明出处。博客中转载文章的著作权归原作者所有。
+&lt;/br&gt;
+&lt;/br&gt;
+欢迎订阅我的博客，访问我的Github，互相学习，共同进步。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;更新&#34;&gt;更新&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;2016.4.19  添加许可协议
+2016.9.25  更换 maupassant 博客主题
+2016.9.28  迁移博客至阿里云
+2017.2.26  迁移到 Hugo
+2017.3.22  图床从七牛迁移到 Flickr，并完成全站 HTTPS
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>about</title>
+      <link>https://chongg039.github.io/about/</link>
+      <pubDate>Sat, 22 Aug 2015 06:42:21 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/about/</guid>
+      <description>&lt;p&gt;coldriver，nodejs玩家，最近转型Go&lt;/p&gt;
+
+&lt;p&gt;仍就读于蓉城某非著名985院校计算机专业，创萌工作室现任负责人，保研无望又不安于找工作，最近准备搞点事情&lt;/p&gt;
+
+&lt;p&gt;师从isomker， tesths两位不大不小的牛人，工作室有一帮同甘共苦的小伙伴，时间紧凑，不过生活也算是滋润&lt;/p&gt;
+
+&lt;p&gt;有强烈的技术情结，重度开源患者，还未成型的全栈攻城尸。喜欢运动爱冒险，愿意探索新奇的语言和事物&lt;/p&gt;
+
+&lt;p&gt;如果你喜欢这里，可以订阅一下就是不知道下一篇什么时候更新。如果有兴趣也可以通过微信，Twitter 和我交流，共同学习进步&lt;/p&gt;
+
+&lt;p&gt;对我或者本站有意见和建议也可以通过下方的邮箱和我联系 ，希望你生活愉快！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/weixin.png?imageView2/2/w/200&#34; alt=&#34;微信&#34; /&gt;
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/twitter.jpg?imageView2/2/w/200&#34; alt=&#34;Twitter&#34; /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;resume/&#34;&gt;这里是我的简历&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

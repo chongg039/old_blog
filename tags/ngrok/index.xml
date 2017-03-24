@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ngrok on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/ngrok/index.xml</link>
+    <description>Recent content in Ngrok on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/ngrok/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>使用ngrok实现内网穿透</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</link>
+      <pubDate>Sun, 18 Sep 2016 09:37:45 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8ngrok%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</guid>
+      <description>
+
+&lt;p&gt;今天想用nodejs写一个微信公众号服务，很尴尬的发现自己的腾讯云学生服务器已经三个月没续费被收回了。工作室的这台服务器又不是很想动，于是就想到前一段时间看的一个实现内网穿透的工具ngrok，花了一段时间部署在了自己的ubuntu上。又化了两块钱买了个域名，准备以后作为工作室测试来用。&lt;/p&gt;
+
+&lt;p&gt;这里感谢下&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt; 提供的文章，方法很不错，省去了自己爬坑的麻烦。&lt;/p&gt;
+
+&lt;h2 id=&#34;准备阶段&#34;&gt;准备阶段&lt;/h2&gt;
+
+&lt;h4 id=&#34;下载ngrok&#34;&gt;下载ngrok&lt;/h4&gt;
+
+&lt;p&gt;由于ngrok是用Go语言开发的，先得安装好必要的环境：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get install build-essential golang mercurial git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来从源码安装，原来的官网好像早就挂了，不过开发者们已经把ngrok开源了，可以从github上获得：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/tutumcloud/ngrok.git ngrok
+cd ngrok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;替换证书&#34;&gt;替换证书&lt;/h4&gt;
+
+&lt;p&gt;源码中有证书，但需要自己生成一个，并把原来那个替换掉：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NGROK_DOMAIN=&amp;quot;cmweb.top&amp;quot;
+//注意上面的域名地址替换成你自己的
+//下面依次运行
+openssl genrsa -out base.key 2048
+openssl req -new -x509 -nodes -key base.key -days 10000 -subj &amp;quot;/CN=&amp;gt;$NGROK_DOMAIN&amp;quot; -out base.pem
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -subj &amp;quot;/CN=$NGROK_DOMAIN&amp;quot; -out server.csr
+openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt
+
+cp base.pem assets/client/tls/ngrokroot.crt
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;编译ngrok&#34;&gt;编译ngrok&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo make release-server release-client
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;成功的标志是ngrok/bin目录下应有ngrok、ngrokd两个文件。&lt;/p&gt;
+
+&lt;h3 id=&#34;开始部署&#34;&gt;开始部署&lt;/h3&gt;
+
+&lt;h4 id=&#34;服务器端&#34;&gt;服务器端&lt;/h4&gt;
+
+&lt;p&gt;就是前面生成的ngrokd程序，指定证书、域名和端口启动：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo ./bin/ngrokd -tlsKey=server.key -tlsCrt=server.crt -domain=&amp;quot;cmweb.top&amp;quot; -httpAddr=&amp;quot;:8081&amp;quot; -httpsAddr=&amp;quot;:8082&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注意修改为自己的域名，httpAddr、httpsAddr 分别是 ngrok 用来转发 http、https 服务的端口，可以随意指定(但要注意这个域名一定是公网可访问到的)。&lt;/p&gt;
+
+&lt;p&gt;这里将我的&lt;code&gt;cmweb.top&lt;/code&gt;域名做了泛解析，我指定了一个子域 &lt;a href=&#34;http://pub.cmweb.top:8081&#34;&gt;http://pub.cmweb.top:8081&lt;/a&gt; 并访问它，发现页面显示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Tunnel pub.cmweb.top:8081 not found
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明服务器端已经好了，剩下的就是部署客户端了。&lt;/p&gt;
+
+&lt;h4 id=&#34;客户端&#34;&gt;客户端&lt;/h4&gt;
+
+&lt;p&gt;客户端就是生成的ngrok，这里参考了&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt;的方法，在ngrok/bin下写了一个启动配置文件 ngrok.cfg：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;server_addr: cmweb.top:4443
+trust_host_root_certs: false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;4443 端口是服务端ngrokd 开的用来跟客户端通讯的端口，并可通过 -tunnelAddr=&amp;rdquo;:xxx&amp;rdquo; 指定。&lt;/p&gt;
+
+&lt;h3 id=&#34;运行&#34;&gt;运行&lt;/h3&gt;
+
+&lt;p&gt;指定子域、要转发的协议和端口、配置文件，在服务器端运行后，运行客户端：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;./ngrok -subdomain pub -proto=http -config=ngrok.cfg 80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里貌似只支持本机的80端口进行映射，试了其他的端口会报错，而且nodejs的微信API也只支持80端口，毕竟我们的主要目的不是为了研究这个，具体原因也就没有深究。&lt;/p&gt;
+
+&lt;p&gt;现在就大功告成了我把一个测试用例&lt;code&gt;app.listen(80)&lt;/code&gt;上，发现公网可以通过 &lt;a href=&#34;http://pub.cmweb.top:8081&#34;&gt;http://pub.cmweb.top:8081&lt;/a&gt; 进行访问了，也就是说实现了内网到公网的一个映射。&lt;/p&gt;
+
+&lt;h3 id=&#34;结语&#34;&gt;结语&lt;/h3&gt;
+
+&lt;p&gt;文章基本是对&lt;a href=&#34;https://imququ.com/post/self-hosted-ngrokd.html&#34;&gt;Jerry Qu&lt;/a&gt;方法的一次操作纪录，没什么原创性，但是可以学到很多知识（也省去了私人开发项目购买服务器的钱&amp;hellip;）。总之以后本机开发的项目就不用劳心费神的再放到服务器上辛辛苦苦的去调试了。&lt;/p&gt;
+
+&lt;p&gt;这也算是一次成功的实践，也不用麻烦的去捣鼓路由器。&lt;/p&gt;
+
+&lt;p&gt;补充：发现了一个集成好了的东西：&lt;a href=&#34;www.ngrok.cc&#34;&gt;sunny-ngrok&lt;/a&gt; ，有时间大家可以研究一下。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

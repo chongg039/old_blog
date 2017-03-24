@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ubuntu on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/ubuntu/index.xml</link>
+    <description>Recent content in Ubuntu on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>解决 ubuntu 下键盘错位问题</title>
+      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 02 Oct 2016 15:43:36 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
+      <description>
+
+&lt;p&gt;很悲催的键盘错位了，就这个系统有问题，以前也没遇到过。简而言之就是@和“互换，#打不出来等。问题不大，但是影响输入体验。
+工作室的小伙伴都说我这电脑只有我会用。。。&lt;/p&gt;
+
+&lt;p&gt;之前在网上搜到的解决办法是在终端输入：
+&amp;gt;sudo dpkg-reconfigure keyboard-configuration
+//需要安装keyboard-configuration&lt;/p&gt;
+
+&lt;p&gt;然后调整键盘布局，改为English(US)或者English(UK)，这样就相当于把键盘布局重置，然后就好了。&lt;/p&gt;
+
+&lt;p&gt;这种办法也可以通过&lt;code&gt;sudo vim /etc/default/keyboard&lt;/code&gt;手动修改配置：
+&amp;gt; KEYBOARD CONFIGURATION FILE&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Consult the keyboard(5) manual page.&lt;/p&gt;
+
+&lt;p&gt;XKBMODEL=&amp;ldquo;cherrycyboard&amp;rdquo; //修改键盘类型
+XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;
+XKBVARIANT=&amp;ldquo;&amp;rdquo;
+XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;BACKSPACE=&amp;ldquo;guess&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;但是！！！&lt;/strong&gt;这样修改一会键盘就变回去了啊啊！！！一开始是一天，后来越来越快，今天连一分钟也没撑住啊啊！！！
+弄得人心里很是崩溃。。。&lt;/p&gt;
+
+&lt;p&gt;继续看吧，有人说需要在配置完&lt;code&gt;sudo vim /etc/default/keyboard&lt;/code&gt;后，终端中运行一次
+&amp;gt;setupcon&lt;/p&gt;
+
+&lt;p&gt;但是输出了&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;We are not on the console, the console is left unconfigured.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;原来要进入文字终端，虚拟终端还不行。。。
+执行完毕后，重启或者执行一次
+&amp;gt;sudo udevadm trigger &amp;ndash;subsystem-match=input &amp;ndash;action=change&lt;/p&gt;
+
+&lt;p&gt;使得保存的配置生效。
+这样一般就成功了，若是还不行，有可能是fcitx输入法的问题。
+打开 Fcitx Configuration，可以在search里找到
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/%20FcitxConfiguration.png&#34; alt=&#34; &#34; title=&#34; FcitxConfiguration&#34; /&gt;
+像我上面选择的键盘语言是
+&amp;gt;XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;需要把当前语言移动到最上面，没有的话就添加一个。&lt;/p&gt;
+
+&lt;p&gt;到这里就可以解决大部分问题了，至少我这里键盘输入还没有回弹到那种奇葩的状况。
+那就必须秀一波@@@@@@@########&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;ldquo;啊哈哈！&lt;/p&gt;
+
+&lt;h2 id=&#34;http-7xswbj-com1-z0-glb-clouddn-com-runningchicken-jpg-runingchicken&#34;&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/runningchicken.jpg&#34; alt=&#34; &#34; title=&#34;runingchicken&#34; /&gt;&lt;/h2&gt;
+
+&lt;h4 id=&#34;参考文档&#34;&gt;参考文档&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.linuxdiyf.com/linux/16832.html&#34;&gt;ubuntu14.04键盘错位小问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.linuxdiyf.com/linux/17450.html&#34;&gt;ubuntu/mint键盘错乱问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/cc7756789w/article/details/50661992&#34;&gt;Ubuntu下键盘输入错乱问题&lt;/a&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>搭建 Linux 开发环境</title>
+      <link>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Thu, 12 May 2016 19:29:07 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;先说说我为啥要干这事儿。
+前段时间迪哥要我们用node搞一个最小化 MEAN 产品，没想到只是在搭建开发环境上windows就各种不兼容，出现了许多奇奇怪怪的bug，再加上国内关于node的开发教程确实相对比较少，没有好的学习资源。搞了virtualbox虚拟机，但是内存和性能又开始捉急。干脆换到ubuntu，一步到位，特此记录下过程。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;系统版本：ubuntu14.04LTS&lt;/li&gt;
+&lt;li&gt;开发环境：nodejs4.4.4LTS， Express， Yeoman, chrome&lt;/li&gt;
+&lt;li&gt;写作环境：sublimetext3， haroopad（md）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;在ubuntu上搭建node和前端开发流网上大部分都有教程，我这里就不一一写出来了，只是记下搭建时应该注意的事项和几个比较好的网站供参考&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;开始搭建&#34;&gt;开始搭建&lt;/h3&gt;
+
+&lt;p&gt;####安装ubuntu14.04&lt;/p&gt;
+
+&lt;p&gt;没啥可说的，搞个系统盘装就行了，就是安装的时候注意盘的分区设置（自行google）并且最好选择英文。有几个可能出现的小问题：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果以前安装过ubuntu系统想要删除，不能直接在系统盘下进行格式化，需要先修改win系统下的启动文件，否则就是血的教训（别问我怎么知道的）&lt;/li&gt;
+&lt;li&gt;有时候进入ubuntu系统时会出现配平和一个警告框，大意是警告在低电源出什么问题，这种问题就是你的显卡驱动没有更新，可以先妥协一下点ok重启进入ubuntu，或者进入命令行模式安装即可，办法自己找。当然第一次进入系统时一般不会出现这种问题，所以出于方便考虑&lt;em&gt;建议第一次进系统时就检测一下驱动并且更新&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;还有一个大坑&lt;/strong&gt;，由于经常使用&lt;code&gt;sudo&lt;/code&gt;命令要输入密码，总会有人偷懒想要设置自己的用户直接拥有root权限而省去这一步，网上的教程修改系统配置文件里增加自己的用户为root用户。当然这种办法是可行的。但一旦不小心在写配置文件时写错一个地方就悲剧了，你会发现你连&lt;strong&gt;sudo命令都无法使用！！！&lt;/strong&gt;这就意味着你再也不能在图形界面下将配置文件打开恢复原样了。。。当然也不是没有办法，就是需要进入命令行模式下一顿操作。。。这里我不贴出具体的方法，因为我觉得当时人们设计这种模式是有道理的，限制对sudo命令的使用来保证系统的安全性。我们的目的还是在nodejs开发上，只要不搞linux的话我们还是老老实实&lt;code&gt;sudo&lt;/code&gt;好了，不用输入密码完全可以通过&lt;code&gt;sodo -s -H&lt;/code&gt;等办法解决。。。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;####一些必要的配置&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sudo apt-get update&lt;/code&gt;没事就用一下&lt;/li&gt;
+&lt;li&gt;换源，国内的话换成阿里的源就够用了，在&lt;code&gt;system settings&lt;/code&gt;里的&lt;code&gt;software&amp;amp;update&lt;/code&gt;的&lt;code&gt;download from&lt;/code&gt;目录下修改&lt;/li&gt;
+&lt;li&gt;搜狗输入法，做得还是不错的，需要换&lt;code&gt;fcitx&lt;/code&gt;框架，官网下载deb包。装完后记得重启才能生效
+&amp;gt;注意安装了fcitx后不要删除原有的iBus框架，否则会导致你的图形界面会发生各种异常（比如哪里的图标都可能会消失，图形界面也有可能消失哦，那样又要去命令行系统里重新搞了，iBus留着即可&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;####科学上网
+- 工作室拿shadowsocks爬墙，还是很方便，只是换了岛国的代理后只有后台架梯子chrome还上不了墙，还得搞个switchomega。有篇@&lt;a href=&#34;https://aitanlu.com/ubuntu-shadowsocks-ke-hu-duan-pei-zhi.html&#34;&gt;爱探路&lt;/a&gt;博客介绍的比较详细直接转过来供参考
+- 据说小飞机的账号网上很好找，没有的话用lantern也不错，官网上有linux版本提供deb包下载&lt;/p&gt;
+
+&lt;p&gt;####安装nodejs
+- apt-get 支持安装nodejs命令，不过版本过低，还不能升级，据说是linux官方源不再更新了，然而有的框架和命令还必须要新版本的才能执行。apt-get安装的版本还不支持node命令，只能用nodejs命令替代（这就非常尴尬了）。因此，墙裂推荐去node官网下载最新的nodejs版本自行安装，麻烦一次受益一生。&lt;strong&gt;推荐使用二进制文件进行安装，比较靠谱，安装过程也可以顺便熟悉一下linux命令&lt;/strong&gt;
+- linux中国开源社区有&lt;a href=&#34;https://linux.cn/article-5766-1.html&#34;&gt;一篇文章&lt;/a&gt;做了比较详细的介绍，当然你需要去&lt;a href=&#34;https://nodejs.org/en/&#34;&gt;nodejs官网&lt;/a&gt;看当前最新的稳定版本是哪个然后下载对应的的二进制源码
+- 安装完nodejs后自带了npm包，不过版本比较低，通过&lt;code&gt;sudo npm update npm -g&lt;/code&gt;升级到最新版本。没事可以再&lt;code&gt;update&lt;/code&gt;一下
+- 注意环境配置，如g++和python2.7.x（检查系统内自带的python版本）&lt;/p&gt;
+
+&lt;p&gt;####配置工作流
+- 正常安装Express步骤：注意高版本的要安装&lt;code&gt;express-generator&lt;/code&gt;
+- 正常安装Yeoman步骤：安装条件&lt;code&gt;sudo apt-get install build-essential openssl libssl-dev curl&lt;/code&gt;
+顺手把Ruby装了算了&lt;code&gt;sudo apt-get install ruby&lt;/code&gt;以后需要啥提示的时候在装就行了
+然后&lt;code&gt;sudo npm install -g yo grunt-cli bower&lt;/code&gt;，&lt;code&gt;gulp&lt;/code&gt;有兴趣装了也行
+- 基本配置完了，顺顺当当，总归不会出现windows命令行下各种不能操作的毛病
+（安装时间有点长就顺手装了个命令行版的&lt;a href=&#34;https://github.com/darknessomi/musicbox&#34;&gt;网易云音乐&lt;/a&gt;，说实话比想象中好用多了。就是我这里登陆是GG的，有时间再找找问题||-_-）&lt;/p&gt;
+
+&lt;p&gt;####安装git
+- 推荐@&lt;a href=&#34;http://sjq597.github.io/2015/10/25/Ubuntu-14-04-%E5%AE%89%E8%A3%85git/&#34;&gt;LittleQ&lt;/a&gt;的这篇文章，比较清晰可靠，同时给配置了SSH&lt;/p&gt;
+
+&lt;p&gt;####配置写作环境
+- 去&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;sublimetext官网&lt;/a&gt;下载对应的deb包安装。插件我就不介绍了，一搜一大堆
+- markdown编辑器推荐&lt;a href=&#34;http://pad.haroopress.com/user.html&#34;&gt;haroopad&lt;/a&gt;，这是我目前在使用的编辑器，功能比较齐全，已经基本可以满足需要&lt;/p&gt;
+
+&lt;p&gt;####配置数据库
+- 我目前在学习使用mongodb（然而SQL语言并没有学好||-_-),因为看到大部分MEAN开发都使用noSQL语言
+- 安装比较简单，14.04自带源，&lt;code&gt;sudo apt-get install mongodb&lt;/code&gt;即可，找不到命令的话需要&lt;code&gt;sudo apt-get update&lt;/code&gt;一下
+- 配置启动mongo和指定数据库目录用&lt;code&gt;mongod --dbpath “目录”&lt;/code&gt;
+- &lt;a href=&#34;http://www.bitscn.com/pdb/otherdb/201501/442949.html&#34;&gt;这篇文章&lt;/a&gt;可以稍微参考一下，mongodb安装不会出什么大问题&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;到这里ubuntu下nodejs工作流基本配置完了，只是我在github上的博客还存在windows下，我想把博客的写作环境移植到这里，同时以后换电脑换系统时也需要有个参考。怎么办呢
+- 找到了一个比较靠谱的@&lt;a href=&#34;http://kwangka.github.io/2015/01/17/how-to-synchronize-blog/&#34;&gt;曾梦想仗剑走天涯&lt;/a&gt;写的一篇文章，参考这个基本就能在任意系统上进行博客文章的写作了
+- 图床我扔给七牛了，这个不用考虑
+- 当然方法不唯一，你也可以参考别的方法达成这个目的。有人介绍可以通过dropbox同步更方便，有时间可以尝试一下&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;还有一些乱七八糟的东西&#34;&gt;还有一些乱七八糟的东西&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;护眼，没有防蓝光眼镜的话（有的话尽量也搞一个）装一个&lt;code&gt;f.lux&lt;/code&gt;，不过这里用的是&lt;code&gt;redshift&lt;/code&gt;，据说这个要好一点。参考&lt;a href=&#34;http://www.ituring.com.cn/article/211486&#34;&gt;图灵社区&lt;/a&gt;的一篇文章进行安装&lt;/li&gt;
+&lt;li&gt;截图，键盘上的Print Screen就很方便，会弹出对话框提醒你保存。放一张网易云音乐的照片
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/cloudNet.png&#34; alt=&#34;cloudNet&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;邮件系统，还是用Thunderbird，好用原生而且方便。系统自带不用安装，配置自己找教程（偷个懒）&lt;/li&gt;
+&lt;li&gt;dropbox，这个没装好，有时间再来更新&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;收工-接下来就是愉快的学习和开发过程了&#34;&gt;收工！接下来就是愉快的学习和开发过程了～&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;####更新
+&amp;gt;
+2016.9.4    升级到ubuntu16.04LTS，安装搜狗中文输入可直接使用gdebi安装
+2016.9.10   更换Remarkable作为MD编辑器
+2016.9.26   转移工作流至阿里云服务器
+2016.9.30   配置工作流到docker&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

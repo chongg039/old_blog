@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/go/index.xml</link>
+    <description>Recent content in Go on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>解决 Go 中遍历 map 的随机化问题</title>
+      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 13 Mar 2017 18:51:20 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;p&gt;在 air-server 中有一个函数，支持解析 URL 的 query 并返回字段中城市的数据，如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET /aqi/cities?1=成都&amp;amp;2=北京&amp;amp;3=杭州&amp;amp;4=西安
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;客户端希望的返回值应该是按照输入顺序，即 1，2，3，4 返回的，但实际多次测试后得到的结果总会是不一样的顺序。想了想应该是 query 解析的结果，即&lt;code&gt;r.URL.Query()&lt;/code&gt;为 map 的原因。&lt;/p&gt;
+
+&lt;p&gt;查询后得知，Go 对 map 的实现是在底层的 hashmap，因此对 key-value 的插入和对 map 的遍历而言两者的 key 访问顺序不同。实践后也证明在使用 range 遍历 map 时得到的 key 的顺序被随机化了，Go
+官方也提到过不希望开发者依赖 range 遍历的 key 次序。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;When iterating over a map with a range loop, the iteration order is not specified and is not guaranteed to be the same from one iteration to the next. Since Go 1 the runtime randomizes map iteration order, as programmers relied on the stable iteration order of the previous implementation.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但我们的业务逻辑往往不可避免的使用顺序的 key-value，怎么解决这个问题呢。
+有作者给出了一个方法，即单独维护一个有序的 key 表，根据对应的 key 遍历原始的 map。下面是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func ReturnDataOfCities(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+
+	var locations []string
+
+	// 由于遍历 map 时 key 的随机化问题，维护一个有序的 keys 数组保证
+	// 每次的顺序都是固定的
+	sorted_keys := make([]int, 0)
+	for k, _ := range q {
+	   // 我们希望的 key 为自然数，并按大小排序
+		i, err := strconv.Atoi(k)
+		if err != nil {
+			panic(err)
+		}
+		sorted_keys = append(sorted_keys, i)
+	}
+
+	// Sort &#39;int&#39; key in decreasing order
+	sort.Ints(sorted_keys)
+
+	// If you want key in increasing order
+	// for i, j := 0, len(sorted_keys)-1; i &amp;lt; j; i, j = i+1, j-1 {
+	// 	sorted_keys[i], sorted_keys[j] = sorted_keys[j], sorted_keys[i]
+	// }
+
+	for _, v := range sorted_keys {
+	   // 将 &#39;int&#39; 类型的 key 转换成 &#39;string&#39;
+		s := strconv.Itoa(v)
+		locations = append(locations, q[s][0])
+	}
+	
+	result := CompareDataOfCities(locations)
+
+	w.Header().Set(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json; charset=UTF-8&amp;quot;)
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(result); err != nil {
+		panic(err)
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;至此达到了我们的要求。&lt;/p&gt;
+
+&lt;p&gt;参考文章：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.golang.org/go-maps-in-action&#34;&gt;Go-maps-in-action&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/slvher/article/details/44779081&#34;&gt;遍历map时的key随机化问题及解决方法&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go实现空气质量状况API服务器过程中的思考</title>
+      <link>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</link>
+      <pubDate>Sat, 04 Mar 2017 16:27:52 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/go%E5%AE%9E%E7%8E%B0%E7%A9%BA%E6%B0%94%E8%B4%A8%E9%87%8F%E7%8A%B6%E5%86%B5api%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%80%9D%E8%80%83/</guid>
+      <description>&lt;p&gt;学习Go之后第一个项目，是编写一个API服务器，提供城市AQI的JSON数据。&lt;/p&gt;
+
+&lt;p&gt;既然要实现这个功能，要解决的问题一个是数据源，一个是Server。&lt;/p&gt;
+
+&lt;p&gt;先说说数据源，如果仅仅和我们初步设想的一样，仅仅为我们的一款应用提供即时数据，那样只是做一个第三方数据的中转便可。不过为了以后可以针对性的做数据分析，还是需要将数据爬下来存在数据库。&lt;/p&gt;
+
+&lt;p&gt;一开始用的是 &lt;a href=&#34;http://www.pm25.com/&#34;&gt;绿色呼吸&lt;/a&gt; 的数据源，因为经过考察后认为这个网站更新较快，每小时的第一分钟基本能完成数据更新。其次我们的应用并不需要提供很详细的数据，AQI和pm2.5即可。于是第一版爬虫和服务器便依托这个数据源建立起来了。&lt;/p&gt;
+
+&lt;p&gt;因为每小时要存一次数据，一开始便考虑数据库怎么设计要优雅一些。为了增强可视化，数据库我选择的是mongoDB，以“YYYYMMDDHH”格式作为一个collection，每个collection里存放三百多个城市及其数据。&lt;/p&gt;
+
+&lt;p&gt;后来发现随着数据的增多，进行复杂查询会开关很多次不同的collection，占用许多不必要时间。于是将数据库迁移到了mysql，只建立一个空气质量表，用“YYYYMMDDHH”格式的时间和城市名作为复合主键存放数据。这样每次查询只需要打开和关闭一次Table。&lt;/p&gt;
+
+&lt;p&gt;在测试爬虫性能的时候，因为一次只获取三百多条数据，犯不着异步。但单条写入数据库却消耗了9.85s左右，而因为数据库设计的问题，同样情况下mongoDB仅耗时200ms，这不是我希望看到的。于是为了节省发送链接和开关数据库的时间开销，采用事务进行插入，优化后插入仅耗时70ms，从打开数据库开始计算不到500ms，在接受范围之内。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;但经过一段时间发现这个网站的数据源时不时会挂掉，严重时甚至丢失数据。于是萌生了重新爬环保部官方数据的想法，但需要安装 Silverlight。幸好有人在 GitHub 上开源了一个 pyhton 破解版本的爬虫，改动后可用，感谢🙏
+
+但是官方数据源不知为什么更新很慢，基本是到半点才更新
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;数据存储完，接下来是API服务器的实现。&lt;/p&gt;
+
+&lt;p&gt;整个过程我是体会到了Go中struct配合interface强大的灵活性&lt;/p&gt;
+
+&lt;p&gt;之前看了&lt;a href=&#34;https://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;一篇文章&lt;/a&gt;深受启发，作者在文中实现的架构也让我眼前一亮。于是在此基础上完成了这个空气质量状况的API服务器。实现的接口主要如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET		/aqi/城市名&amp;amp;today			返回某一城市当天所有时段的数据
+
+GET		/aqi/城市名&amp;amp;now			返回某一城市最新一小时的数据
+
+GET		/aqi/城市名&amp;amp;2017022822		返回某一城市某一时刻(2017-02-28 22:00)的数据
+
+GET		/aqi/城市名&amp;amp;trend			返回某一城市当前与上一小时相比变化的AQI，缺少某一时段数据则为0
+
+GET		/aqi/allcity			  返回城市表，包括城市名和城市编号
+
+GET		/aqi/城市名&amp;amp;station		返回某一城市的监测站，包括编号、名称和经纬度
+
+GET		/aqi/cities?city1=城市名&amp;amp;city2=城市名&amp;amp;city3...	返回任意多城市的当前数据
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;基本功能主要是参照&lt;a href=&#34;http://www.pm25.in/&#34;&gt;PM25.in&lt;/a&gt;的接口文档，因为我们的应用要精简功能，第一版也就加了这么多。&lt;/p&gt;
+
+&lt;p&gt;过程中发现的问题：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;自己的思维还是面向过程，尽管Go提供的面向对象十分友好&lt;/li&gt;
+&lt;li&gt;在数据库优化方面能力还是有些不足&lt;/li&gt;
+&lt;li&gt;旧版工程用两个第三方包，mux路由包和定时任务包cron，以后争取用原生替换掉&lt;/li&gt;
+&lt;li&gt;编译还是喜欢用Makefile&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;为了实现工程自动化，我使用了supervisor并输出运行日志作为监控，目前运行比较稳定。&lt;/p&gt;
+
+&lt;p&gt;我将项目开源，&lt;a href=&#34;https://github.com/chongg039/AQIApp&#34;&gt;旧版工程&lt;/a&gt;包括爬虫和服务器，均使用Go实现，但是数据源不稳定，输出API也不够规范，仅作为参考，不再更新。&lt;a href=&#34;https://github.com/CM-Studio/air-server&#34;&gt;新版工程&lt;/a&gt;只有服务器，数据源也是环保部官方数据源格式。开源的目的是便是希望大家有需要就自己搭一个，不要随便攻击我们这种没有加任何安全措施的服务器&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;再说我也不会把我们的IP告诉你。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>我为什么选择Go</title>
+      <link>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</link>
+      <pubDate>Mon, 27 Feb 2017 12:50:39 +0800</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9go/</guid>
+      <description>
+
+&lt;p&gt;是的，我开始接触go语言了，如去年年底所说的那样。&lt;/p&gt;
+
+&lt;p&gt;先说说我为什么不继续用Node，并不是因为这门语言不好。事实上，NodeJS作为一个争议颇多的“全栈”语言，才带我真正走进了编程世界。它的异步，并发，非阻塞，以及丰富的npm库，无一不证明了它在解决传统服务器端编程的很多非常棒的思想。&lt;/p&gt;
+
+&lt;p&gt;我可以毫不违心的说，使用node开发web服务器是一件非常畅快的事情（尤其是对一名新手而言），而且使用JS前后端通吃的感觉可以满足我很大的虚荣心。同时丰富的npm包以及良好的版本管理也给人留下了很好的印象。&lt;/p&gt;
+
+&lt;p&gt;以下都是我的一面之词，看看便罢。&lt;/p&gt;
+
+&lt;h2 id=&#34;node存在争议的地方&#34;&gt;Node存在争议的地方&lt;/h2&gt;
+
+&lt;h3 id=&#34;乱七八糟的回调&#34;&gt;乱七八糟的回调&lt;/h3&gt;
+
+&lt;p&gt;虽然不论是官方还是民间都提出了很多解决异步回调的办法，但只能说是打的补丁而已，始终会让人是认为是早期语言的设计问题（这里可能说的比较片面）。&lt;/p&gt;
+
+&lt;h3 id=&#34;动态数据类型&#34;&gt;动态数据类型&lt;/h3&gt;
+
+&lt;p&gt;这类动态语言虽然免去了编译的麻烦，但在构建大型项目时利用编译器可以更早发现问题。从另一个方面来讲也增加了对环境的依赖，毕竟JS本来就是依赖于浏览器而生，Node也是运行在V8引擎之上。&lt;/p&gt;
+
+&lt;p&gt;这里只是个人的感受，毕竟接触的语言也不多。&lt;/p&gt;
+
+&lt;h3 id=&#34;大量引入三方npm包&#34;&gt;大量引入三方npm包&lt;/h3&gt;
+
+&lt;p&gt;海量的npm包的确极大缩短了开发时间，但是也造成了滥用的问题。如果一个项目中引用的三方npm包过多，先不说耦合大不大，最起码系统的安全和稳定已经很难保证。而且如果是因为非常重大的问题导致的单个包的不得不更新，内部结构也要做出必要的升级，而这将给后期维护带来更多的困扰。&lt;/p&gt;
+
+&lt;p&gt;所以说虽然用三方包用的很爽，但心里还是抵制这种滥用的模式的。&lt;/p&gt;
+
+&lt;h3 id=&#34;设计模式&#34;&gt;设计模式&lt;/h3&gt;
+
+&lt;p&gt;RESTful不用说了，这种理念无懈可击，最起码现在看起来是这样。主要还是想说一下MVC。&lt;/p&gt;
+
+&lt;p&gt;最初开始使用mongodb + express + angularjs + nodejs做应用开发时，接触的便是MVC的文件组织目录，那时看来确实是结构清晰的一种组织方式。但现在看来，这种多文件夹以及相对不友好的require反而成了一种负担。&lt;/p&gt;
+
+&lt;p&gt;有人会说MVC不是一种文件分散结构，而是客观存在的。这样说当然这对，可是又有多少人在使用MVC的过程中不会建立那几个文件夹呢？在我看来通过文件名已经足够清晰了，Node始终缺乏一个让我觉得满意的解决方法。&lt;/p&gt;
+
+&lt;h2 id=&#34;我用go的理由&#34;&gt;我用Go的理由&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先Go很好的诠释了什么叫21世纪的C语言：设计优美良好、编译快、天生支持并发、部署方便，并且较新的版本完成了自举，第一印象非常好；&lt;/li&gt;
+&lt;li&gt;有很多第三方package，方便引入，但许多三方package均仅使用原生package完成，依赖关系较弱；&lt;/li&gt;
+&lt;li&gt;package包的组织方式使我们完全不需要显式组织MVC，减轻了组织结构的负担；&lt;/li&gt;
+&lt;li&gt;不仅编译非常快，而且支持&lt;code&gt;go run&lt;/code&gt;动态运行。编译快也是我将博客从Hexo迁移到Hugo的原因之一；&lt;/li&gt;
+&lt;li&gt;支持多环境交叉编译，部署完全不需要考虑运行环境的依赖问题；&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;还有很多理由就不一一说了，毕竟才接触Go两个多月。&lt;/p&gt;
+
+&lt;p&gt;在用Go写了一个API服务器之后，我找到了当初刚学Node的那种畅快感。也许我接触的才是冰山一角，也许Go自身也有很多我没有发现的问题，也许我是学一门语言爱一门语言&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;但学习总能带给我惊喜，你也可以试试。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

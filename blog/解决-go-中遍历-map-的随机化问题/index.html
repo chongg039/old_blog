@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Don&#39;t panic">
+
+<base href="https://chongg039.github.io/">
+<title>
+
+
+     解决 Go 中遍历 map 的随机化问题 
+
+</title>
+<link rel="canonical" href="https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98/">
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="https://chongg039.github.io/css/reset.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/pygments.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/main.css?t=1490330580">
+    
+        <link rel="stylesheet" href="https://chongg039.github.io/css/override.css?t=1490330580">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://chongg039.github.io/img/favicon.ico"
+
+>
+
+
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+            <a href="https://chongg039.github.io/"><div class="name">coldriver的技术博客</div></a>
+            
+            <nav>
+                <ul>
+                    <li class="nav-blog"><a href="https://chongg039.github.io/blog/">Blog</a></li>
+                    <li class="nav-about"><a href="https://chongg039.github.io/about/">About</a></li>
+                    <li class="nav-code"><a href="https://chongg039.github.io/life/">Life</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/chongg039" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/github.svg" alt="github" /></a>
+        
+
+        
+            <a href="//twitter.com/uestcchongg" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/twitter.svg" alt="twitter" /></a>
+        
+
+        
+
+        
+
+        
+
+        
+            <a href="mailto:chongg039@gmail.com"><img class="icon" src="https://chongg039.github.io/img/email.svg" alt="email" /></a>
+        
+
+        
+            <a href="https://chongg039.github.io/index.xml"><img class="icon" src="https://chongg039.github.io/img/rss.svg" alt="rss" /></a>
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    解决 Go 中遍历 map 的随机化问题
+
+</div>
+
+                    <div class="initials"><a href="https://chongg039.github.io/">ad</a></div>
+                </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Mon Mar 13 2017 18:51:20 CST'>Mar 13, 2017</div>
+                    
+                    
+                    <div class="reading-time"><div class="middot"></div>2 minutes read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                <p>在 air-server 中有一个函数，支持解析 URL 的 query 并返回字段中城市的数据，如：</p>
+
+<pre><code>GET /aqi/cities?1=成都&amp;2=北京&amp;3=杭州&amp;4=西安
+</code></pre>
+
+<p>客户端希望的返回值应该是按照输入顺序，即 1，2，3，4 返回的，但实际多次测试后得到的结果总会是不一样的顺序。想了想应该是 query 解析的结果，即<code>r.URL.Query()</code>为 map 的原因。</p>
+
+<p>查询后得知，Go 对 map 的实现是在底层的 hashmap，因此对 key-value 的插入和对 map 的遍历而言两者的 key 访问顺序不同。实践后也证明在使用 range 遍历 map 时得到的 key 的顺序被随机化了，Go
+官方也提到过不希望开发者依赖 range 遍历的 key 次序。</p>
+
+<pre><code>When iterating over a map with a range loop, the iteration order is not specified and is not guaranteed to be the same from one iteration to the next. Since Go 1 the runtime randomizes map iteration order, as programmers relied on the stable iteration order of the previous implementation.
+</code></pre>
+
+<p>但我们的业务逻辑往往不可避免的使用顺序的 key-value，怎么解决这个问题呢。
+有作者给出了一个方法，即单独维护一个有序的 key 表，根据对应的 key 遍历原始的 map。下面是</p>
+
+<pre><code class="language-go">func ReturnDataOfCities(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+
+	var locations []string
+
+	// 由于遍历 map 时 key 的随机化问题，维护一个有序的 keys 数组保证
+	// 每次的顺序都是固定的
+	sorted_keys := make([]int, 0)
+	for k, _ := range q {
+	   // 我们希望的 key 为自然数，并按大小排序
+		i, err := strconv.Atoi(k)
+		if err != nil {
+			panic(err)
+		}
+		sorted_keys = append(sorted_keys, i)
+	}
+
+	// Sort 'int' key in decreasing order
+	sort.Ints(sorted_keys)
+
+	// If you want key in increasing order
+	// for i, j := 0, len(sorted_keys)-1; i &lt; j; i, j = i+1, j-1 {
+	// 	sorted_keys[i], sorted_keys[j] = sorted_keys[j], sorted_keys[i]
+	// }
+
+	for _, v := range sorted_keys {
+	   // 将 'int' 类型的 key 转换成 'string'
+		s := strconv.Itoa(v)
+		locations = append(locations, q[s][0])
+	}
+	
+	result := CompareDataOfCities(locations)
+
+	w.Header().Set(&quot;Content-Type&quot;, &quot;application/json; charset=UTF-8&quot;)
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(result); err != nil {
+		panic(err)
+	}
+}
+</code></pre>
+
+<p>至此达到了我们的要求。</p>
+
+<p>参考文章：</p>
+
+<p><a href="https://blog.golang.org/go-maps-in-action">Go-maps-in-action</a></p>
+
+<p><a href="http://blog.csdn.net/slvher/article/details/44779081">遍历map时的key随机化问题及解决方法</a></p>
+
+                <br>
+                <p><a href="https://chongg039.github.io/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'coldriver';
+    var disqus_identifier = 'https:\/\/chongg039.github.io\/blog\/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98\/';
+    var disqus_title = '解决 Go 中遍历 map 的随机化问题';
+    var disqus_url = 'https:\/\/chongg039.github.io\/blog\/%E8%A7%A3%E5%86%B3-go-%E4%B8%AD%E9%81%8D%E5%8E%86-map-%E7%9A%84%E9%9A%8F%E6%9C%BA%E5%8C%96%E9%97%AE%E9%A2%98\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+</body>
+</html>
+

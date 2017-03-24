@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Don&#39;t panic">
+
+<base href="https://chongg039.github.io/">
+<title>
+
+
+     [Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化 
+
+</title>
+<link rel="canonical" href="https://chongg039.github.io/blog/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96/">
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:500">
+
+
+
+    
+    <link rel="stylesheet" href="https://chongg039.github.io/css/reset.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/pygments.css?t=1490330580">
+    <link rel="stylesheet" href="https://chongg039.github.io/css/main.css?t=1490330580">
+    
+        <link rel="stylesheet" href="https://chongg039.github.io/css/override.css?t=1490330580">
+    
+
+
+
+
+<link rel="shortcut icon"
+
+    href="https://chongg039.github.io/img/favicon.ico"
+
+>
+
+
+
+
+
+
+</head>
+
+
+<body lang="en">
+
+<section class="header">
+    <div class="container">
+        <div class="content">
+            
+            <a href="https://chongg039.github.io/"><div class="name">coldriver的技术博客</div></a>
+            
+            <nav>
+                <ul>
+                    <li class="nav-blog"><a href="https://chongg039.github.io/blog/">Blog</a></li>
+                    <li class="nav-about"><a href="https://chongg039.github.io/about/">About</a></li>
+                    <li class="nav-code"><a href="https://chongg039.github.io/life/">Life</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<section class="icons">
+    <div class="container">
+        <div class="content">
+
+        
+            <a href="//github.com/chongg039" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/github.svg" alt="github" /></a>
+        
+
+        
+            <a href="//twitter.com/uestcchongg" target="_blank" rel="noopener"><img class="icon" src="https://chongg039.github.io/img/twitter.svg" alt="twitter" /></a>
+        
+
+        
+
+        
+
+        
+
+        
+            <a href="mailto:chongg039@gmail.com"><img class="icon" src="https://chongg039.github.io/img/email.svg" alt="email" /></a>
+        
+
+        
+            <a href="https://chongg039.github.io/index.xml"><img class="icon" src="https://chongg039.github.io/img/rss.svg" alt="rss" /></a>
+        
+        </div>
+    </div>
+</section>
+
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
+
+    [Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化
+
+</div>
+
+                    <div class="initials"><a href="https://chongg039.github.io/">ad</a></div>
+                </div>
+                <div class="meta">
+                    
+                    <div class="date" title='Wed Mar 22 2017 22:51:09 CST'>Mar 22, 2017</div>
+                    
+                    
+                    <div class="reading-time"><div class="middot"></div>2 minutes read</div>
+                    
+                </div>
+            </div>
+            <div class="markdown">
+                
+
+<p>跟风，响应 Web 世界的号召，决定把博客全站换成 HTTPS 访问，并记录下遇到的一些问题。</p>
+
+<h3 id="github-page">Github Page</h3>
+
+<p>原来博客是部署在云服务器上，后来觉得没有这个必要，也不想花精力在维护上面，就重新把博客放回了 Github Page 。因此下面的文字并不针对自有服务器的博客用户进行说明。</p>
+
+<h3 id="图床">图床</h3>
+
+<p>为了加快访问速度，原来图片等一些较大的文件都放在了 七牛云存储 上，但七牛并不提供免费的 HTTPS 流量访问，而这却是全站 HTTPS 化的硬性条件之一。</p>
+
+<p>我选择了将图床迁移到了 Flickr 上，它提供了免费的 HTTPS 外链和 1T 的存储量，使用起来绰绰有余。</p>
+
+<p>Mac 端迁移推荐一款应用：iPic，配合插件使用能自动识别 Markdown 文章中的图片并将其上传到新的图床。虽然我使用的时候这个功能好像挂了，但其他功能印象还是很不错。软件一年的使用费用是 38元人民币，你可以在 App Store中下载。</p>
+
+<h3 id="ssl服务提供商-cloudflare">SSL服务提供商：Cloudflare</h3>
+
+<p>作为私人博客还是希望有一个免费的 SSL 证书，最理想的 Let&rsquo;s Encrypt 却不能为我们的 Github 博客提供帮助。然而作为候选的 Cloudflare 则给了我们这个选择，具体方法不再阐述，你可以参考这篇博文完成配置操作：<a href="https://yicodes.com/2016/12/04/free-cloudflare-ssl-for-custom-domain/">为自定义域名的GitHub Pages添加SSL 完整方案 </a> 。</p>
+
+<h3 id="遇到的问题">遇到的问题</h3>
+
+<ol>
+<li><p>全站 HTTPS 化要求所有引用文件的来源，否则会显示网站不安全的信息，这便需要仔细选择图床等第三方文件存储提供商。</p></li>
+
+<li><p>我是用的是 Hugo 的 Go 语言博客框架，如果你使用的是第三方的主题文件，一定要检查其中 JS，CSS文件引入时的路径，如果是 &ldquo;http://&hellip;/main.css&rdquo; 开头的绝对路径是无法被引用使用的。一个可行的方案是修改为 &ldquo;//&hellip;/main.css&rdquo; 的相对文件路径。</p></li>
+
+<li><p>如果使用自定义域名代替 github.io 的二级域名，注意在 Hugo 的配置文件 config.toml 中的 baseurl 修改，否则有时仍会引用 HTTP 的文件资源。</p></li>
+</ol>
+
+<p>下面是我的配置文件：</p>
+
+<pre><code class="language-toml">   baseurl             = &quot;https://chongg039.cn/&quot;
+   builddrafts         = false
+   canonifyurls        = true
+   contentdir          = &quot;content&quot;
+   languageCode        = &quot;zh-cn&quot;
+   layoutdir           = &quot;layouts&quot;
+   publishdir          = &quot;public&quot;
+   author              = &quot;coldriver&quot;
+   title               = &quot;coldriver的技术博客&quot;
+   theme				= &quot;cocoa&quot;
+   pygmentsuseclasses  = true
+   disqusshortname     = &quot;coldriver&quot; # Comment out to disable Disqus.
+   pluralizelisttitles = false
+   googleAnalytics     = &quot;UA-123-45&quot;
+
+   [permalinks]
+   fixed = &quot;:title/&quot;
+   blog  = &quot;blog/:slug/&quot;
+
+   [params]
+   author                 = &quot;coldriver的技术博客&quot;
+   cachebuster            = true                          # add the current unix timestamp in query string for cache busting css assets
+   dateform               = &quot;Jan 2, 2006&quot;
+   dateformfull           = &quot;Mon Jan 2 2006 15:04:05 MST&quot;
+   description            = &quot;Don't panic&quot;
+   email                  = &quot;chongg039@gmail.com&quot;
+   # extracssfiles          = [ &quot;/css/override.css&quot; ]       # In your `static` directory, add/remove files as necessary.
+   # faviconfile            = &quot;img/leaf.ico&quot;
+   github                 = &quot;//github.com/chongg039&quot;
+   highlightjs            = true
+   lang                   = &quot;en&quot;
+   # linkedin               = &quot;//linkedin.com/in/you&quot;
+   noshowreadtime         = false                         # if true, don't show &quot;&lt;x&gt; minutes read&quot; in posts
+   selfintro              = &quot;&quot;                            # appears in the site header when set to a non-empty string
+   twitter                = &quot;//twitter.com/uestcchongg&quot;
+   # highlightjslanguages = [&quot;go&quot;]                        # additional languages not included in the &quot;common&quot; set
+
+   # avatar                 = &quot;img/profile.png&quot; # path to image in static dir e.g img/avatar.png (do not use in the same time as gravatar)
+   # gravatar             = &quot;&quot;                # do not use in the same time as avatar
+
+   # The following are DEPRECATED.
+   gatracker              = &quot;XYZ&quot; # use googleAnalytics instead
+   initials               = &quot;ad&quot;  # displayed on single post page; deprecated in v0.3.0.
+</code></pre>
+
+<ol>
+<li>Cloudflare 生效大概在72小时之内，我这边还是比较快的。如果你的博客显示不安全的信息，或者丢失样式文件，建议打开控制台检查一下，多半是某处文件没有使用 HTTPS 导致的。</li>
+</ol>
+
+<p>最后建议阅读 Jerry Qu 的<a href="https://imququ.com/post/sth-about-switch-to-https.html">关于启用 HTTPS 的一些经验分享</a>，对理解不同平台以及浏览器的 HTTPS 启用有很大帮助。</p>
+
+<p>配置的过程很痛苦，但当你的博客上出现一把小绿锁，心里是真的舒服。</p>
+
+                <br>
+                <p><a href="https://chongg039.github.io/blog/">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'coldriver';
+    var disqus_identifier = 'https:\/\/chongg039.github.io\/blog\/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96\/';
+    var disqus_title = '[Hugo]使用 Cloudflare 为自定义域名的 Github 博客完成全站 HTTPS 化';
+    var disqus_url = 'https:\/\/chongg039.github.io\/blog\/hugo%E4%BD%BF%E7%94%A8-cloudflare-%E4%B8%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E7%9A%84-github-%E5%8D%9A%E5%AE%A2%E5%AE%8C%E6%88%90%E5%85%A8%E7%AB%99-https-%E5%8C%96\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-123-45', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  
+
+  <script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+</body>
+</html>
+

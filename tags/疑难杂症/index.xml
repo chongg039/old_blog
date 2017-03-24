@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>疑难杂症 on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87/index.xml</link>
+    <description>Recent content in 疑难杂症 on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>解决 ubuntu 下键盘错位问题</title>
+      <link>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 02 Oct 2016 15:43:36 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/</guid>
+      <description>
+
+&lt;p&gt;很悲催的键盘错位了，就这个系统有问题，以前也没遇到过。简而言之就是@和“互换，#打不出来等。问题不大，但是影响输入体验。
+工作室的小伙伴都说我这电脑只有我会用。。。&lt;/p&gt;
+
+&lt;p&gt;之前在网上搜到的解决办法是在终端输入：
+&amp;gt;sudo dpkg-reconfigure keyboard-configuration
+//需要安装keyboard-configuration&lt;/p&gt;
+
+&lt;p&gt;然后调整键盘布局，改为English(US)或者English(UK)，这样就相当于把键盘布局重置，然后就好了。&lt;/p&gt;
+
+&lt;p&gt;这种办法也可以通过&lt;code&gt;sudo vim /etc/default/keyboard&lt;/code&gt;手动修改配置：
+&amp;gt; KEYBOARD CONFIGURATION FILE&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Consult the keyboard(5) manual page.&lt;/p&gt;
+
+&lt;p&gt;XKBMODEL=&amp;ldquo;cherrycyboard&amp;rdquo; //修改键盘类型
+XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;
+XKBVARIANT=&amp;ldquo;&amp;rdquo;
+XKBOPTIONS=&amp;ldquo;&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;BACKSPACE=&amp;ldquo;guess&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;但是！！！&lt;/strong&gt;这样修改一会键盘就变回去了啊啊！！！一开始是一天，后来越来越快，今天连一分钟也没撑住啊啊！！！
+弄得人心里很是崩溃。。。&lt;/p&gt;
+
+&lt;p&gt;继续看吧，有人说需要在配置完&lt;code&gt;sudo vim /etc/default/keyboard&lt;/code&gt;后，终端中运行一次
+&amp;gt;setupcon&lt;/p&gt;
+
+&lt;p&gt;但是输出了&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;We are not on the console, the console is left unconfigured.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;原来要进入文字终端，虚拟终端还不行。。。
+执行完毕后，重启或者执行一次
+&amp;gt;sudo udevadm trigger &amp;ndash;subsystem-match=input &amp;ndash;action=change&lt;/p&gt;
+
+&lt;p&gt;使得保存的配置生效。
+这样一般就成功了，若是还不行，有可能是fcitx输入法的问题。
+打开 Fcitx Configuration，可以在search里找到
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/%20FcitxConfiguration.png&#34; alt=&#34; &#34; title=&#34; FcitxConfiguration&#34; /&gt;
+像我上面选择的键盘语言是
+&amp;gt;XKBLAYOUT=&amp;ldquo;us&amp;rdquo; //修改语言类型：us,uk,cn&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;需要把当前语言移动到最上面，没有的话就添加一个。&lt;/p&gt;
+
+&lt;p&gt;到这里就可以解决大部分问题了，至少我这里键盘输入还没有回弹到那种奇葩的状况。
+那就必须秀一波@@@@@@@########&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;rdquo;&amp;ldquo;&amp;ldquo;啊哈哈！&lt;/p&gt;
+
+&lt;h2 id=&#34;http-7xswbj-com1-z0-glb-clouddn-com-runningchicken-jpg-runingchicken&#34;&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/runningchicken.jpg&#34; alt=&#34; &#34; title=&#34;runingchicken&#34; /&gt;&lt;/h2&gt;
+
+&lt;h4 id=&#34;参考文档&#34;&gt;参考文档&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.linuxdiyf.com/linux/16832.html&#34;&gt;ubuntu14.04键盘错位小问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.linuxdiyf.com/linux/17450.html&#34;&gt;ubuntu/mint键盘错乱问题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.csdn.net/cc7756789w/article/details/50661992&#34;&gt;Ubuntu下键盘输入错乱问题&lt;/a&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

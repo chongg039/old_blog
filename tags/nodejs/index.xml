@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nodejs on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/nodejs/index.xml</link>
+    <description>Recent content in Nodejs on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>使用 nodejs 模拟登陆电子科大信息门户并抓取信息</title>
+      <link>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Thu, 08 Dec 2016 12:09:31 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E4%BD%BF%E7%94%A8-nodejs-%E6%A8%A1%E6%8B%9F%E7%99%BB%E9%99%86%E7%94%B5%E5%AD%90%E7%A7%91%E5%A4%A7%E4%BF%A1%E6%81%AF%E9%97%A8%E6%88%B7%E5%B9%B6%E6%8A%93%E5%8F%96%E4%BF%A1%E6%81%AF/</guid>
+      <description>
+
+&lt;p&gt;学校高层做了个公众号，把信息门户弄到微信上的浏览器上。本着干掉学校高层的一贯行事风格，觉得是时候搞一个正规的公众号来抢学校生意了。&lt;/p&gt;
+
+&lt;p&gt;结果没想到并不是很顺利，信息门户登录有两个重定向页面，自己也对模拟请求服务器不是很熟悉，一步一步好歹是扒到了想要的数据，也浪费了好长时间。先拿出来了个命令行版本，还停留在 es5，准备熬过去考试月后全部重构成 es6，再加上流程控制，放到公众号上造福社会。&lt;/p&gt;
+
+&lt;p&gt;使用到的 npm 库：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;request：模拟 HTTP 请求&lt;/li&gt;
+&lt;li&gt;cheerio：解析页面&lt;/li&gt;
+&lt;li&gt;readline-sync：控制命令行会话&lt;/li&gt;
+&lt;li&gt;chalk：美化输出&lt;/li&gt;
+&lt;li&gt;log4js：管理日志&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;难度主要是模拟登陆到所需页面和解析相关内容上，封装好了接口，以后就方便使用了。&lt;/p&gt;
+
+&lt;h3 id=&#34;分析报文&#34;&gt;分析报文&lt;/h3&gt;
+
+&lt;p&gt;为了完成模拟登陆这一目的，先尝试获取登录主界面&lt;code&gt;http://portal.uestc.edu.cn/&lt;/code&gt;的内容。分析一波登陆过程中的 HTTP 行为：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/HTTPAnalysis.png&#34; alt=&#34;HTTPAnalysis&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以发现在正文&lt;code&gt;portal.uestc.edu.cn/&lt;/code&gt;前有两个页面，分别打开看一看：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;login?service=http%3A%2F%2Fportal.uestc.edu.cn%2F&lt;/code&gt;页面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/3021.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;?ticket=ST-199833-BbDvk6q57cmNFtJkBJNL1481032281383-zATy-cas&lt;/code&gt;页面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/3022.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最终页面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/200.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;理论上是获取到最终页面的&lt;code&gt;JSESSIONID&lt;/code&gt;，这是服务器用来唯一标识用户信息的&lt;code&gt;session&lt;/code&gt;。带着这个 cookie 去访问其他相关页面，就能获取到对应数据。&lt;/p&gt;
+
+&lt;p&gt;那么怎么解决重定向问题呢？&lt;/p&gt;
+
+&lt;p&gt;查到 request 方法自身是支持跟随10次页面重定向的，但是我们现在需要禁止重定向，单独访问并获取每个302界面内 header 中的数据。就可以修改 request 的默认 Redirect 方法，禁止重定向跳转或者设置最大跳转次数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = request.defaults({followRedirect: false});
+//OR ‘maxRedirects = 1’
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有了条件我们就可以来分析怎么一步步获取我们想要的最终数据了（是的我用了分别 request 每个页面这样一个最蠢的办法 &amp;hellip;），以第一个302页面为例详细说明如何操作。&lt;/p&gt;
+
+&lt;h4 id=&#34;第一个302页面&#34;&gt;第一个302页面&lt;/h4&gt;
+
+&lt;p&gt;第一个页面是一个重定向页面，发送 POST 报文获取到了&lt;code&gt;Response-Headers&lt;/code&gt;里的&lt;code&gt;Set-Cookie&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CASPRIVACY&lt;/li&gt;
+&lt;li&gt;iPlanetDirectoryPro&lt;/li&gt;
+&lt;li&gt;CASTGC&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这里面有些是我们需要的，获取他们就要分析&lt;code&gt;Request-Headers&lt;/code&gt;报文。请求头报文里的 Cookie 有两个值：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;route&lt;/li&gt;
+&lt;li&gt;JSESSIONID_ids1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个是怎么生成的？&lt;/p&gt;
+
+&lt;p&gt;分析发现这个&lt;code&gt;JSESSIONID_ids1&lt;/code&gt;是浏览器在访问到 UESTC 信息门户登录界面
+&lt;code&gt;http://idas.uestc.edu.cn/authserver/login?service=http://portal.uestc.edu.cn/index.portal&lt;/code&gt;
+时服务器返回的表示用户信息的一个 Cookie 。那么就很简单了，由于访问登录界面使用的是 GET 方法，使用&lt;code&gt;request&lt;/code&gt;即可获取：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = require(&#39;request&#39;);
+var setCookies， Cookies;
+
+const loginUrl = &#39;http://idas.uestc.edu.cn/authserver/login?service=http://eams.uestc.edu.cn/eams/home.action&#39;;
+
+request(loginUrl, function (err, response, body) {
+	if (!err &amp;amp;&amp;amp; response.statusCode == 200) {
+      	setCookies = response.headers[&#39;set-cookie&#39;];
+		Cookies = setCookies[0] + &amp;quot;; &amp;quot; + setCookies[1];
+      	return Cookies;
+	} else { 
+		console.log(&amp;quot;暂时无法访问信息门户，请稍后重试&amp;quot;);
+		return err;
+	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样便得到了&lt;code&gt;Cookies = route + JSESSIONID_ids1&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;下一步要获取 form 中的内容，最为 POST 的表单随同 cookie 一起发出。表单中有：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;username&lt;/li&gt;
+&lt;li&gt;password&lt;/li&gt;
+&lt;li&gt;lt&lt;/li&gt;
+&lt;li&gt;dllt&lt;/li&gt;
+&lt;li&gt;execution&lt;/li&gt;
+&lt;li&gt;_eventId&lt;/li&gt;
+&lt;li&gt;rmShown&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;前两个是用户名和密码，那后面的又是什么？&lt;/p&gt;
+
+&lt;p&gt;听说15年学校系统进行了一次改版，在学号和密码之外又添加了验证码（如果你多输错几次密码应该就能看到）。网上对这种验证码的处理方式有很多，不过我觉得对学校这种系统还用不上一些图像识别的办法。&lt;/p&gt;
+
+&lt;p&gt;事实上也确实如此，直接用&lt;code&gt;cheerio&lt;/code&gt;解析我们的&lt;code&gt;loginUrl&lt;/code&gt;界面，获取后填入就行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;var request = require(&#39;request&#39;);
+var cheerio = require(&#39;cheerio&#39;);
+var setCookies, Cookies, lt, dllt, execution, _eventId, rmShown;
+
+const loginUrl = &#39;http://idas.uestc.edu.cn/authserver/login?service=http://eams.uestc.edu.cn/eams/home.action&#39;;
+
+request(loginUrl, function (err, response, body) {
+	if (!err &amp;amp;&amp;amp; response.statusCode == 200) {  
+	  	var $ = cheerio.load(body);
+		lt = $(&#39;[name=lt]&#39;).attr(&#39;value&#39;);
+		dllt = $(&#39;[name=dllt]&#39;).attr(&#39;value&#39;);
+		execution = $(&#39;[name=execution]&#39;).attr(&#39;value&#39;);
+		_eventId = $(&#39;[name=_eventId]&#39;).attr(&#39;value&#39;);
+		rmShown = $(&#39;[name=rmShown]&#39;).attr(&#39;value&#39;);
+		// cookies	  
+	  	setCookies = response.headers[&#39;set-cookie&#39;];
+		Cookies = setCookies[0] + &amp;quot;; &amp;quot; + setCookies[1];
+	} else { 
+		console.log(&amp;quot;暂时无法访问信息门户，请稍后重试&amp;quot;);
+		// return err;
+	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;现在需要的都有了，就可以模拟第一次的 POST 请求了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;/* 只写出部分功能 */
+var loginOption = {
+	url: loginUrl,
+	method: &#39;POST&#39;,
+    headers: {	
+        &#39;Accept&#39;:&#39;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&#39;,
+        &#39;Accept-Encoding&#39;:&#39;gzip, deflate, sdch&#39;,
+        &#39;Accept-Language&#39;:&#39;zh-CN,zh;q=0.8&#39;,
+        &#39;Cache-Control&#39;:&#39;no-cache&#39;,
+        &#39;Connection&#39;:&#39;keep-alive&#39;,
+        &#39;Cookie&#39;:Cookies,
+        &#39;Host&#39;:&#39;idas.uestc.edu.cn&#39;,
+        &#39;Origin&#39;:&#39;http://idas.uestc.edu.cn&#39;,
+        &#39;Pragma&#39;:&#39;no-cache&#39;,
+        &#39;Referer&#39;:&#39;http://idas.uestc.edu.cn/authserver/login?service=http://eams.uestc.edu.cn/eams/home.action&#39;,
+        &#39;Upgrade-Insecure-Requests&#39;:1,
+        &#39;User-Agent&#39;:&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36&#39;
+    },
+	form: {
+		username: userName,
+		password: password, // 这里可以先替换个人学号密码使用
+		lt: lt,
+		dllt: dllt,
+		execution: execution,
+		_eventId: _eventId,
+		rmShown: rmShown
+	}
+};
+
+request(loginOption, function (err, res, body) {
+    if (!err &amp;amp;&amp;amp; res.statusCode == 302) {
+        // 获取第二个302地址
+        redirectLocation = res.headers[&#39;location&#39;];
+        // 获取所需要的 cookie
+        redirectCookies = res.headers[&#39;set-cookie&#39;][1]; // iPlanetDirectoryPro
+    } else {
+        console.log(&amp;quot;登录失败！请检查学号和密码重试&amp;quot;);
+        //return err;
+  	}
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;打印结果看看应该就可以得到所需要的 Cookie，第二张图的&lt;code&gt;Reauest-Headers&lt;/code&gt;中需要的是&lt;code&gt;iPlanetDirectoryPro&lt;/code&gt;，我们也只获取这个就可以了。&lt;/p&gt;
+
+&lt;p&gt;通过以上步骤就可以获取到想要的第一个302页面的信息，带着这个信息访问第二个302页面也可以获取到相关信息。最后获取到最终界面的内容。&lt;/p&gt;
+
+&lt;p&gt;下面不贴出具体代码，只是写一写思想。&lt;/p&gt;
+
+&lt;h4 id=&#34;第二个302页面&#34;&gt;第二个302页面&lt;/h4&gt;
+
+&lt;p&gt;获得了第一个302页面的&lt;code&gt;iPlanetDirectoryPro&lt;/code&gt;和重定向地址&lt;code&gt;redirectLocation&lt;/code&gt;，就可以进行 GET 请求，获取所需要的 cookie 了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MOD_AUTH_CAS=MOD_AUTH_ST-150807-EmrjontiArvbt7tLFeDp1481041468406-eVTU-cas
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里有个别的方法，刚才获取的重定向地址&lt;code&gt;redirectLocation&lt;/code&gt;中：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http://portal.uestc.edu.cn/index.portal?ticket=ST-150807-EmrjontiArvbt7tLFeDp1481041468406-eVTU-cas
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;观察到存在相同部分，因此第二步重定向页面请求可以省略，直接截取、拼接字符串也是可以获得第二步的 cookie，但这实际上是取巧了 。&lt;/p&gt;
+
+&lt;h4 id=&#34;最终200页面&#34;&gt;最终200页面&lt;/h4&gt;
+
+&lt;p&gt;最终页面的 HTTP 请求是当时困扰我好长时间的，为什么这么说呢？先来看一下它的请求头 cookie 有什么：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;route&lt;/li&gt;
+&lt;li&gt;JSESSIONID&lt;/li&gt;
+&lt;li&gt;iPlanetDirectoryPro&lt;/li&gt;
+&lt;li&gt;MOD_AUTH_CAS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对比一下响应头 cookie：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JSESSIONID&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;很显然两个&lt;code&gt;JSESSIONID&lt;/code&gt;内容不一样的嘛！我要获取响应头的&lt;code&gt;JSESSIONID&lt;/code&gt;，为什么我请求头也要发送一个名称一样的 cookie，而且在前面的请求响应报文中也没有出现好吗！于是我尝试了这些办法：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在登录界面的 body 里查找&lt;/li&gt;
+&lt;li&gt;寻找&lt;code&gt;JSESSIONID_ids1&lt;/code&gt;和&lt;code&gt;JSESSIONID&lt;/code&gt;之间的关系&lt;/li&gt;
+&lt;li&gt;模拟服务器端&lt;code&gt;JSESSIONID&lt;/code&gt;的生成算法（感觉真是没救了&amp;hellip;）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;终于在某一天躺在椅子上思考人生的时候回想起了我获取登录页面&lt;code&gt;JSESSIONID_ids1&lt;/code&gt;的过程：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;我为什么不不带 cookie 请求一下第二个302页面呢？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;试试试！果然，在 request 方法禁止重定向的情况下，浏览器虽然打不开这个页面，但是服务器确实返回了&lt;code&gt;route&lt;/code&gt;和&lt;code&gt;JSESSIONID&lt;/code&gt;    。带着这些重新请求，就能得到最后的&lt;code&gt;Response JSESSIONID&lt;/code&gt;和&lt;code&gt;200-body&lt;/code&gt;内容。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;事后仔细回想这个问题，其实是我陷入了两个思维误区：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;一个是我认为只要是名为&lt;code&gt;JSESSIONID&lt;/code&gt;的 cookie，都应该是带有用户 POST 信息的，与用户数据库产生联系的 cookie 。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;再一个就是浏览器无法直接打开的302界面，即不能从 chrome 控制台观测到有无 HTTP 报文产生，不代表真的不能单独获取服务器返回的 header 数据。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决了之后真的是心情愉悦～&lt;/p&gt;
+
+&lt;h3 id=&#34;获取相关内容&#34;&gt;获取相关内容&lt;/h3&gt;
+
+&lt;p&gt;进入信息门户的“课程管理”的地址是
+&lt;code&gt;http://eams.uestc.edu.cn/eams/home!childmenus.action?menu.id=844&lt;/code&gt;
+将它的 HTTP 请求替换掉上面的200页面的请求，下一步就可以获取到相应的内容。&lt;/p&gt;
+
+&lt;p&gt;这里就以获取课程表为例详细说明。&lt;/p&gt;
+
+&lt;h4 id=&#34;获取课表&#34;&gt;获取课表&lt;/h4&gt;
+
+&lt;p&gt;地址是
+&lt;code&gt;http://eams.uestc.edu.cn/eams/courseTableForStd!courseTable.action&lt;/code&gt;
+从控制台看出需要一个 POST 请求，发送的表单含有：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ignoreHead&lt;/li&gt;
+&lt;li&gt;setting.kind&lt;/li&gt;
+&lt;li&gt;startWeek&lt;/li&gt;
+&lt;li&gt;semester.id&lt;/li&gt;
+&lt;li&gt;ids&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;cookie 有：&lt;code&gt;JSESSIONID, semester.id, iPlanetDirectoryPro&lt;/code&gt; 。可以看出表单中含有的前面都是常量，处理的粗糙一些的话就可以直接输入。只有一个&lt;code&gt;ids&lt;/code&gt;，应该是学校用来标示学生身份的唯一码（事实上也确实如此），这个怎么需要获取呢？&lt;/p&gt;
+
+&lt;p&gt;凭经验来看&lt;code&gt;ids&lt;/code&gt;肯定是在前文的响应 body 里服务器已经返回的数据。果然，在请求这个地址之前已经请求了一个地址：&lt;code&gt;http://eams.uestc.edu.cn/eams/courseTableForStd.action?_=1481077999393&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/ids.png&#34; alt=&#34;ids&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;解析这个 Response，就可以得到对应的ids值。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;这里面的&lt;code&gt;_=1481077999393&lt;/code&gt;可能是个时间戳一类而的东西（猜的），每次访问都是会变的，实际测试的时候应该用什么都可以，都会转到自己所需的内容。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;获取到了对应的 form 内容，POST 之后用正则解析就得到了想要的课程表。但 UESTC 信息门户的课程表是用页面脚本加载到表格里去展示，而我们用模拟请求的方法就比较麻烦了。因此就先统一拿出来所有的课程信息，暂时没有想到很好的解决办法。&lt;/p&gt;
+
+&lt;p&gt;获取成绩和期末考试安排都是类似的方法，难度都不高。&lt;/p&gt;
+
+&lt;h3 id=&#34;放一下效果&#34;&gt;放一下效果：&lt;/h3&gt;
+
+&lt;p&gt;主界面：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/main.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;课程表：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/courses.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;考试安排：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/eams.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;成绩垃圾就打上码了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://ohroncry6.bkt.clouddn.com/gradesAll.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;虽然效果粗糙了一些，但就结果而言还是好的，达到了目的。&lt;/p&gt;
+
+&lt;h3 id=&#34;几个注意的问题&#34;&gt;几个注意的问题&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;有些地址中的 &amp;lsquo;/&amp;rsquo; 、&amp;rsquo;:&amp;rsquo; 被转义了，使用时注意修改回来&lt;/li&gt;
+&lt;li&gt;有时返回的信息是乱码，开始以为是 Shell 的中文解码问题，最后才发现是请求头里&lt;code&gt;gzip&lt;/code&gt;压缩问题，去掉就可以了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;后面的打算&#34;&gt;后面的打算&lt;/h3&gt;
+
+&lt;p&gt;考试月还是比较仓促的，也没有认真把这个东西做好。准备过年腾出时间来重写一遍：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;全部使用 es6 语法，拿 React 或者 vue 套壳&lt;/li&gt;
+&lt;li&gt;加入 d3 或者 echart 库美化视觉输出&lt;/li&gt;
+&lt;li&gt;再做成公众号，干倒高层&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;整个工程放在了我的  &lt;a href=&#34;https://github.com/chongg039/uestcLogin&#34;&gt;Github&lt;/a&gt; 上，写的烂了点，不过踩坑时的思想还是可以借鉴的 ，觉得有用就给个 Star 吧。&lt;/p&gt;
+
+&lt;p&gt;最后祝大家考试月顺利～&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>搭建 Linux 开发环境</title>
+      <link>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Thu, 12 May 2016 19:29:07 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/%E6%90%AD%E5%BB%BA-linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/ubuntunodejs.jpg&#34; alt=&#34;ubuntu下配置nodejs工作流&#34; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;先说说我为啥要干这事儿。
+前段时间迪哥要我们用node搞一个最小化 MEAN 产品，没想到只是在搭建开发环境上windows就各种不兼容，出现了许多奇奇怪怪的bug，再加上国内关于node的开发教程确实相对比较少，没有好的学习资源。搞了virtualbox虚拟机，但是内存和性能又开始捉急。干脆换到ubuntu，一步到位，特此记录下过程。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;系统版本：ubuntu14.04LTS&lt;/li&gt;
+&lt;li&gt;开发环境：nodejs4.4.4LTS， Express， Yeoman, chrome&lt;/li&gt;
+&lt;li&gt;写作环境：sublimetext3， haroopad（md）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;在ubuntu上搭建node和前端开发流网上大部分都有教程，我这里就不一一写出来了，只是记下搭建时应该注意的事项和几个比较好的网站供参考&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;开始搭建&#34;&gt;开始搭建&lt;/h3&gt;
+
+&lt;p&gt;####安装ubuntu14.04&lt;/p&gt;
+
+&lt;p&gt;没啥可说的，搞个系统盘装就行了，就是安装的时候注意盘的分区设置（自行google）并且最好选择英文。有几个可能出现的小问题：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果以前安装过ubuntu系统想要删除，不能直接在系统盘下进行格式化，需要先修改win系统下的启动文件，否则就是血的教训（别问我怎么知道的）&lt;/li&gt;
+&lt;li&gt;有时候进入ubuntu系统时会出现配平和一个警告框，大意是警告在低电源出什么问题，这种问题就是你的显卡驱动没有更新，可以先妥协一下点ok重启进入ubuntu，或者进入命令行模式安装即可，办法自己找。当然第一次进入系统时一般不会出现这种问题，所以出于方便考虑&lt;em&gt;建议第一次进系统时就检测一下驱动并且更新&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;还有一个大坑&lt;/strong&gt;，由于经常使用&lt;code&gt;sudo&lt;/code&gt;命令要输入密码，总会有人偷懒想要设置自己的用户直接拥有root权限而省去这一步，网上的教程修改系统配置文件里增加自己的用户为root用户。当然这种办法是可行的。但一旦不小心在写配置文件时写错一个地方就悲剧了，你会发现你连&lt;strong&gt;sudo命令都无法使用！！！&lt;/strong&gt;这就意味着你再也不能在图形界面下将配置文件打开恢复原样了。。。当然也不是没有办法，就是需要进入命令行模式下一顿操作。。。这里我不贴出具体的方法，因为我觉得当时人们设计这种模式是有道理的，限制对sudo命令的使用来保证系统的安全性。我们的目的还是在nodejs开发上，只要不搞linux的话我们还是老老实实&lt;code&gt;sudo&lt;/code&gt;好了，不用输入密码完全可以通过&lt;code&gt;sodo -s -H&lt;/code&gt;等办法解决。。。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;####一些必要的配置&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sudo apt-get update&lt;/code&gt;没事就用一下&lt;/li&gt;
+&lt;li&gt;换源，国内的话换成阿里的源就够用了，在&lt;code&gt;system settings&lt;/code&gt;里的&lt;code&gt;software&amp;amp;update&lt;/code&gt;的&lt;code&gt;download from&lt;/code&gt;目录下修改&lt;/li&gt;
+&lt;li&gt;搜狗输入法，做得还是不错的，需要换&lt;code&gt;fcitx&lt;/code&gt;框架，官网下载deb包。装完后记得重启才能生效
+&amp;gt;注意安装了fcitx后不要删除原有的iBus框架，否则会导致你的图形界面会发生各种异常（比如哪里的图标都可能会消失，图形界面也有可能消失哦，那样又要去命令行系统里重新搞了，iBus留着即可&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;####科学上网
+- 工作室拿shadowsocks爬墙，还是很方便，只是换了岛国的代理后只有后台架梯子chrome还上不了墙，还得搞个switchomega。有篇@&lt;a href=&#34;https://aitanlu.com/ubuntu-shadowsocks-ke-hu-duan-pei-zhi.html&#34;&gt;爱探路&lt;/a&gt;博客介绍的比较详细直接转过来供参考
+- 据说小飞机的账号网上很好找，没有的话用lantern也不错，官网上有linux版本提供deb包下载&lt;/p&gt;
+
+&lt;p&gt;####安装nodejs
+- apt-get 支持安装nodejs命令，不过版本过低，还不能升级，据说是linux官方源不再更新了，然而有的框架和命令还必须要新版本的才能执行。apt-get安装的版本还不支持node命令，只能用nodejs命令替代（这就非常尴尬了）。因此，墙裂推荐去node官网下载最新的nodejs版本自行安装，麻烦一次受益一生。&lt;strong&gt;推荐使用二进制文件进行安装，比较靠谱，安装过程也可以顺便熟悉一下linux命令&lt;/strong&gt;
+- linux中国开源社区有&lt;a href=&#34;https://linux.cn/article-5766-1.html&#34;&gt;一篇文章&lt;/a&gt;做了比较详细的介绍，当然你需要去&lt;a href=&#34;https://nodejs.org/en/&#34;&gt;nodejs官网&lt;/a&gt;看当前最新的稳定版本是哪个然后下载对应的的二进制源码
+- 安装完nodejs后自带了npm包，不过版本比较低，通过&lt;code&gt;sudo npm update npm -g&lt;/code&gt;升级到最新版本。没事可以再&lt;code&gt;update&lt;/code&gt;一下
+- 注意环境配置，如g++和python2.7.x（检查系统内自带的python版本）&lt;/p&gt;
+
+&lt;p&gt;####配置工作流
+- 正常安装Express步骤：注意高版本的要安装&lt;code&gt;express-generator&lt;/code&gt;
+- 正常安装Yeoman步骤：安装条件&lt;code&gt;sudo apt-get install build-essential openssl libssl-dev curl&lt;/code&gt;
+顺手把Ruby装了算了&lt;code&gt;sudo apt-get install ruby&lt;/code&gt;以后需要啥提示的时候在装就行了
+然后&lt;code&gt;sudo npm install -g yo grunt-cli bower&lt;/code&gt;，&lt;code&gt;gulp&lt;/code&gt;有兴趣装了也行
+- 基本配置完了，顺顺当当，总归不会出现windows命令行下各种不能操作的毛病
+（安装时间有点长就顺手装了个命令行版的&lt;a href=&#34;https://github.com/darknessomi/musicbox&#34;&gt;网易云音乐&lt;/a&gt;，说实话比想象中好用多了。就是我这里登陆是GG的，有时间再找找问题||-_-）&lt;/p&gt;
+
+&lt;p&gt;####安装git
+- 推荐@&lt;a href=&#34;http://sjq597.github.io/2015/10/25/Ubuntu-14-04-%E5%AE%89%E8%A3%85git/&#34;&gt;LittleQ&lt;/a&gt;的这篇文章，比较清晰可靠，同时给配置了SSH&lt;/p&gt;
+
+&lt;p&gt;####配置写作环境
+- 去&lt;a href=&#34;https://www.sublimetext.com/&#34;&gt;sublimetext官网&lt;/a&gt;下载对应的deb包安装。插件我就不介绍了，一搜一大堆
+- markdown编辑器推荐&lt;a href=&#34;http://pad.haroopress.com/user.html&#34;&gt;haroopad&lt;/a&gt;，这是我目前在使用的编辑器，功能比较齐全，已经基本可以满足需要&lt;/p&gt;
+
+&lt;p&gt;####配置数据库
+- 我目前在学习使用mongodb（然而SQL语言并没有学好||-_-),因为看到大部分MEAN开发都使用noSQL语言
+- 安装比较简单，14.04自带源，&lt;code&gt;sudo apt-get install mongodb&lt;/code&gt;即可，找不到命令的话需要&lt;code&gt;sudo apt-get update&lt;/code&gt;一下
+- 配置启动mongo和指定数据库目录用&lt;code&gt;mongod --dbpath “目录”&lt;/code&gt;
+- &lt;a href=&#34;http://www.bitscn.com/pdb/otherdb/201501/442949.html&#34;&gt;这篇文章&lt;/a&gt;可以稍微参考一下，mongodb安装不会出什么大问题&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;到这里ubuntu下nodejs工作流基本配置完了，只是我在github上的博客还存在windows下，我想把博客的写作环境移植到这里，同时以后换电脑换系统时也需要有个参考。怎么办呢
+- 找到了一个比较靠谱的@&lt;a href=&#34;http://kwangka.github.io/2015/01/17/how-to-synchronize-blog/&#34;&gt;曾梦想仗剑走天涯&lt;/a&gt;写的一篇文章，参考这个基本就能在任意系统上进行博客文章的写作了
+- 图床我扔给七牛了，这个不用考虑
+- 当然方法不唯一，你也可以参考别的方法达成这个目的。有人介绍可以通过dropbox同步更方便，有时间可以尝试一下&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;还有一些乱七八糟的东西&#34;&gt;还有一些乱七八糟的东西&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;护眼，没有防蓝光眼镜的话（有的话尽量也搞一个）装一个&lt;code&gt;f.lux&lt;/code&gt;，不过这里用的是&lt;code&gt;redshift&lt;/code&gt;，据说这个要好一点。参考&lt;a href=&#34;http://www.ituring.com.cn/article/211486&#34;&gt;图灵社区&lt;/a&gt;的一篇文章进行安装&lt;/li&gt;
+&lt;li&gt;截图，键盘上的Print Screen就很方便，会弹出对话框提醒你保存。放一张网易云音乐的照片
+&lt;img src=&#34;http://7xswbj.com1.z0.glb.clouddn.com/cloudNet.png&#34; alt=&#34;cloudNet&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;邮件系统，还是用Thunderbird，好用原生而且方便。系统自带不用安装，配置自己找教程（偷个懒）&lt;/li&gt;
+&lt;li&gt;dropbox，这个没装好，有时间再来更新&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;收工-接下来就是愉快的学习和开发过程了&#34;&gt;收工！接下来就是愉快的学习和开发过程了～&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;####更新
+&amp;gt;
+2016.9.4    升级到ubuntu16.04LTS，安装搜狗中文输入可直接使用gdebi安装
+2016.9.10   更换Remarkable作为MD编辑器
+2016.9.26   转移工作流至阿里云服务器
+2016.9.30   配置工作流到docker&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

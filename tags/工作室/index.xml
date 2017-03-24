@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>工作室 on coldriver的技术博客</title>
+    <link>https://chongg039.github.io/tags/%E5%B7%A5%E4%BD%9C%E5%AE%A4/index.xml</link>
+    <description>Recent content in 工作室 on coldriver的技术博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <atom:link href="https://chongg039.github.io/tags/%E5%B7%A5%E4%BD%9C%E5%AE%A4/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>2016年终总结</title>
+      <link>https://chongg039.github.io/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sat, 31 Dec 2016 16:59:03 -0700</pubDate>
+      
+      <guid>https://chongg039.github.io/blog/2016%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/</guid>
+      <description>
+
+&lt;p&gt;年底了，总结一下这一年。&lt;/p&gt;
+
+&lt;h4 id=&#34;工作室&#34;&gt;工作室&lt;/h4&gt;
+
+&lt;p&gt;这一年有大半时间都是在创萌工作室度过的，也见证了创萌从当时的三五个人到现在的规模。&lt;/p&gt;
+
+&lt;p&gt;工作室的巨总和迪哥算是我的导师。迪哥带着我从前端转向了nodejs，教会我如何作为一名全栈工程师来思考问题。而巨总眼界比较开阔，给我的更多是学习方法和技术趋势的指导。&lt;/p&gt;
+
+&lt;p&gt;虽然我总是黑巨哥，但那都是玩笑话。巨哥虽然老是在吹牛比，不过他确实给了我很大的影响，这是个我从心底都很尊敬的一个人。&lt;/p&gt;
+
+&lt;p&gt;下半年和军儿接手了工作室，开始了自己的项目。创业艰难，这条路并不像感觉的那样好走，不过总能有所收获。&lt;/p&gt;
+
+&lt;p&gt;一帮同甘共苦的小伙伴，也算是人生一大幸事。&lt;/p&gt;
+
+&lt;h4 id=&#34;技术&#34;&gt;技术&lt;/h4&gt;
+
+&lt;p&gt;对于2016的前端世界，年底各种社交平台上的大手子的撕比也说得差不多了。这里我不发表个人态度。萝卜青菜，自己用着顺手就行。&lt;/p&gt;
+
+&lt;p&gt;我是纯前端入门，学前端框架后转的nodejs。当时还是个大二本科生，node这门“服务器端”语言确实给了我与c和Java相比很多不一样的思考。看着node从当时的v4.4一步一步到v7.0，见证了其“妄图”一统天下的决心，只能感叹前路漫漫。&lt;/p&gt;
+
+&lt;h4 id=&#34;下一步&#34;&gt;下一步&lt;/h4&gt;
+
+&lt;p&gt;现在的感觉就像巨哥说的那样，一门语言学精之后转型是很容易的一件事。我在nodejs踩了大半年的坑，随着ES5到了ES6，不说多么精通，但是感觉确实应该思考下一步要走什么路了。&lt;/p&gt;
+
+&lt;p&gt;我可能会先去看看Go，Ruby的设计思想，重拾Java也说不定，借此机会重新自己去感受下web服务器端语言的发展潮流。&lt;/p&gt;
+
+&lt;p&gt;我还是会去使用各种前端框架，也会去做React Native。尽管我不喜欢TypeScript之类的语法糖，尽管我不喜欢各类层出不穷的轮子，尽管全栈可能是一个美好的设想，但我还是会尽量开阔自己的眼界。&lt;/p&gt;
+
+&lt;p&gt;我会去做机器学习或是其他人工智能的方面，我已经感受到了未来。&lt;/p&gt;
+
+&lt;p&gt;我可能会去考研，但我还是应该会找个公司先实习。不只是为了自己，更是希望能向正规军学习，闭门造车，盲人瞎马带领工作室胡搞一气肯定还是行不通的。还是要看看别人，摸索出自己的一套方法。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
