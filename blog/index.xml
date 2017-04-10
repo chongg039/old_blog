@@ -1110,31 +1110,96 @@ trust_host_root_certs: false
     </item>
     
     <item>
-      <title>分享一些自用chrome插件</title>
-      <link>https://chongg039.cn/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</link>
+      <title>自用 Chrome 插件分享</title>
+      <link>https://chongg039.cn/blog/%E8%87%AA%E7%94%A8-chrome-%E6%8F%92%E4%BB%B6%E5%88%86%E4%BA%AB/</link>
       <pubDate>Sat, 21 May 2016 15:45:01 -0700</pubDate>
       
-      <guid>https://chongg039.cn/blog/%E5%88%86%E4%BA%AB%E4%B8%80%E4%BA%9B%E8%87%AA%E7%94%A8chrome%E6%8F%92%E4%BB%B6/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://c1.staticflickr.com/1/738/33457475271_8f1bb7c525_b.jpg&#34; alt=&#34;分享一些自用的chrome插件&#34; /&gt;&lt;/p&gt;
+      <guid>https://chongg039.cn/blog/%E8%87%AA%E7%94%A8-chrome-%E6%8F%92%E4%BB%B6%E5%88%86%E4%BA%AB/</guid>
+      <description>
 
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;feedly:关注内容在&lt;a href=&#34;https://github.com/foru17/front-end-collect这里可以找几个&#34;&gt;https://github.com/foru17/front-end-collect这里可以找几个&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;switchyomega：科学上网，配合ss使用&lt;/li&gt;
-&lt;li&gt;onetab：一键收藏网页并保存在本地，方便下次打开&lt;/li&gt;
-&lt;li&gt;postman（扩展）：查看网页发送的数据&lt;/li&gt;
-&lt;li&gt;Responsive Web Design Tester：将网页内容在不同设备呈现&lt;/li&gt;
-&lt;li&gt;cssviewer：实时查看网页某一部分的css&lt;/li&gt;
-&lt;li&gt;Chrome Sniffer Plus：查看网页用了哪些框架（图标会随网页变）&lt;/li&gt;
-&lt;li&gt;page load time：分析网页加载速度&lt;/li&gt;
-&lt;li&gt;save to pocket：右键收藏到pocket，需注册，可在手机上使用&lt;/li&gt;
-&lt;li&gt;Isometric Contributions：可以将github上的访问时间变成盖楼样式，很有意思&lt;/li&gt;
-&lt;li&gt;octotree：这个是神器，具体搜一搜，是关于github实时查看文件的&lt;/li&gt;
-&lt;li&gt;划词翻译&lt;/li&gt;
-&lt;li&gt;Momentum：chrome打开新标签页有背景，这个比较大,建议不使用&lt;/li&gt;
-&lt;li&gt;jsonview：查看网页json&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;这里会持续不断分享一些自己觉的好用的 Chrome 插件，有些也会弃用。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;2016-05-21-更新&#34;&gt;2016-05-21 更新&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/feedly-mini/ndhinffkekpekljifjkkkkkhopnjodja?hl=en-US&#34;&gt;[feedly Mini]&lt;/a&gt;：RSS 订阅器，你可以在&lt;a href=&#34;https://github.com/foru17/front-end-collect&#34;&gt;这里&lt;/a&gt;找几个前端相关的开发者博客，或者自己去 Github 搜一些&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif&#34;&gt;SwitchyOmega&lt;/a&gt;：配合 ss 使用的科学上网利器，需要相应的规则文件&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall?hl=en-US&#34;&gt;OneTab&lt;/a&gt;：当你打开一大堆网页而不想关掉，要留在以后再看。它可以帮你一键保存，从而避免了大量后台网页占用系统资源&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/postman-interceptor/aicmkgpgakddgnaphhhpliifpcfhicfo?hl=en-US&#34;&gt;Postman Interceptor&lt;/a&gt;：Postman 的官方插件，不过现在基本用桌面级客户端了&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/responsive-web-design-tes/objclahbaimlfnbjdeobicmmlnbhamkg?hl=en-US&#34;&gt;Responsive Web Design Tester&lt;/a&gt;：将网页内容在不同设备呈现&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/cssviewer/ggfgijbpiheegefliciemofobhmofgce?hl=en-US&#34;&gt;CSSViewer&lt;/a&gt;：实时查看网页某一部分的css&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/library-sniffer-for-googl/fhhdlnnepfjhlhilgmeepgkhjmhhhjkh?hl=en-US&#34;&gt;Library Sniffer for Google Chrome&lt;/a&gt;：Sniff web framework and javascript libraries run on browsing website.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/page-load-time/fploionmjgeclbkemipmkogoaohcdbig?hl=en-US&#34;&gt;Page Load Time&lt;/a&gt;：分析网页具体部分的加载速度&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/save-to-pocket/niloccemoadcdkdjlinkgdfekeahmflj?hl=en-US&#34;&gt;Save To Pocket&lt;/a&gt;：将未看完的内容保存在 Pocket ，以后再看，多平台可用&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/isometric-contributions/mjoedlfflcchnleknnceiplgaeoegien?hl=en-US&#34;&gt;Isometric Contributions&lt;/a&gt;：将 Github 上的贡献活动变为盖楼样式显示，很有意思&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/buunguyen/octotree&#34;&gt;octotree&lt;/a&gt;：Extension to show code tree for GitHub and GitLab&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/%E5%88%92%E8%AF%8D%E7%BF%BB%E8%AF%91/ikhdkkncnoglghljlkmcimlnlhkeamad?hl=en-US&#34;&gt;划词翻译&lt;/a&gt;：字面解释，浏览文档时必需&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc?hl=en-US&#34;&gt;JSONView&lt;/a&gt;：Validate and view JSON documents&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;2017-04-10-更新&#34;&gt;2017-04-10 更新&lt;/h2&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/colorzilla/bhlhnicpbhignbdhedgjhgdocnmhomnp&#34;&gt;ColorZilla&lt;/a&gt;：Advanced Eyedropper, Color Picker, Gradient Generator and other colorful goodies&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/ipinfoio-website-ip-addre/dfdphlgjcfobnklpiiobcfmbdnmihjpo&#34;&gt;ipinfo.io&lt;/a&gt;：ipinfo.io 官方插件，查询网页的服务器 ip 所在地等信息&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/%E6%8E%98%E9%87%91/lecdifefmmfjnjjinhaennhdlmcaeeeb&#34;&gt;掘金&lt;/a&gt;：掘金网站官方插件，将 New Page 变得对开发者更亲和，为设计师、程序员、产品经理每日发现优质内容&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/github-repository-size/apnjnioapinblneaedefcnopcjepgkci&#34;&gt;Github Repository Size&lt;/a&gt;：Automatically adds repository size to GitHub&amp;rsquo;s repository summary&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.baidufe.com/fehelper&#34;&gt;FeHelper&lt;/a&gt;：WEB前端助手，包含一些比较实用的工具&lt;/p&gt;
+
+&lt;hr /&gt;
 </description>
     </item>
     
