@@ -14,10 +14,10 @@
 <title>
 
 
-     解决 ubuntu 下键盘错位问题 
+     属于这个时代的创业者 
 
 </title>
-<link rel="canonical" href="https://chongg039.cn/blog/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="https://chongg039.cn/blog/%E5%B1%9E%E4%BA%8E%E8%BF%99%E4%B8%AA%E6%97%B6%E4%BB%A3%E7%9A%84%E5%88%9B%E4%B8%9A%E8%80%85/">
 
 
 
@@ -113,7 +113,7 @@
                 <div class="title-container">
                     <div class="page-heading">
 
-    解决 ubuntu 下键盘错位问题
+    属于这个时代的创业者
 
 </div>
 
@@ -121,7 +121,7 @@
                 </div>
                 <div class="meta">
                     
-                    <div class="date" title='Sun Oct 2 2016 15:43:36 -0700'>Oct 2, 2016</div>
+                    <div class="date" title='Wed May 10 2017 00:20:32 CST'>May 10, 2017</div>
                     
                     
                     <div class="reading-time"><div class="middot"></div>1 minute read</div>
@@ -129,68 +129,45 @@
                 </div>
             </div>
             <div class="markdown">
-                
+                <p><img src="https://c1.staticflickr.com/5/4170/34556673535_566297e2e6_b.jpg" alt="2017春季锤子科技发布会" /></p>
 
-<p>很悲催的键盘错位了，就这个系统有问题，以前也没遇到过。简而言之就是@和“互换，#打不出来等。问题不大，但是影响输入体验。
-工作室的小伙伴都说我这电脑只有我会用。。。</p>
+<p>没错，我就是在吹老罗。</p>
 
-<p>之前在网上搜到的解决办法是在终端输入：
-&gt;sudo dpkg-reconfigure keyboard-configuration
-//需要安装keyboard-configuration</p>
+<p>一位专职搞英语教学的教育工作者，在2012年说出自己要投身手机领域，改变这一行业的时候，他最难的这五年是如何坚持下来的？仅仅是靠着他所谓的“情怀”和工匠精神吗？</p>
 
-<p>然后调整键盘布局，改为English(US)或者English(UK)，这样就相当于把键盘布局重置，然后就好了。</p>
+<p>“少啰嗦，先看东西”这是老罗在发布会开始一贯会说出的话。当然，这几年的发布会，也都带给了人们惊喜。</p>
 
-<p>这种办法也可以通过<code>sudo vim /etc/default/keyboard</code>手动修改配置：
-&gt; KEYBOARD CONFIGURATION FILE</p>
+<p>而这次人们却傻了眼，这TM是什么玩意？这不是智能手机刚普及那个年代，只有联想之类的厂商才能做出的功能机的样子吗？</p>
 
-<blockquote>
-<p>Consult the keyboard(5) manual page.</p>
+<p>现场稀稀拉拉的掌声直到重头戏的操作系统环节才有所改善，事实上这也确实是老罗和他团队擅长的地方。不论是 One Step，Bigbang 的大幅更新，还是新出的“闪念胶囊”，都带给了人们一些手机之外的慰藉。而在此之后，真正的坚果手机才得以亮相，也引起人们的一片惊呼。</p>
 
-<p>XKBMODEL=&ldquo;cherrycyboard&rdquo; //修改键盘类型
-XKBLAYOUT=&ldquo;us&rdquo; //修改语言类型：us,uk,cn&hellip;
-XKBVARIANT=&ldquo;&rdquo;
-XKBOPTIONS=&ldquo;&rdquo;</p>
+<p>我们姑且不论这款手机究竟如何，尽管它只是一台千元级产品，但半小时内售空40万台储备已经说明一切。我们且看在这发布会最后真正的一小时，对老罗和他的锤子意味着什么？</p>
 
-<p>BACKSPACE=&ldquo;guess&rdquo;</p>
-</blockquote>
+<p><img src="https://c1.staticflickr.com/5/4176/34527349046_7f8bf39921_b.jpg" alt="" /></p>
 
-<p><strong>但是！！！</strong>这样修改一会键盘就变回去了啊啊！！！一开始是一天，后来越来越快，今天连一分钟也没撑住啊啊！！！
-弄得人心里很是崩溃。。。</p>
+<p>“圆滑当道时代的锐丽异类”（原图来自：Engadget 中国版）</p>
 
-<p>继续看吧，有人说需要在配置完<code>sudo vim /etc/default/keyboard</code>后，终端中运行一次
-&gt;setupcon</p>
+<p>这也许就是老罗坚持的工匠精神，从不妥协，坚持做最好的自我。而对于整个锤子科技而言，这是他们2017年的第一次亮相。在这个全是发布会的五月他们凭什么成功，仅凭会前十几天做足的噱头吗？干货，才是这家公司向外界证明自己的底气。</p>
 
-<p>但是输出了</p>
+<p>新机终于得以亮相，老罗一度几近哽咽。的确，发布会的前两个小时他和他的团队承受了太多外界的压力。我在社交媒体上看到了不止一位媒体人、大V枪口一致，炮轰这场发布会。而作为主讲人，我相信他们内心一定无比着急，急于早些拿出真正的产品向世人证明自己。但他们不能。</p>
 
-<blockquote>
-<p>We are not on the console, the console is left unconfigured.</p>
-</blockquote>
+<p>锤子，或者说老罗，这样“处心积虑”把一场发布会搞得“又臭又长”，乃至最后才将真机放出来究竟为的是什么？难道他们不明白一开始就打开天窗说亮话，可以免受多少责骂，甚至赢得一片赞誉这个道理吗？</p>
 
-<p>原来要进入文字终端，虚拟终端还不行。。。
-执行完毕后，重启或者执行一次
-&gt;sudo udevadm trigger &ndash;subsystem-match=input &ndash;action=change</p>
+<p>“你永远想象不到，我们的野心究竟有多大。”</p>
 
-<p>使得保存的配置生效。
-这样一般就成功了，若是还不行，有可能是fcitx输入法的问题。
-打开 Fcitx Configuration，可以在search里找到
-<img src="https://c1.staticflickr.com/4/3766/33457473611_5ab96b6472_b.jpg" alt="" />
-像我上面选择的键盘语言是
-&gt;XKBLAYOUT=&ldquo;us&rdquo; //修改语言类型：us,uk,cn&hellip;</p>
+<p>是的，老罗的志向从来就不止于此。这场发布会对他们而言从来不仅是一场产品发布会，而是向世人证明自己实力的最好机会，也是摘掉自己创业公司帽子的最佳时机。我再这里可以不负责任地说，经此一役，锤子科技已成为一家主流科技公司，比肩国内外一线手机厂商有过之而无不及。</p>
 
-<p>需要把当前语言移动到最上面，没有的话就添加一个。</p>
+<p><img src="https://c1.staticflickr.com/5/4179/33758210223_8aff7a669a_b.jpg" alt="" /></p>
 
-<p>到这里就可以解决大部分问题了，至少我这里键盘输入还没有回弹到那种奇葩的状况。
-那就必须秀一波@@@@@@@########&ldquo;&rdquo;&ldquo;&rdquo;&ldquo;&rdquo;&ldquo;&rdquo;&ldquo;&ldquo;啊哈哈！</p>
+<p>（原图来自：Engadget 中国版）</p>
 
-<h2 id="https-c1-staticflickr-com-4-3666-33457496511-69a2c3bdae-z-jpg"><img src="https://c1.staticflickr.com/4/3666/33457496511_69a2c3bdae_z.jpg" alt="" /></h2>
+<p>“如果有一天，买了几百几千万台，傻X都在用我们的手机，你要知道这是给你们做的。”</p>
 
-<h4 id="参考文档">参考文档</h4>
+<p>什么叫情怀？</p>
 
-<ul>
-<li><a href="http://www.linuxdiyf.com/linux/16832.html">ubuntu14.04键盘错位小问题</a></li>
-<li><a href="http://www.linuxdiyf.com/linux/17450.html">ubuntu/mint键盘错乱问题</a></li>
-<li><a href="http://blog.csdn.net/cc7756789w/article/details/50661992">Ubuntu下键盘输入错乱问题</a><br /></li>
-</ul>
+<p>这就是为什么在中国，只有老罗的锤粉才是最坚实的用户群。</p>
+
+<p>这便是老罗，一个属于时代的创业者。</p>
 
                 <br>
                 <p><a href="https://chongg039.cn/blog/">Back to posts</a></p>
@@ -200,9 +177,9 @@ XKBOPTIONS=&ldquo;&rdquo;</p>
                 <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'coldriver';
-    var disqus_identifier = 'https:\/\/chongg039.cn\/blog\/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98\/';
-    var disqus_title = '解决 ubuntu 下键盘错位问题';
-    var disqus_url = 'https:\/\/chongg039.cn\/blog\/%E8%A7%A3%E5%86%B3-ubuntu-%E4%B8%8B%E9%94%AE%E7%9B%98%E9%94%99%E4%BD%8D%E9%97%AE%E9%A2%98\/';
+    var disqus_identifier = 'https:\/\/chongg039.cn\/blog\/%E5%B1%9E%E4%BA%8E%E8%BF%99%E4%B8%AA%E6%97%B6%E4%BB%A3%E7%9A%84%E5%88%9B%E4%B8%9A%E8%80%85\/';
+    var disqus_title = '属于这个时代的创业者';
+    var disqus_url = 'https:\/\/chongg039.cn\/blog\/%E5%B1%9E%E4%BA%8E%E8%BF%99%E4%B8%AA%E6%97%B6%E4%BB%A3%E7%9A%84%E5%88%9B%E4%B8%9A%E8%80%85\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
